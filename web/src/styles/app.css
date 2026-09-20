@@ -222,7 +222,7 @@ dd { margin: 0; }
 .answers .note { opacity: 0.8; font-size: 0.9rem; }
 .answers dd.mono { font-size: 1.05rem; font-weight: 700; }
 
-/* The register: monospace, right-aligned 14-character cell, rules only where drawn. */
+/* The register: monospace, three ruled columns (day, month, year), rules only where drawn. */
 table.register {
   border-collapse: collapse;
   font-family: var(--mono);
@@ -232,16 +232,29 @@ table.register {
   width: 100%;
   max-width: 34rem;
 }
-table.register td { padding: 0.05rem 0; vertical-align: baseline; }
-table.register td.cell {
-  white-space: pre;
-  text-align: right;
-  width: 14ch;
-  padding-right: 1.5ch;
+table.register th, table.register td { padding: 0.05rem 0; vertical-align: baseline; }
+table.register th {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.2rem;
 }
-table.register td.label { padding-left: 0.5ch; white-space: nowrap; }
+table.register .cell { text-align: right; white-space: nowrap; }
+table.register .d { width: 7ch; }
+table.register .m { width: 4ch; }
+table.register .y { width: 6ch; }
+table.register .m, table.register .y { padding-left: 1.5ch; }
+table.register .label { padding-left: 2.5ch; white-space: nowrap; text-align: left; }
 table.register tr.ruled td { border-bottom: 1px solid var(--ink); }
 table.register tr.key td { font-weight: 700; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
 
 .flags {
   list-style: none;
@@ -284,7 +297,7 @@ footer .credit { font-weight: 600; opacity: 1; }
 @media (max-width: 400px) {
   body { font-size: 15px; }
   table.register { font-size: 0.95rem; }
-  table.register td.cell { width: 13ch; padding-right: 1ch; }
+  table.register .label { padding-left: 1.5ch; white-space: normal; }
   dt { min-width: 9rem; }
 }
 

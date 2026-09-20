@@ -46,8 +46,11 @@ rows), as a 1px border in ink.
 ## Why it departs from a generic form-and-result page
 
 - The register is rendered from the engine's `lines`, one table row per
-  line with the identical fourteen-character left cell, so the officer's
-  eye can move down the screen and down the hand working in step.
+  line, in the three ruled columns of the paper form: day, month, year. A
+  deduction's days, months and years sit directly under the date's day,
+  month and year, so the officer's eye can move down the screen and down
+  the hand working column by column. The fixed-width text render is kept
+  for copying and for the vectors.
 - The answer is not enlarged or boxed. The working is the product; the LPD
   and EPD are simply the labelled lines in it, repeated once as a plain
   summary for the print footer.
