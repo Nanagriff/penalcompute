@@ -3,7 +3,7 @@
  * Every value here is a string straight from an input; nothing is parsed
  * until toCaseSpec runs. No prisoner data anywhere (standing rule 7).
  */
-import type { CaseSpec, WireDate, WireDuration, WirePolicy } from "../engine";
+import { Duration, type CaseSpec, type WireDate, type WireDuration, type WirePolicy } from "../engine";
 
 export interface DateInput { d: string; m: string; y: string }
 export interface DurInput { days: string; weeks: string; months: string; years: string }
@@ -53,6 +53,9 @@ export interface FormState {
   counts: CountInput[];
   // reduction, double escape
   cut: DurInput;
+  // reduction: the order says "reduced by" (a cut) or "reduced to" (a new term)
+  reductionMode: "by" | "to";
+  newTerm: DurInput;
   // single escape
   dateOfEscape: DateInput;
   dateOfRecapture: DateInput;
@@ -90,6 +93,8 @@ export function initialState(): FormState {
       { dur: emptyDur(), group: "A" },
     ],
     cut: emptyDur(),
+    reductionMode: "by",
+    newTerm: emptyDur(),
     dateOfEscape: emptyDate(),
     dateOfRecapture: emptyDate(),
     dateOfEscape1: emptyDate(),
@@ -224,7 +229,25 @@ export function toCaseSpec(s: FormState): Parsed {
     }
     case "reduction": {
       const sentence = parseDur(s.sentence, "Sentence", errors, true);
-      const cut = parseDur(s.cut, "Reduction", errors, true);
+      let cut: WireDuration | null;
+      if (s.reductionMode === "to") {
+        // "Reduced to": the cut is the difference, at 30 days to the month (R2.2),
+        // so the engine's balance comes out as the new term the court named.
+        const newTerm = parseDur(s.newTerm, "New sentence", errors, true);
+        cut = null;
+        if (sentence && newTerm) {
+          const from = Duration.of(sentence).totalDays;
+          const to = Duration.of(newTerm).totalDays;
+          if (to >= from) {
+            errors.push("New sentence: must be shorter than the original sentence");
+          } else {
+            const d = Duration.fromDays(from - to);
+            cut = { days: d.days, months: d.months, years: d.years };
+          }
+        }
+      } else {
+        cut = parseDur(s.cut, "Reduction", errors, true);
+      }
       spec = { scenario: "reduction", inputs: { date_of_sentence: ds, sentence, cut, offence_class: cls }, policy };
       break;
     }

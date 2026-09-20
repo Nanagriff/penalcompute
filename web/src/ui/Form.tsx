@@ -111,8 +111,23 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
       )}
 
       {sc === "reduction" && (
-        <DurationFields legend="Reduction or pardon" value={state.cut} onChange={set("cut")}
-          hint="Deducted from the sentence; remission runs on the balance, worked from the original date (R8.4)." />
+        <>
+          <div className="select">
+            <label htmlFor="reduction-mode">How the order is written</label>
+            <select id="reduction-mode" value={state.reductionMode}
+              onChange={(e) => onChange({ ...state, reductionMode: e.target.value as FormState["reductionMode"] })}>
+              <option value="by">Reduced by a period</option>
+              <option value="to">Reduced to a new sentence</option>
+            </select>
+          </div>
+          {state.reductionMode === "to" ? (
+            <DurationFields legend="New sentence" value={state.newTerm} onChange={set("newTerm")}
+              hint="The term the court substituted. The difference is deducted and the new term is worked from the original date of sentence; remission runs on it (R8.4). The date of the appeal decision is not needed." />
+          ) : (
+            <DurationFields legend="Reduction or pardon" value={state.cut} onChange={set("cut")}
+              hint="Deducted from the sentence; remission runs on the balance, worked from the original date of sentence (R8.4). The date of the appeal decision is not needed." />
+          )}
+        </>
       )}
 
       {sc === "single_escape" && (
