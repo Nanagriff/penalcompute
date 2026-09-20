@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { runCase, type CaseOutcome, type CaseSpec, versionLine } from "./engine";
+import { useEffect, useRef, useState } from "react";
+import { runCase, type CaseOutcome, type CaseSpec } from "./engine";
 import { Form } from "./ui/Form";
 import { ResultView } from "./ui/ResultView";
 import { VersionNotice } from "./ui/VersionNotice";
@@ -15,6 +15,8 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
   const [state, setState] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<string[]>([]);
   const [computed, setComputed] = useState<Computed | null>(null);
+  const [runs, setRuns] = useState(0);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   function compute() {
     const parsed = toCaseSpec(state);
@@ -27,11 +29,20 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
       const outcome = runCase(parsed.spec);
       setErrors([]);
       setComputed({ spec: parsed.spec, outcome, sex: parsed.sex });
+      setRuns((n) => n + 1);
     } catch (e) {
       setErrors([e instanceof Error ? e.message : String(e)]);
       setComputed(null);
     }
   }
+
+  // On a phone the form fills the screen, so bring the working into view once it exists.
+  useEffect(() => {
+    if (runs === 0 || !resultRef.current) return;
+    if (window.matchMedia("(min-width: 60rem)").matches) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    resultRef.current.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }, [runs]);
 
   function clear() {
     setState(initialState());
@@ -41,18 +52,36 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
 
   return (
     <main>
-      <header className="chrome">
+      <header className="chrome masthead">
+        <p className="eyebrow">Ghana Prisons Service</p>
         <h1>Sentence computation</h1>
-        <p className="sub">Ghana Prisons Service register working, line by line. Offline once loaded.</p>
+        <p className="sub">
+          The register working, line by line, with the rule behind each line.
+          Works offline once loaded.
+        </p>
       </header>
       <VersionNotice updateReady={updateReady} onReload={onReload} />
-      <Form state={state} onChange={(s) => { setState(s); }} onCompute={compute} onClear={clear} errors={errors} />
-      {computed && <ResultView spec={computed.spec} outcome={computed.outcome} sex={computed.sex} />}
+      <div className="columns">
+        <Form state={state} onChange={(s) => { setState(s); }} onCompute={compute} onClear={clear} errors={errors} />
+        <div className="output" ref={resultRef}>
+          {computed ? (
+            <ResultView key={runs} spec={computed.spec} outcome={computed.outcome} sex={computed.sex} />
+          ) : (
+            <div className="chrome empty" aria-hidden="true">
+              <p className="empty-title">Register working</p>
+              <p>
+                Enter the court's order and press <b>Compute</b>. The working appears here
+                exactly as it is set out in the register, ready to check against your own
+                computation and to print.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
       <footer className="chrome">
-        <p>{versionLine()}</p>
+        <p className="credit">A project by Officer Cadet Course Intake 36.</p>
         <p>
-          Every line carries its rule number from RULES.md. Where the booklet gives two answers the
-          engine shows both and flags it; it never resolves an ambiguity silently.
+          Nothing typed here leaves this device unless you report an answer as wrong.
         </p>
       </footer>
     </main>

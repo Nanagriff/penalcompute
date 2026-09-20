@@ -70,7 +70,7 @@ export interface FormState {
   hospital: boolean;
   hospitalFrom: DateInput;
   hospitalTo: DateInput;
-  // policy switches (RULES.md section 9)
+  // policy switches (rule set, section 9)
   leapRule: WirePolicy["leap_rule"];
   monthEndPreservation: boolean;
   escapeRemissionBase: WirePolicy["escape_remission_base"];

@@ -26,9 +26,10 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
       }}
       noValidate
     >
+      <h2 className="section-title">Court's order</h2>
       <Select
         id="scenario"
-        label="Court's order"
+        label="Type of order"
         value={sc}
         options={UI_SCENARIOS}
         onChange={(v) => onChange({ ...state, scenario: v as UiScenario })}
@@ -180,7 +181,7 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
       </div>
 
       <details className="switches">
-        <summary>Rule switches (RULES.md section 9)</summary>
+        <summary>Rule switches</summary>
         <label className="inline">
           <span>Leap year rule (R2.4)</span>
           <select value={state.leapRule}
@@ -207,8 +208,7 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
         <button type="button" className="quiet" onClick={onClear}>Clear</button>
       </div>
       <p className="hint privacy">
-        No case details are collected. There is no field for a name, prison number or file
-        reference, and nothing typed here leaves this device unless you report an answer as wrong.
+        No case details are collected: there is no field for a name, prison number or file reference.
       </p>
     </form>
   );

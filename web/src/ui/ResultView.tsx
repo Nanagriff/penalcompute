@@ -46,7 +46,7 @@ function Discharge({ date, isLpd, label }: { date: RegDate; isLpd: boolean; labe
         ? ` : moved ${r.movedDays} day${r.movedDays > 1 ? "s" : ""} ${isLpd ? "back" : "forward"}` +
           (r.reason ? `, ${r.reason}` : "") + (isLpd ? " (R7.4: never past midnight on the LPD)" : "")
         : " : a working day, unchanged"}
-      {r.provisional && <> . Provisional: {r.note}.</>}
+      {r.provisional && <>. Provisional: {r.note}.</>}
     </li>
   );
 }
@@ -130,7 +130,7 @@ export function ResultView({ spec, outcome, sex }: Props) {
         {licence && (
           <div>
             <dt>Licence</dt>
-            <dd>{licence[0] ? "Eligible" : "Not eligible"}. {licence[1]}</dd>
+            <dd>{licence[0] ? "Eligible" : "Not eligible"}. {licence[1].replace(/^eligible;\s*/, "").replace(/^\w/, (c) => c.toUpperCase())}</dd>
           </div>
         )}
       </dl>
@@ -149,7 +149,7 @@ export function ResultView({ spec, outcome, sex }: Props) {
         {result.lpd && <Discharge date={result.lpd} isLpd label="LPD, previous working day" />}
       </ul>
 
-      <p className="versions">{versionLine()}</p>
+      <p className="versions print-only">{versionLine()}</p>
 
       <div className="chrome row actions">
         <button type="button" className="quiet" onClick={() => window.print()}>Print</button>

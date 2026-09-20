@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { DateInput, DurInput } from "./state";
 
 const numeric = { inputMode: "numeric" as const, pattern: "[0-9]*", autoComplete: "off" };
@@ -9,26 +10,40 @@ interface DateFieldsProps {
   hint?: string;
 }
 
-/** Day, month, year as three inputs, in the order a warrant is read. */
+/**
+ * Day, month, year as three inputs, in the order a warrant is read. Typing
+ * the full width of a field moves focus to the next one, so a date can be
+ * keyed straight through on a phone.
+ */
 export function DateFields({ legend, value, onChange, hint }: DateFieldsProps) {
-  const set = (k: keyof DateInput) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    onChange({ ...value, [k]: e.target.value });
+  const refs = { d: useRef<HTMLInputElement>(null), m: useRef<HTMLInputElement>(null), y: useRef<HTMLInputElement>(null) };
+  const next: Record<keyof DateInput, keyof DateInput | null> = { d: "m", m: "y", y: null };
+  const width: Record<keyof DateInput, number> = { d: 2, m: 2, y: 4 };
+  const set = (k: keyof DateInput) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    onChange({ ...value, [k]: v });
+    const n = next[k];
+    if (n && /^\d+$/.test(v) && v.length >= width[k]) refs[n].current?.focus();
+  };
   return (
     <fieldset className="date">
       <legend>{legend}</legend>
       <label>
         <span>Day</span>
-        <input {...numeric} className="w2" value={value.d} onChange={set("d")} aria-label={`${legend}, day`} />
+        <input {...numeric} ref={refs.d} className="w2" placeholder="DD" maxLength={2}
+          value={value.d} onChange={set("d")} aria-label={`${legend}, day`} />
       </label>
-      <span className="sep" aria-hidden="true">-</span>
+      <span className="sep" aria-hidden="true">/</span>
       <label>
         <span>Month</span>
-        <input {...numeric} className="w2" value={value.m} onChange={set("m")} aria-label={`${legend}, month`} />
+        <input {...numeric} ref={refs.m} className="w2" placeholder="MM" maxLength={2}
+          value={value.m} onChange={set("m")} aria-label={`${legend}, month`} />
       </label>
-      <span className="sep" aria-hidden="true">-</span>
+      <span className="sep" aria-hidden="true">/</span>
       <label>
         <span>Year</span>
-        <input {...numeric} className="w4" value={value.y} onChange={set("y")} aria-label={`${legend}, year`} />
+        <input {...numeric} ref={refs.y} className="w4" placeholder="YYYY" maxLength={4}
+          value={value.y} onChange={set("y")} aria-label={`${legend}, year`} />
       </label>
       {hint && <small className="hint">{hint}</small>}
     </fieldset>
@@ -52,7 +67,7 @@ export function DurationFields({ legend, value, onChange, hint }: DurationFields
       {(["years", "months", "weeks", "days"] as const).map((k) => (
         <label key={k}>
           <span>{k[0].toUpperCase() + k.slice(1)}</span>
-          <input {...numeric} className="w3" value={value[k]} onChange={set(k)} aria-label={`${legend}, ${k}`} />
+          <input {...numeric} className="w3" placeholder="0" value={value[k]} onChange={set(k)} aria-label={`${legend}, ${k}`} />
         </label>
       ))}
       {hint && <small className="hint">{hint}</small>}

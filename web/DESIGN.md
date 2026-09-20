@@ -32,9 +32,12 @@ shadows. Print is black on white regardless.
 
 ## Layout
 
-Single column, left aligned, no maximum width below 44rem. The form sits
-above, the register below at full width as the hero of the result view,
-then the flags, then the working-day layer, then the versions. No cards, no
+Single column on a phone, left aligned, no maximum width below 44rem: the
+form sits above, the register below at full width as the hero of the result
+view, then the flags, then the working-day layer. From 60rem the order and
+the working sit side by side, the working column sticky, so an officer at a
+desk can change an input and see the register move without scrolling. The
+version stamp appears only on the printed page, where it matters for filing. No cards, no
 shadows, no rounded corners: the register is a ruled table and the inputs
 are boxes ruled in `--rule`, which is how a form looks on paper. Rules are
 drawn only under the lines where the booklet draws them (the deduction
@@ -56,7 +59,8 @@ rows), as a 1px border in ink.
 
 ## Not done, on purpose
 
-No rounded cards with soft grey shadows, no all-caps eyebrow labels, no
-cream-and-terracotta accent, no dark theme (the artefact is a paper
+No rounded cards with soft grey shadows, no cream-and-terracotta accent,
+(the only small-caps text is the "Ghana Prisons Service" masthead line and
+the section title above the form, both in ink), no dark theme (the artefact is a paper
 register and is printed), no icon set, no web fonts (offline first, and
 the system faces are the ones an officer already reads all day).

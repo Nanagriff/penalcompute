@@ -27,16 +27,64 @@ body {
 main {
   max-width: 44rem;
   margin: 0 auto;
-  padding: 1rem 16px 3rem;
+  padding: 1.25rem 16px 3rem;
 }
 
-h1 {
-  font-size: 1.35rem;
+/* ---- masthead ---------------------------------------------------------- */
+
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 0.9rem; margin-bottom: 1.25rem; }
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
   font-weight: 600;
-  margin: 0.25rem 0 0;
-  letter-spacing: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
 }
-.sub { margin: 0.15rem 0 1.25rem; color: var(--ink); opacity: 0.8; }
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0.1rem 0 0;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.sub { margin: 0.4rem 0 0; color: var(--ink); opacity: 0.8; max-width: 38rem; }
+
+h2.section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin: 0 0 0.75rem;
+}
+
+/* ---- two columns on a wide screen: order on the left, working on the right ---- */
+
+.columns { display: block; }
+.output { min-width: 0; }
+@media (min-width: 60rem) {
+  main { max-width: 72rem; }
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
+    gap: 0 3rem;
+    align-items: start;
+  }
+  .output {
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding-top: 0;
+  }
+  .output .result { border-top: 0; margin-top: 0; padding-top: 0; }
+}
+
+.empty { padding: 0.5rem 0 1rem; opacity: 0.7; max-width: 32rem; }
+.empty-title { font-weight: 600; margin: 0 0 0.35rem; }
+.empty p { margin: 0; }
+@media (max-width: 59.99rem) { .empty { display: none; } }
 
 .mono { font-family: var(--mono); }
 .hint { display: block; font-size: 0.85rem; opacity: 0.8; margin-top: 0.25rem; }
@@ -45,7 +93,8 @@ h1 {
 
 /* ---- inputs ------------------------------------------------------------ */
 
-form.inputs { border-top: 1px solid var(--ink); padding-top: 1rem; }
+form.inputs { padding-top: 0.25rem; }
+@media (min-width: 60rem) { form.inputs { padding-top: 0; } }
 
 fieldset {
   border: 0;
@@ -78,9 +127,19 @@ input, select, textarea, button {
   min-height: 2.5rem;
 }
 input { font-family: var(--mono); font-size: 1.05rem; }
-input.w2 { width: 4ch; text-align: right; }
-input.w3 { width: 5ch; text-align: right; }
-input.w4 { width: 6.5ch; text-align: right; }
+input::placeholder { color: var(--rule); opacity: 1; }
+input.w2 { width: 4.5ch; text-align: right; }
+input.w3 { width: 5.5ch; text-align: right; }
+input.w4 { width: 7ch; text-align: right; }
+select {
+  cursor: pointer;
+  padding-right: 2rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%231a1a18' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+}
 input:focus, select:focus, textarea:focus, button:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 1px;
@@ -89,7 +148,7 @@ textarea { width: 100%; font-family: var(--sans); resize: vertical; }
 
 .select { margin: 0 0 1rem; display: flex; flex-direction: column; }
 .select > label { font-weight: 600; margin-bottom: 0.3rem; }
-.select select { max-width: 100%; }
+.select select { max-width: 100%; width: 100%; }
 
 label.inline { display: flex; flex-direction: column; margin: 0.5rem 0; }
 label.inline > span { margin-bottom: 0.25rem; }
@@ -98,28 +157,44 @@ label.inline.check input { min-height: 0; width: 1.1rem; height: 1.1rem; margin:
 label.stack { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 0; }
 
 details { border-top: 1px solid var(--rule); padding: 0.5rem 0 0.25rem; margin: 0 0 1rem; }
-summary { cursor: pointer; font-weight: 600; }
+summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+"; font-family: var(--mono); width: 1ch; opacity: 0.7; }
+details[open] > summary::before { content: "\2212"; }
+details[open] > summary { margin-bottom: 0.25rem; }
 
 .counts .count { border-left: 2px solid var(--rule); padding-left: 0.75rem; margin-bottom: 0.5rem; }
 .counts .count fieldset { margin-bottom: 0.5rem; }
 
 .row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
-.actions { margin-top: 1rem; }
+.actions { margin-top: 1.25rem; }
 
 button {
   cursor: pointer;
   border: 1px solid var(--ink);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.25rem;
   font-weight: 600;
 }
+button[type="submit"] { background: var(--ink); color: var(--paper); }
+button[type="submit"]:hover { opacity: 0.9; }
 button.quiet { font-weight: 400; border-color: var(--rule); }
+button.quiet:hover { border-color: var(--ink); }
+form.inputs .actions button[type="submit"] { min-width: 9rem; }
+@media (max-width: 30rem) {
+  form.inputs .actions button[type="submit"] { flex: 1 1 auto; }
+}
 button.link {
   border: 0; padding: 0; min-height: 0; background: none;
   text-decoration: underline; font-weight: 400;
 }
 button:disabled { opacity: 0.5; cursor: default; }
 
-.errors { margin: 0.75rem 0; padding-left: 1.2rem; color: var(--flag); }
+.errors {
+  margin: 0.75rem 0;
+  padding: 0.5rem 0.75rem 0.5rem 1.75rem;
+  color: var(--flag);
+  border-left: 3px solid var(--flag);
+}
 .privacy { margin-top: 1rem; }
 
 /* ---- result ------------------------------------------------------------ */
@@ -138,8 +213,14 @@ dl > div { display: flex; flex-wrap: wrap; gap: 0 0.75rem; padding: 0.15rem 0; }
 dt { font-weight: 600; min-width: 11rem; }
 dd { margin: 0; }
 .summary-inputs { font-size: 0.95rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; }
-.answers { margin-top: 1rem; }
+.answers {
+  margin: 1rem 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--rule);
+  max-width: 34rem;
+}
 .answers .note { opacity: 0.8; font-size: 0.9rem; }
+.answers dd.mono { font-size: 1.05rem; font-weight: 700; }
 
 /* The register: monospace, right-aligned 14-character cell, rules only where drawn. */
 table.register {
@@ -184,6 +265,7 @@ table.register tr.key td { font-weight: 700; }
 .discharge .k { font-weight: 600; }
 
 .versions { font-family: var(--mono); font-size: 0.8rem; opacity: 0.8; margin: 0.75rem 0; }
+.print-only { display: none; }
 
 .feedback { border-top: 1px solid var(--rule); margin-top: 1rem; padding-top: 0.75rem; }
 .feedback-done { color: var(--confirm); margin-top: 1rem; }
@@ -195,11 +277,14 @@ table.register tr.key td { font-weight: 700; }
   font-size: 0.9rem;
 }
 
-footer { margin-top: 2rem; font-size: 0.85rem; opacity: 0.85; border-top: 1px solid var(--rule); padding-top: 0.75rem; }
+footer { margin-top: 2.5rem; font-size: 0.85rem; opacity: 0.85; border-top: 1px solid var(--rule); padding-top: 0.75rem; }
+footer p { margin: 0.25rem 0; }
+footer .credit { font-weight: 600; opacity: 1; }
 
 @media (max-width: 400px) {
   body { font-size: 15px; }
   table.register { font-size: 0.95rem; }
+  table.register td.cell { width: 13ch; padding-right: 1ch; }
   dt { min-width: 9rem; }
 }
 
@@ -211,6 +296,9 @@ footer { margin-top: 2rem; font-size: 0.85rem; opacity: 0.85; border-top: 1px so
   :root { --ink: #000; --paper: #fff; --rule: #888; --flag: #000; --confirm: #000; }
   html, body { background: #fff; color: #000; }
   main { max-width: none; padding: 0; }
+  .columns { display: block; }
+  .output { position: static; max-height: none; overflow: visible; border-top: 0; padding-top: 0; }
+  .empty { display: none; }
   /* the register and the inputs only: no chrome, no answers restated, no working-day layer */
   .chrome, .notice, .feedback, .feedback-done, footer, form.inputs, .answers, .discharge { display: none !important; }
   .result { border-top: 0; margin-top: 0; padding-top: 0; animation: none; }
@@ -220,6 +308,7 @@ footer { margin-top: 2rem; font-size: 0.85rem; opacity: 0.85; border-top: 1px so
   .flags, .discharge { font-size: 10pt; }
   .discharge { page-break-inside: avoid; }
   .versions {
+    display: block;
     margin-top: 8mm;
     font-size: 8pt;
     opacity: 1;
