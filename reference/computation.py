@@ -282,6 +282,7 @@ class Line:
     deduction: Optional[str] = None
     label: str = ""
     rule: bool = False  # draw a rule under this line
+    op: Optional[str] = None  # "+" added to, "-" taken from, the date above
 
 
 @dataclass
@@ -339,7 +340,7 @@ def compute(
     add = res.lines.append
 
     add(Line(date=d_s, label=label_ds))
-    add(Line(deduction=sentence.columns(), label="S", rule=True))
+    add(Line(deduction=sentence.columns(), label="S", rule=True, op="+"))
 
     raw = add_sentence(d_s, sentence)
     add(Line(date=raw))
@@ -350,11 +351,11 @@ def compute(
         # line exactly as the register shows it (R4.2)
         while cur.d > month_len(cur.m, cur.y, policy):
             length = month_len(cur.m, cur.y, policy)
-            add(Line(deduction=str(length), label=MONTH_NAME[cur.m], rule=True))
+            add(Line(deduction=str(length), label=MONTH_NAME[cur.m], rule=True, op="-"))
             cur = _carry_months(RegDate(cur.d - length, cur.m + 1, cur.y))
             add(Line(date=cur))
 
-    add(Line(deduction="1", label="Grace", rule=True))
+    add(Line(deduction="1", label="Grace", rule=True, op="-"))
     cur = sub_days(cur, 1, policy)  # R5.1
 
     base = remission_base if remission_base is not None else sentence
@@ -374,7 +375,7 @@ def compute(
     res.lpd = cur
     add(Line(date=cur, label="LPD"))
     add(Line(deduction=rem.columns(), label=f"1/3 Rem on {base}" if "third" in note
-             else f"Rem on {base}", rule=True))
+             else f"Rem on {base}", rule=True, op="-"))
 
     cur, fl = sub_duration(cur, rem, policy)
     res.flags.extend(fl)
@@ -382,11 +383,11 @@ def compute(
 
     if cur.is_impossible(policy):
         length = month_len(cur.m, cur.y, policy)
-        add(Line(deduction=str(length), label=MONTH_NAME[cur.m], rule=True))
+        add(Line(deduction=str(length), label=MONTH_NAME[cur.m], rule=True, op="-"))
         cur = roll_forward(cur, policy)  # R4.6
         add(Line(date=cur))
 
-    add(Line(deduction="1", label="Add", rule=True))
+    add(Line(deduction="1", label="Add", rule=True, op="+"))
     cur = add_days(cur, 1, policy)
     res.epd = cur
     add(Line(date=cur, label="EPD"))
@@ -396,10 +397,10 @@ def compute(
     if hospital_period is not None:
         loss = hospital_loss(hospital_period)
         extra = extra + loss
-        add(Line(deduction=loss.columns(), label="H/R/L", rule=True))
+        add(Line(deduction=loss.columns(), label="H/R/L", rule=True, op="+"))
     if forfeited_days:
         extra = extra + Duration(days=forfeited_days)
-        add(Line(deduction=str(forfeited_days), label="Forfeit", rule=True))
+        add(Line(deduction=str(forfeited_days), label="Forfeit", rule=True, op="+"))
 
     if extra.total_days:
         cur = add_days(cur, extra.days, policy)

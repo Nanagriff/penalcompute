@@ -219,20 +219,21 @@ dt { font-weight: 600; min-width: 11rem; color: var(--brown); }
 dd { margin: 0; }
 .summary-inputs { font-size: 0.95rem; border-bottom: 1px solid var(--tan-line); padding-bottom: 0.5rem; }
 
-/* The register: a ruled ledger. Day, month and year in their own columns,
-   faint tan ruling between them, brown rules only where the booklet draws them. */
+/* The register: a ruled ledger. A sign column, then day, month and year in
+   their own columns, faint tan ruling between them, brown rules only where
+   the booklet draws them. */
 table.register {
   border-collapse: collapse;
   font-family: var(--mono);
-  font-size: 1rem;
-  line-height: 1.5;
-  margin: 0.9rem 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 1rem 0;
   width: 100%;
-  max-width: 36rem;
+  max-width: 38rem;
   border: 1px solid var(--tan);
   background: var(--paper);
 }
-table.register th, table.register td { padding: 0.2rem 0.75ch; vertical-align: baseline; }
+table.register th, table.register td { padding: 0.35rem 1ch; vertical-align: baseline; }
 table.register th {
   font-family: var(--sans);
   font-weight: 600;
@@ -240,16 +241,26 @@ table.register th {
   color: var(--brown);
   background: var(--sand);
   border-bottom: 1px solid var(--tan);
-  padding: 0.3rem 0.75ch;
+  padding: 0.35rem 1ch;
+}
+table.register .op {
+  width: 3ch;
+  text-align: center;
+  color: var(--brown);
+  font-weight: 700;
+  padding-left: 0.5ch;
+  padding-right: 0.5ch;
 }
 table.register .cell { text-align: right; white-space: nowrap; }
 table.register .d { width: 8ch; }
 table.register .m { width: 5ch; }
 table.register .y { width: 7ch; }
 table.register .d, table.register .m, table.register .y { border-right: 1px solid var(--tan-line); }
-table.register .label { padding-left: 2ch; white-space: nowrap; text-align: left; }
+table.register .label { padding-left: 2.5ch; white-space: nowrap; text-align: left; }
+table.register tr.date td { padding-top: 0.45rem; }
+table.register tr.deduction td { padding-bottom: 0.45rem; }
 table.register tr.ruled td { border-bottom: 1.5px solid var(--brown); }
-table.register tr.key td { font-weight: 700; background: var(--sand); color: var(--brown); }
+table.register tr.key td { font-weight: 700; background: var(--sand); color: var(--brown); padding-top: 0.45rem; padding-bottom: 0.45rem; }
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
@@ -317,7 +328,8 @@ footer .credit { font-family: var(--serif); font-size: 1.05rem; color: var(--bro
   body { font-size: 15px; }
   .masthead h1 { font-size: 1.8rem; }
   table.register { font-size: 0.95rem; }
-  table.register th, table.register td { padding: 0.2rem 0.5ch; }
+  table.register th, table.register td { padding: 0.3rem 0.5ch; }
+  table.register .op { width: 2.5ch; padding-left: 0.25ch; padding-right: 0.25ch; }
   table.register .label { padding-left: 1.2ch; white-space: normal; }
   dt { min-width: 9rem; }
 }

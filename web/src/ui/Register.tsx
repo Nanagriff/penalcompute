@@ -28,6 +28,7 @@ export function Register({ lines }: { lines: Line[] }) {
     <table className="register" aria-label="Register working">
       <thead>
         <tr>
+          <th scope="col" className="op"><span className="visually-hidden">Sign</span></th>
           <th scope="col" className="cell d">Day</th>
           <th scope="col" className="cell m">Mth</th>
           <th scope="col" className="cell y">Year</th>
@@ -42,6 +43,9 @@ export function Register({ lines }: { lines: Line[] }) {
           const cls = [isDate ? "date" : "deduction", ln.rule ? "ruled" : "", key ? "key" : ""].join(" ").trim();
           return (
             <tr key={i} className={cls}>
+              <td className="op" aria-label={ln.op === "+" ? "add" : ln.op === "-" ? "subtract" : undefined}>
+                {ln.op === "-" ? "\u2212" : ln.op ?? ""}
+              </td>
               <td className="cell d">{c.d}</td>
               <td className="cell m">{c.m}</td>
               <td className="cell y">{c.y}</td>

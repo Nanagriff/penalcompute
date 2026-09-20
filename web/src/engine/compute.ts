@@ -27,6 +27,8 @@ export interface Line {
   label: string;
   /** Draw a rule under this line. */
   rule: boolean;
+  /** Arithmetic sign of a deduction line: added to, or taken from, the date above. */
+  op?: "+" | "-";
 }
 
 const LEFT = 14;
@@ -98,7 +100,7 @@ export function compute(
   const add = (ln: Line) => res.lines.push(ln);
 
   add({ date: ds, label: labelDs, rule: false });
-  add({ deduction: sentence.columns(), label: "S", rule: true });
+  add({ deduction: sentence.columns(), label: "S", rule: true, op: "+" });
 
   const raw = addSentence(ds, sentence);
   add({ date: raw, label: "", rule: false });
@@ -109,13 +111,13 @@ export function compute(
     // line exactly as the register shows it (R4.2)
     while (cur.d > monthLen(cur.m, cur.y, rule)) {
       const length = monthLen(cur.m, cur.y, rule);
-      add({ deduction: String(length), label: MONTH_NAME[cur.m], rule: true });
+      add({ deduction: String(length), label: MONTH_NAME[cur.m], rule: true, op: "-" });
       cur = carryMonths({ d: cur.d - length, m: cur.m + 1, y: cur.y });
       add({ date: cur, label: "", rule: false });
     }
   }
 
-  add({ deduction: "1", label: "Grace", rule: true });
+  add({ deduction: "1", label: "Grace", rule: true, op: "-" });
   cur = subDays(cur, 1, rule); // R5.1
 
   const base = opts.remissionBase ?? sentence;
@@ -141,6 +143,7 @@ export function compute(
     deduction: rem.columns(),
     label: note.includes("third") ? `1/3 Rem on ${base.format()}` : `Rem on ${base.format()}`,
     rule: true,
+    op: "-",
   });
 
   const sub = subDuration(cur, rem, policy);
@@ -150,12 +153,12 @@ export function compute(
 
   if (isImpossible(cur, rule)) {
     const length = monthLen(cur.m, cur.y, rule);
-    add({ deduction: String(length), label: MONTH_NAME[cur.m], rule: true });
+    add({ deduction: String(length), label: MONTH_NAME[cur.m], rule: true, op: "-" });
     cur = rollForward(cur, rule); // R4.6
     add({ date: cur, label: "", rule: false });
   }
 
-  add({ deduction: "1", label: "Add", rule: true });
+  add({ deduction: "1", label: "Add", rule: true, op: "+" });
   cur = addDays(cur, 1, rule);
   res.epd = cur;
   add({ date: cur, label: "EPD", rule: false });
@@ -165,11 +168,11 @@ export function compute(
   if (opts.hospitalPeriod !== undefined) {
     const loss = hospitalLoss(opts.hospitalPeriod);
     extra = extra.add(loss);
-    add({ deduction: loss.columns(), label: "H/R/L", rule: true });
+    add({ deduction: loss.columns(), label: "H/R/L", rule: true, op: "+" });
   }
   if (forfeitedDays) {
     extra = extra.add(new Duration(forfeitedDays));
-    add({ deduction: String(forfeitedDays), label: "Forfeit", rule: true });
+    add({ deduction: String(forfeitedDays), label: "Forfeit", rule: true, op: "+" });
   }
 
   if (extra.totalDays) {
