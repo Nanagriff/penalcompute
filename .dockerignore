@@ -1,0 +1,7 @@
+.git
+web/node_modules
+web/dist
+web/dist-single
+api/venv
+**/__pycache__
+*.sqlite3*

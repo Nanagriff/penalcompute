@@ -1,0 +1,236 @@
+/* Design tokens: see DESIGN.md. Five colours, two typefaces, nothing else. */
+:root {
+  --ink: #1a1a18;
+  --paper: #fbfaf7;
+  --rule: #c9c4b8;
+  --flag: #8a5a2b;
+  --confirm: #2f5d3f;
+  --mono: ui-monospace, "Cascadia Mono", "DejaVu Sans Mono", "Roboto Mono", "Droid Sans Mono", monospace;
+  --sans: system-ui, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--paper); }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1rem 16px 3rem;
+}
+
+h1 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+  letter-spacing: 0;
+}
+.sub { margin: 0.15rem 0 1.25rem; color: var(--ink); opacity: 0.8; }
+
+.mono { font-family: var(--mono); }
+.hint { display: block; font-size: 0.85rem; opacity: 0.8; margin-top: 0.25rem; }
+.flag { color: var(--flag); }
+.confirm { color: var(--confirm); }
+
+/* ---- inputs ------------------------------------------------------------ */
+
+form.inputs { border-top: 1px solid var(--ink); padding-top: 1rem; }
+
+fieldset {
+  border: 0;
+  margin: 0 0 1rem;
+  padding: 0;
+  min-width: 0;
+}
+legend { font-weight: 600; padding: 0; margin-bottom: 0.3rem; }
+
+fieldset.date, fieldset.duration {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.35rem 0.5rem;
+}
+fieldset.date legend, fieldset.duration legend { width: 100%; }
+fieldset .hint { width: 100%; }
+
+fieldset label { display: flex; flex-direction: column; font-size: 0.8rem; }
+fieldset label span { margin-bottom: 0.15rem; }
+.sep { align-self: flex-end; padding-bottom: 0.45rem; font-family: var(--mono); }
+
+input, select, textarea, button {
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 0.45rem 0.5rem;
+  min-height: 2.5rem;
+}
+input { font-family: var(--mono); font-size: 1.05rem; }
+input.w2 { width: 4ch; text-align: right; }
+input.w3 { width: 5ch; text-align: right; }
+input.w4 { width: 6.5ch; text-align: right; }
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+textarea { width: 100%; font-family: var(--sans); resize: vertical; }
+
+.select { margin: 0 0 1rem; display: flex; flex-direction: column; }
+.select > label { font-weight: 600; margin-bottom: 0.3rem; }
+.select select { max-width: 100%; }
+
+label.inline { display: flex; flex-direction: column; margin: 0.5rem 0; }
+label.inline > span { margin-bottom: 0.25rem; }
+label.inline.check { flex-direction: row; align-items: center; gap: 0.5rem; }
+label.inline.check input { min-height: 0; width: 1.1rem; height: 1.1rem; margin: 0; }
+label.stack { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 0; }
+
+details { border-top: 1px solid var(--rule); padding: 0.5rem 0 0.25rem; margin: 0 0 1rem; }
+summary { cursor: pointer; font-weight: 600; }
+
+.counts .count { border-left: 2px solid var(--rule); padding-left: 0.75rem; margin-bottom: 0.5rem; }
+.counts .count fieldset { margin-bottom: 0.5rem; }
+
+.row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+.actions { margin-top: 1rem; }
+
+button {
+  cursor: pointer;
+  border: 1px solid var(--ink);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+button.quiet { font-weight: 400; border-color: var(--rule); }
+button.link {
+  border: 0; padding: 0; min-height: 0; background: none;
+  text-decoration: underline; font-weight: 400;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+
+.errors { margin: 0.75rem 0; padding-left: 1.2rem; color: var(--flag); }
+.privacy { margin-top: 1rem; }
+
+/* ---- result ------------------------------------------------------------ */
+
+.result {
+  border-top: 1px solid var(--ink);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  animation: reveal 180ms ease-out;
+}
+@keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .result { animation: none; } }
+
+dl { margin: 0 0 1rem; }
+dl > div { display: flex; flex-wrap: wrap; gap: 0 0.75rem; padding: 0.15rem 0; }
+dt { font-weight: 600; min-width: 11rem; }
+dd { margin: 0; }
+.summary-inputs { font-size: 0.95rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; }
+.answers { margin-top: 1rem; }
+.answers .note { opacity: 0.8; font-size: 0.9rem; }
+
+/* The register: monospace, right-aligned 14-character cell, rules only where drawn. */
+table.register {
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0.75rem 0;
+  width: 100%;
+  max-width: 34rem;
+}
+table.register td { padding: 0.05rem 0; vertical-align: baseline; }
+table.register td.cell {
+  white-space: pre;
+  text-align: right;
+  width: 14ch;
+  padding-right: 1.5ch;
+}
+table.register td.label { padding-left: 0.5ch; white-space: nowrap; }
+table.register tr.ruled td { border-bottom: 1px solid var(--ink); }
+table.register tr.key td { font-weight: 700; }
+
+.flags {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+  color: var(--flag);
+  font-size: 0.95rem;
+}
+.flags li::before { content: "! "; font-family: var(--mono); }
+.flags li { padding: 0.1rem 0; }
+
+.discharge {
+  list-style: none;
+  padding: 0.5rem 0 0;
+  margin: 0.75rem 0;
+  border-top: 1px solid var(--rule);
+  font-size: 0.95rem;
+}
+.discharge li { padding: 0.1rem 0; }
+.discharge .head { font-weight: 600; }
+.discharge .k { font-weight: 600; }
+
+.versions { font-family: var(--mono); font-size: 0.8rem; opacity: 0.8; margin: 0.75rem 0; }
+
+.feedback { border-top: 1px solid var(--rule); margin-top: 1rem; padding-top: 0.75rem; }
+.feedback-done { color: var(--confirm); margin-top: 1rem; }
+
+.notice {
+  border: 1px solid var(--rule);
+  padding: 0.5rem 0.75rem;
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+footer { margin-top: 2rem; font-size: 0.85rem; opacity: 0.85; border-top: 1px solid var(--rule); padding-top: 0.75rem; }
+
+@media (max-width: 400px) {
+  body { font-size: 15px; }
+  table.register { font-size: 0.95rem; }
+  dt { min-width: 9rem; }
+}
+
+/* ---- print: A4, black on white, register and inputs only ------------------- */
+
+@page { size: A4; margin: 18mm 16mm; }
+
+@media print {
+  :root { --ink: #000; --paper: #fff; --rule: #888; --flag: #000; --confirm: #000; }
+  html, body { background: #fff; color: #000; }
+  main { max-width: none; padding: 0; }
+  /* the register and the inputs only: no chrome, no answers restated, no working-day layer */
+  .chrome, .notice, .feedback, .feedback-done, footer, form.inputs, .answers, .discharge { display: none !important; }
+  .result { border-top: 0; margin-top: 0; padding-top: 0; animation: none; }
+  .summary-inputs { border-bottom: 1px solid #000; }
+  table.register { font-size: 11pt; }
+  table.register tr.ruled td { border-bottom: 1px solid #000; }
+  .flags, .discharge { font-size: 10pt; }
+  .discharge { page-break-inside: avoid; }
+  .versions {
+    margin-top: 8mm;
+    font-size: 8pt;
+    opacity: 1;
+    border-top: 1px solid #000;
+    padding-top: 2mm;
+    page-break-inside: avoid;
+  }
+  .result::before {
+    content: "Sentence computation register. Computed working, to be filed with the hand computation.";
+    display: block;
+    font-size: 9pt;
+    margin-bottom: 4mm;
+  }
+}

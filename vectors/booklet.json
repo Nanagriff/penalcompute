@@ -1,0 +1,1380 @@
+{
+  "format": 1,
+  "generator": "reference/export_vectors.py",
+  "ruleset": "booklet-as-supplied-2026-09",
+  "cases": [
+    {
+      "id": "p04a-25-days",
+      "page": 4,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          4,
+          7,
+          76
+        ],
+        "sentence": {
+          "days": 25,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "28-7-76",
+        "remission": "nil",
+        "remission_note": "no remission: sentence below 31 days (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: sentence below 31 days (R6.1)"
+        ],
+        "render": "        4-7-76   D/S\n  25                  S\n                 ----------------------------------\n       29-7-76   \n             1   Grace\n                 ----------------------------------\n       28-7-76   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+      },
+      "booklet_says": null,
+      "note": "below 31 days, no remission, D/R (R6.1)"
+    },
+    {
+      "id": "p04b-1-month",
+      "page": 4,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          1,
+          2007
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 1,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "31-1-2007",
+        "remission": "nil",
+        "remission_note": "no remission: sentence below 31 days (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: sentence below 31 days (R6.1)"
+        ],
+        "render": "      1-1-2007   D/S\n          1           S\n                 ----------------------------------\n      1-2-2007   \n             1   Grace\n                 ----------------------------------\n     31-1-2007   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+      },
+      "booklet_says": null,
+      "note": "1 month = 30 days under R2.2, below 31, D/R"
+    },
+    {
+      "id": "p05a-5-weeks-2-days",
+      "page": 5,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          17,
+          10,
+          2006
+        ],
+        "sentence": {
+          "days": 37,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "22-11-2006",
+        "epd": "16-11-2006",
+        "dr": null,
+        "remission": "7days",
+        "remission_note": "ordinary remission (R6.2)",
+        "licence_period": "6days",
+        "flags": [],
+        "render": "    17-10-2006   D/S\n  37                  S\n                 ----------------------------------\n    54-10-2006   \n            31   Oct\n                 ----------------------------------\n    23-11-2006   \n             1   Grace\n                 ----------------------------------\n    22-11-2006   LPD\n   7                  Rem on 37days\n                 ----------------------------------\n    15-11-2006   \n             1   Add\n                 ----------------------------------\n    16-11-2006   EPD"
+      },
+      "booklet_says": null,
+      "note": "37 days, ordinary remission 7 days (R6.2); weeks folded at 7 days (R2.3)"
+    },
+    {
+      "id": "p05b-40-days",
+      "page": 5,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          1,
+          2006
+        ],
+        "sentence": {
+          "days": 40,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "9-2-2006",
+        "epd": "31-1-2006",
+        "dr": null,
+        "remission": "10days",
+        "remission_note": "ordinary remission (R6.2)",
+        "licence_period": "9days",
+        "flags": [],
+        "render": "      1-1-2006   D/S\n  40                  S\n                 ----------------------------------\n     41-1-2006   \n            31   Jan\n                 ----------------------------------\n     10-2-2006   \n             1   Grace\n                 ----------------------------------\n      9-2-2006   LPD\n  10                  Rem on 40days\n                 ----------------------------------\n     30-1-2006   \n             1   Add\n                 ----------------------------------\n     31-1-2006   EPD"
+      },
+      "booklet_says": null,
+      "note": "ordinary remission 10 days (R6.2)"
+    },
+    {
+      "id": "p05-kwesi-mensah",
+      "page": 5,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          6,
+          11,
+          2005
+        ],
+        "sentence": {
+          "days": 100,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "13-2-2006",
+        "epd": "12-1-2006",
+        "dr": null,
+        "remission": "33days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1mth 1day",
+        "flags": [],
+        "render": "     6-11-2005   D/S\n 100                  S\n                 ----------------------------------\n   106-11-2005   \n            30   Nov\n                 ----------------------------------\n    76-12-2005   \n            31   Dec\n                 ----------------------------------\n     45-1-2006   \n            31   Jan\n                 ----------------------------------\n     14-2-2006   \n             1   Grace\n                 ----------------------------------\n     13-2-2006   LPD\n  33                  1/3 Rem on 100days\n                 ----------------------------------\n     11-1-2006   \n             1   Add\n                 ----------------------------------\n     12-1-2006   EPD"
+      },
+      "booklet_says": null,
+      "note": "remission stays in days, R6.7; roll-forward sequence 106-11, 76-12, 45-1, 14-2 (R4.2)"
+    },
+    {
+      "id": "p05-6-years",
+      "page": 5,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          17,
+          11,
+          2004
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 6
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "16-11-2010",
+        "epd": "17-11-2008",
+        "dr": null,
+        "remission": "2yrs",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1yr 11mths 30days",
+        "flags": [],
+        "render": "    17-11-2004   D/S\n                  6   S\n                 ----------------------------------\n    17-11-2010   \n             1   Grace\n                 ----------------------------------\n    16-11-2010   LPD\n                  2   1/3 Rem on 6yrs\n                 ----------------------------------\n    16-11-2008   \n             1   Add\n                 ----------------------------------\n    17-11-2008   EPD"
+      },
+      "booklet_says": null,
+      "note": ""
+    },
+    {
+      "id": "p07-debtor-6-months",
+      "page": 7,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          31,
+          8,
+          72
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 6,
+          "years": 0
+        },
+        "offence_class": "debt"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "28(30)-2-73",
+        "remission": "nil",
+        "remission_note": "no remission: debt (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: debt (R6.1)"
+        ],
+        "render": "       31-8-72   D/S\n          6           S\n                 ----------------------------------\n       31-2-73   \n             1   Grace\n                 ----------------------------------\n   28(30)-2-73   D/R\n\n  ! no remission: debt (R6.1)"
+      },
+      "booklet_says": null,
+      "note": "terminal impossible date clamps back, written 28(30)-2-73 (R4.4, R4.5)"
+    },
+    {
+      "id": "p07-1-month-over-feb-76",
+      "page": 7,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          31,
+          1,
+          76
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 1,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "29(30)-2-76",
+        "remission": "nil",
+        "remission_note": "no remission: sentence below 31 days (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: sentence below 31 days (R6.1)"
+        ],
+        "render": "       31-1-76   D/S\n          1           S\n                 ----------------------------------\n       31-2-76   \n             1   Grace\n                 ----------------------------------\n   29(30)-2-76   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+      },
+      "booklet_says": null,
+      "note": "leap February, 29(30)-2-76"
+    },
+    {
+      "id": "p07-3-months-ihl",
+      "page": 7,
+      "source": "booklet",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          12,
+          71
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 3,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "29-2-72",
+        "epd": "1-2-72",
+        "dr": null,
+        "remission": "1mth",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "28days",
+        "flags": [],
+        "render": "       1-12-71   D/S\n          3           S\n                 ----------------------------------\n        1-3-72   \n             1   Grace\n                 ----------------------------------\n       29-2-72   LPD\n          1           1/3 Rem on 3mths\n                 ----------------------------------\n   31(29)-1-72   \n             1   Add\n                 ----------------------------------\n        1-2-72   EPD"
+      },
+      "booklet_says": null,
+      "note": "month-end preserved across whole-month subtraction (R4.7)"
+    },
+    {
+      "id": "p08-paul-mensah",
+      "page": 8,
+      "source": "booklet",
+      "scenario": "additional",
+      "inputs": {
+        "date_of_sentence": [
+          25,
+          7,
+          2005
+        ],
+        "first": {
+          "days": 0,
+          "months": 6,
+          "years": 0
+        },
+        "first_class": "debt",
+        "second": {
+          "days": 14,
+          "months": 9,
+          "years": 0
+        },
+        "second_class": "assault"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "7-11-2006",
+        "epd": "3-8-2006",
+        "dr": null,
+        "remission": "3mths 5days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "3mths 4days",
+        "flags": [
+          "R8.1: total sentence 1yr 3mths 14days, remission base 9mths 14days"
+        ],
+        "render": "     25-7-2005   D/S\n  14      3       1   S\n                 ----------------------------------\n    39-10-2006   \n            31   Oct\n                 ----------------------------------\n     8-11-2006   \n             1   Grace\n                 ----------------------------------\n     7-11-2006   LPD\n   5      3           1/3 Rem on 9mths 14days\n                 ----------------------------------\n      2-8-2006   \n             1   Add\n                 ----------------------------------\n      3-8-2006   EPD\n\n  ! R8.1: total sentence 1yr 3mths 14days, remission base 9mths 14days"
+      },
+      "booklet_says": null,
+      "note": "remission on the 9mths 14days only (R6.6, R8.1)"
+    },
+    {
+      "id": "p08-ex2",
+      "page": 8,
+      "source": "booklet",
+      "scenario": "additional",
+      "inputs": {
+        "date_of_sentence": [
+          24,
+          10,
+          2003
+        ],
+        "first": {
+          "days": 0,
+          "months": 15,
+          "years": 0
+        },
+        "first_class": "stealing",
+        "second": {
+          "days": 26,
+          "months": 7,
+          "years": 3
+        },
+        "second_class": "assault"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "18-9-2008",
+        "epd": "31-1-2007",
+        "dr": null,
+        "remission": "1yr 7mths 19days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1yr 7mths 18days",
+        "flags": [
+          "R8.1: total sentence 4yrs 10mths 26days, remission base 4yrs 10mths 26days"
+        ],
+        "render": "    24-10-2003   D/S\n  26     10       4   S\n                 ----------------------------------\n     50-8-2008   \n            31   Aug\n                 ----------------------------------\n     19-9-2008   \n             1   Grace\n                 ----------------------------------\n     18-9-2008   LPD\n  19      7       1   1/3 Rem on 4yrs 10mths 26days\n                 ----------------------------------\n     30-1-2007   \n             1   Add\n                 ----------------------------------\n     31-1-2007   EPD\n\n  ! R8.1: total sentence 4yrs 10mths 26days, remission base 4yrs 10mths 26days"
+      },
+      "booklet_says": null,
+      "note": ""
+    },
+    {
+      "id": "p09-ex1-concurrent",
+      "page": 9,
+      "source": "booklet",
+      "scenario": "counts",
+      "inputs": {
+        "date_of_sentence": [
+          26,
+          11,
+          66
+        ],
+        "offence_class": "stealing",
+        "groups": [
+          [
+            {
+              "days": 0,
+              "months": 10,
+              "years": 1
+            },
+            {
+              "days": 0,
+              "months": 6,
+              "years": 1
+            }
+          ]
+        ]
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "25-9-68",
+        "epd": "16-2-68",
+        "dr": null,
+        "remission": "7mths 10days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "7mths 9days",
+        "flags": [],
+        "render": "      26-11-66   D/S\n         10       1   S\n                 ----------------------------------\n       26-9-68   \n             1   Grace\n                 ----------------------------------\n       25-9-68   LPD\n  10      7           1/3 Rem on 1yr 10mths\n                 ----------------------------------\n       15-2-68   \n             1   Add\n                 ----------------------------------\n       16-2-68   EPD",
+        "total": "1yr 10mths"
+      },
+      "booklet_says": {
+        "epd": "16-3-68"
+      },
+      "note": "booklet prints EPD 16-3-68, a misprint (R8.2)"
+    },
+    {
+      "id": "p09-ex2-grouped",
+      "page": 9,
+      "source": "booklet",
+      "scenario": "counts",
+      "inputs": {
+        "date_of_sentence": [
+          28,
+          3,
+          2007
+        ],
+        "offence_class": "stealing",
+        "groups": [
+          [
+            {
+              "days": 0,
+              "months": 10,
+              "years": 0
+            },
+            {
+              "days": 0,
+              "months": 18,
+              "years": 0
+            },
+            {
+              "days": 0,
+              "months": 6,
+              "years": 0
+            }
+          ],
+          [
+            {
+              "days": 0,
+              "months": 9,
+              "years": 0
+            },
+            {
+              "days": 0,
+              "months": 0,
+              "years": 2
+            },
+            {
+              "days": 11,
+              "months": 5,
+              "years": 1
+            }
+          ]
+        ]
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "27-9-2010",
+        "epd": "28-7-2009",
+        "dr": null,
+        "remission": "1yr 2mths",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1yr 1mth 30days",
+        "flags": [],
+        "render": "     28-3-2007   D/S\n          6       3   S\n                 ----------------------------------\n     28-9-2010   \n             1   Grace\n                 ----------------------------------\n     27-9-2010   LPD\n          2       1   1/3 Rem on 3yrs 6mths\n                 ----------------------------------\n     27-7-2009   \n             1   Add\n                 ----------------------------------\n     28-7-2009   EPD",
+        "total": "3yrs 6mths"
+      },
+      "booklet_says": {
+        "remission_label": "1yr 10mths"
+      },
+      "note": "right figure under a label reading '1yr 10mths' (R8.2, R8.3)"
+    },
+    {
+      "id": "p11-pardon",
+      "page": 11,
+      "source": "booklet",
+      "scenario": "reduction",
+      "inputs": {
+        "date_of_sentence": [
+          30,
+          12,
+          1998
+        ],
+        "sentence": {
+          "days": 1,
+          "months": 3,
+          "years": 14
+        },
+        "cut": {
+          "days": 0,
+          "months": 0,
+          "years": 2
+        },
+        "offence_class": "fraud"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "30-3-2011",
+        "epd": "3-3-2007",
+        "dr": null,
+        "remission": "4yrs 1mth",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "4yrs 27days",
+        "flags": [
+          "R8.4: 14yrs 3mths 1day less 2yrs = 12yrs 3mths 1day, worked from original D/S"
+        ],
+        "render": "    30-12-1998   D/S\n   1      3      12   S\n                 ----------------------------------\n     31-3-2011   \n             1   Grace\n                 ----------------------------------\n     30-3-2011   LPD\n          1       4   1/3 Rem on 12yrs 3mths 1day\n                 ----------------------------------\n     30-2-2007   \n            28   Feb\n                 ----------------------------------\n      2-3-2007   \n             1   Add\n                 ----------------------------------\n      3-3-2007   EPD\n\n  ! R8.4: 14yrs 3mths 1day less 2yrs = 12yrs 3mths 1day, worked from original D/S",
+        "balance": "12yrs 3mths 1day"
+      },
+      "booklet_says": {
+        "remission_label": "13yrs 3mths 1day"
+      },
+      "note": "intermediate 30-2-2007 rolls forward (R4.6); right figure under a wrong label (R8.4)"
+    },
+    {
+      "id": "p12-period-served",
+      "page": 12,
+      "source": "booklet",
+      "scenario": "date_diff",
+      "inputs": {
+        "later": [
+          10,
+          3,
+          2007
+        ],
+        "earlier": [
+          15,
+          12,
+          2006
+        ]
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "diff": "2mths 23days"
+      },
+      "booklet_says": null,
+      "note": "borrowing February 2007 = 28 (R4.8)"
+    },
+    {
+      "id": "p12-residue",
+      "page": 12,
+      "source": "booklet",
+      "scenario": "duration_sub",
+      "inputs": {
+        "a": {
+          "days": 0,
+          "months": 0,
+          "years": 2
+        },
+        "b": {
+          "days": 23,
+          "months": 2,
+          "years": 0
+        }
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "result": "1yr 9mths 7days"
+      },
+      "booklet_says": null,
+      "note": "2yrs less 2mths 23days at 30 days to the month (R2.2)"
+    },
+    {
+      "id": "p12-escape-residue-basis",
+      "page": 12,
+      "source": "booklet",
+      "scenario": "single_escape",
+      "inputs": {
+        "date_of_sentence": [
+          15,
+          12,
+          2006
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 2
+        },
+        "date_of_escape": [
+          10,
+          3,
+          2007
+        ],
+        "date_of_recapture": [
+          25,
+          8,
+          2007
+        ],
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "residue"
+      },
+      "expect": {
+        "lpd": "31-5-2009",
+        "epd": "30-10-2008",
+        "dr": null,
+        "remission": "7mths 2days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "7mths 1day",
+        "flags": [
+          "R8.5: served 2mths 23days, residue 1yr 9mths 7days",
+          "A1: remission taken on the residue (1yr 9mths 7days); the other reading gives a different EPD",
+          "A4: deduction mixes days with whole months from a month-end date; month-end preservation not applied, booklet shows no example"
+        ],
+        "render": "     25-8-2007   D/R (recapture)\n   7      9       1   S\n                 ----------------------------------\n     32-5-2009   \n            31   May\n                 ----------------------------------\n      1-6-2009   \n             1   Grace\n                 ----------------------------------\n     31-5-2009   LPD\n   2      7           1/3 Rem on 1yr 9mths 7days\n                 ----------------------------------\n    29-10-2008   \n             1   Add\n                 ----------------------------------\n    30-10-2008   EPD\n\n  ! R8.5: served 2mths 23days, residue 1yr 9mths 7days\n  ! A1: remission taken on the residue (1yr 9mths 7days); the other reading gives a different EPD\n  ! A4: deduction mixes days with whole months from a month-end date; month-end preservation not applied, booklet shows no example"
+      },
+      "booklet_says": null,
+      "note": "the booklet's own worked example takes remission on the residue (A1)"
+    },
+    {
+      "id": "p12-escape-original-basis",
+      "page": 12,
+      "source": "booklet",
+      "scenario": "single_escape",
+      "inputs": {
+        "date_of_sentence": [
+          15,
+          12,
+          2006
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 2
+        },
+        "date_of_escape": [
+          10,
+          3,
+          2007
+        ],
+        "date_of_recapture": [
+          25,
+          8,
+          2007
+        ],
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "31-5-2009",
+        "epd": "1-10-2008",
+        "dr": null,
+        "remission": "8mths",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "7mths 30days",
+        "flags": [
+          "R8.5: served 2mths 23days, residue 1yr 9mths 7days",
+          "A1: remission taken on the original (2yrs); the other reading gives a different EPD"
+        ],
+        "render": "     25-8-2007   D/R (recapture)\n   7      9       1   S\n                 ----------------------------------\n     32-5-2009   \n            31   May\n                 ----------------------------------\n      1-6-2009   \n             1   Grace\n                 ----------------------------------\n     31-5-2009   LPD\n          8           1/3 Rem on 2yrs\n                 ----------------------------------\n 30(31)-9-2008   \n             1   Add\n                 ----------------------------------\n     1-10-2008   EPD\n\n  ! R8.5: served 2mths 23days, residue 1yr 9mths 7days\n  ! A1: remission taken on the original (2yrs); the other reading gives a different EPD"
+      },
+      "booklet_says": null,
+      "note": "rule (h): remission on the original 2yrs, the engine default (A1)"
+    },
+    {
+      "id": "p15-q1-double-escape",
+      "page": 15,
+      "source": "booklet",
+      "scenario": "double_escape",
+      "inputs": {
+        "date_of_sentence": [
+          17,
+          8,
+          80
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 3
+        },
+        "date_of_escape_1": [
+          27,
+          10,
+          80
+        ],
+        "date_of_recapture_1": [
+          10,
+          2,
+          81
+        ],
+        "date_of_escape_2": [
+          25,
+          4,
+          81
+        ],
+        "date_of_recapture_2": [
+          22,
+          11,
+          81
+        ],
+        "offence_class": "fraud"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "26-6-84",
+        "epd": "27-6-83",
+        "dr": null,
+        "remission": "1yr",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "11mths 30days",
+        "flags": [
+          "R8.6: served 2mths 10days + 2mths 15days = 4mths 25days; total sentence 3yrs; residue 2yrs 7mths 5days"
+        ],
+        "render": "      22-11-81   2nd D/R\n   5      7       2   S\n                 ----------------------------------\n       27-6-84   \n             1   Grace\n                 ----------------------------------\n       26-6-84   LPD\n                  1   1/3 Rem on 3yrs\n                 ----------------------------------\n       26-6-83   \n             1   Add\n                 ----------------------------------\n       27-6-83   EPD\n\n  ! R8.6: served 2mths 10days + 2mths 15days = 4mths 25days; total sentence 3yrs; residue 2yrs 7mths 5days"
+      },
+      "booklet_says": null,
+      "note": "R8.6"
+    },
+    {
+      "id": "p16-q2-double-escape",
+      "page": 16,
+      "source": "booklet",
+      "scenario": "double_escape",
+      "inputs": {
+        "date_of_sentence": [
+          19,
+          5,
+          71
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 3
+        },
+        "date_of_escape_1": [
+          2,
+          8,
+          72
+        ],
+        "date_of_recapture_1": [
+          28,
+          10,
+          72
+        ],
+        "date_of_escape_2": [
+          22,
+          12,
+          72
+        ],
+        "date_of_recapture_2": [
+          13,
+          12,
+          72
+        ],
+        "extra_sentence": {
+          "days": 0,
+          "months": 6,
+          "years": 0
+        },
+        "cut": {
+          "days": 0,
+          "months": 12,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "3-2-74",
+        "epd": "4-4-73",
+        "dr": null,
+        "remission": "10mths",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "9mths 30days",
+        "flags": [
+          "R8.6: served 1yr 2mths 14days + 1mth 24days = 1yr 4mths 8days; total sentence 2yrs 6mths; residue 1yr 1mth 22days"
+        ],
+        "render": "      13-12-72   2nd D/R\n  22      1       1   S\n                 ----------------------------------\n       35-1-74   \n            31   Jan\n                 ----------------------------------\n        4-2-74   \n             1   Grace\n                 ----------------------------------\n        3-2-74   LPD\n         10           1/3 Rem on 2yrs 6mths\n                 ----------------------------------\n        3-4-73   \n             1   Add\n                 ----------------------------------\n        4-4-73   EPD\n\n  ! R8.6: served 1yr 2mths 14days + 1mth 24days = 1yr 4mths 8days; total sentence 2yrs 6mths; residue 1yr 1mth 22days"
+      },
+      "booklet_says": null,
+      "note": "the question's dates are impossible (escape 22/12/72, recapture 20/12/72); the working uses 13-12-72 as the 2nd date of recapture"
+    },
+    {
+      "id": "p18-hospital-period",
+      "page": 18,
+      "source": "booklet",
+      "scenario": "date_diff",
+      "inputs": {
+        "later": [
+          26,
+          12,
+          2004
+        ],
+        "earlier": [
+          20,
+          9,
+          2004
+        ]
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "diff": "3mths 6days"
+      },
+      "booklet_says": null,
+      "note": "3mths 6days in hospital (R4.8)"
+    },
+    {
+      "id": "p18-hospital-loss",
+      "page": 18,
+      "source": "booklet",
+      "scenario": "hospital",
+      "inputs": {
+        "date_of_sentence": [
+          25,
+          8,
+          2004
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 6
+        },
+        "offence_class": "stealing",
+        "hospital_from": [
+          20,
+          9,
+          2004
+        ],
+        "hospital_to": [
+          26,
+          12,
+          2004
+        ]
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "24-8-2010",
+        "epd": "27-9-2008",
+        "dr": null,
+        "remission": "2yrs",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1yr 10mths 28days",
+        "flags": [],
+        "render": "     25-8-2004   D/S\n                  6   S\n                 ----------------------------------\n     25-8-2010   \n             1   Grace\n                 ----------------------------------\n     24-8-2010   LPD\n                  2   1/3 Rem on 6yrs\n                 ----------------------------------\n     24-8-2008   \n             1   Add\n                 ----------------------------------\n     25-8-2008   EPD\n   2      1           H/R/L\n                 ----------------------------------\n     27-9-2008   EPD (adjusted)",
+        "hospital_period": "3mths 6days",
+        "hospital_loss": "1mth 2days"
+      },
+      "booklet_says": null,
+      "note": "96 days / 3 = 32 days = 1mth 2days lost, added back to the EPD (R7.2)"
+    },
+    {
+      "id": "r64-one-third-284",
+      "page": null,
+      "source": "booklet",
+      "scenario": "one_third",
+      "inputs": {
+        "n": 284
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "value": 95
+      },
+      "booklet_says": null,
+      "note": "R6.4 rounds up on remainder 2"
+    },
+    {
+      "id": "r64-one-third-100",
+      "page": null,
+      "source": "booklet",
+      "scenario": "one_third",
+      "inputs": {
+        "n": 100
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "value": 33
+      },
+      "booklet_says": null,
+      "note": "R6.4 discards remainder 1"
+    },
+    {
+      "id": "r64-one-third-1766",
+      "page": null,
+      "source": "booklet",
+      "scenario": "one_third",
+      "inputs": {
+        "n": 1766
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "value": 589
+      },
+      "booklet_says": null,
+      "note": "R6.4 rounds up"
+    },
+    {
+      "id": "r64-one-third-4411",
+      "page": null,
+      "source": "booklet",
+      "scenario": "one_third",
+      "inputs": {
+        "n": 4411
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "value": 1470
+      },
+      "booklet_says": null,
+      "note": "R6.4 discards"
+    },
+    {
+      "id": "r88-male-3yrs-stealing",
+      "page": 18,
+      "source": "booklet",
+      "scenario": "licence",
+      "inputs": {
+        "sex": "male",
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 3
+        },
+        "offence": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "eligible": true,
+        "reason": "eligible; Prison Form No. 10 to local police at least one week before release"
+      },
+      "booklet_says": null,
+      "note": ""
+    },
+    {
+      "id": "r88-female-excluded",
+      "page": 18,
+      "source": "booklet",
+      "scenario": "licence",
+      "inputs": {
+        "sex": "female",
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 3
+        },
+        "offence": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "eligible": false,
+        "reason": "p.18(b): licence is not issued to female prisoners, on the Ordinance's definition of 'convict' as male. Note this sits awkwardly against Article 17 of the 1992 Constitution."
+      },
+      "booklet_says": null,
+      "note": "p.18(b), the Ordinance's definition of 'convict'"
+    },
+    {
+      "id": "r88-under-two-years",
+      "page": 18,
+      "source": "booklet",
+      "scenario": "licence",
+      "inputs": {
+        "sex": "male",
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 1
+        },
+        "offence": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "eligible": false,
+        "reason": "p.18: sentence under two years"
+      },
+      "booklet_says": null,
+      "note": ""
+    },
+    {
+      "id": "x-bailed-out",
+      "page": null,
+      "source": "engine",
+      "scenario": "bailed_out",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          3,
+          2005
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 2
+        },
+        "date_of_bail": [
+          1,
+          6,
+          2005
+        ],
+        "date_of_readmission": [
+          1,
+          9,
+          2006
+        ],
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "31-5-2008",
+        "epd": "1-10-2007",
+        "dr": null,
+        "remission": "8mths",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "7mths 30days",
+        "flags": [
+          "R8.7: served 3mths, residue 1yr 9mths"
+        ],
+        "render": "      1-9-2006   D/R (re-admission)\n          9       1   S\n                 ----------------------------------\n      1-6-2008   \n             1   Grace\n                 ----------------------------------\n     31-5-2008   LPD\n          8           1/3 Rem on 2yrs\n                 ----------------------------------\n 30(31)-9-2007   \n             1   Add\n                 ----------------------------------\n     1-10-2007   EPD\n\n  ! R8.7: served 3mths, residue 1yr 9mths"
+      },
+      "booklet_says": null,
+      "note": "R8.7; the worked example is on p.13, which was not supplied"
+    },
+    {
+      "id": "x-forfeiture-30-days",
+      "page": null,
+      "source": "engine",
+      "scenario": "forfeiture",
+      "inputs": {
+        "date_of_sentence": [
+          17,
+          11,
+          2004
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 6
+        },
+        "offence_class": "stealing",
+        "forfeited_days": 30
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "16-11-2010",
+        "epd": "17-12-2008",
+        "dr": null,
+        "remission": "2yrs",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1yr 10mths 30days",
+        "flags": [],
+        "render": "    17-11-2004   D/S\n                  6   S\n                 ----------------------------------\n    17-11-2010   \n             1   Grace\n                 ----------------------------------\n    16-11-2010   LPD\n                  2   1/3 Rem on 6yrs\n                 ----------------------------------\n    16-11-2008   \n             1   Add\n                 ----------------------------------\n    17-11-2008   EPD\n            30   Forfeit\n                 ----------------------------------\n    17-12-2008   EPD (adjusted)"
+      },
+      "booklet_says": null,
+      "note": "R7.1 forfeiture added back to the EPD"
+    },
+    {
+      "id": "x-forfeiture-capped-at-lpd",
+      "page": null,
+      "source": "engine",
+      "scenario": "forfeiture",
+      "inputs": {
+        "date_of_sentence": [
+          17,
+          10,
+          2006
+        ],
+        "sentence": {
+          "days": 37,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing",
+        "forfeited_days": 20
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "22-11-2006",
+        "epd": "22-11-2006",
+        "dr": null,
+        "remission": "7days",
+        "remission_note": "ordinary remission (R6.2)",
+        "licence_period": "nil",
+        "flags": [
+          "R7.4: forfeiture pushed the EPD past the LPD; capped at the LPD"
+        ],
+        "render": "    17-10-2006   D/S\n  37                  S\n                 ----------------------------------\n    54-10-2006   \n            31   Oct\n                 ----------------------------------\n    23-11-2006   \n             1   Grace\n                 ----------------------------------\n    22-11-2006   LPD\n   7                  Rem on 37days\n                 ----------------------------------\n    15-11-2006   \n             1   Add\n                 ----------------------------------\n    16-11-2006   EPD\n            20   Forfeit\n                 ----------------------------------\n     6-12-2006   EPD (adjusted)\n\n  ! R7.4: forfeiture pushed the EPD past the LPD; capped at the LPD"
+      },
+      "booklet_says": null,
+      "note": "R7.4 hard cap: forfeiture may not push past the LPD"
+    },
+    {
+      "id": "x-punishment-same-date",
+      "page": null,
+      "source": "engine",
+      "scenario": "punishment_loss",
+      "inputs": {
+        "close_days": 6,
+        "diet_days": 3,
+        "same_date": true
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "loss": "2days"
+      },
+      "booklet_says": null,
+      "note": "R7.3 same date: higher of the two, divided by three"
+    },
+    {
+      "id": "x-punishment-different-dates",
+      "page": null,
+      "source": "engine",
+      "scenario": "punishment_loss",
+      "inputs": {
+        "close_days": 6,
+        "diet_days": 3,
+        "same_date": false
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "loss": "3days"
+      },
+      "booklet_says": null,
+      "note": "R7.3 different dates: added, one third forfeited"
+    },
+    {
+      "id": "x-leap-1900-gregorian",
+      "page": null,
+      "source": "engine",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          2,
+          1900
+        ],
+        "sentence": {
+          "days": 29,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "1-3-1900",
+        "remission": "nil",
+        "remission_note": "no remission: sentence below 31 days (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: sentence below 31 days (R6.1)"
+        ],
+        "render": "      1-2-1900   D/S\n  29                  S\n                 ----------------------------------\n     30-2-1900   \n            28   Feb\n                 ----------------------------------\n      2-3-1900   \n             1   Grace\n                 ----------------------------------\n      1-3-1900   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+      },
+      "booklet_says": null,
+      "note": "R2.4 true rule: 1900 is not leap; 30-2-1900 rolls forward to 2-3-1900 before grace, D/R 1-3-1900"
+    },
+    {
+      "id": "x-leap-1900-divide-by-4",
+      "page": null,
+      "source": "engine",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          2,
+          1900
+        ],
+        "sentence": {
+          "days": 29,
+          "months": 0,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "divide_by_4",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "29-2-1900",
+        "remission": "nil",
+        "remission_note": "no remission: sentence below 31 days (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: sentence below 31 days (R6.1)"
+        ],
+        "render": "      1-2-1900   D/S\n  29                  S\n                 ----------------------------------\n     30-2-1900   \n            29   Feb\n                 ----------------------------------\n      1-3-1900   \n             1   Grace\n                 ----------------------------------\n     29-2-1900   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+      },
+      "booklet_says": null,
+      "note": "R2.4 booklet rule: 1900 treated as leap; 30-2-1900 rolls to 1-3-1900, grace gives D/R 29-2-1900"
+    },
+    {
+      "id": "x-month-end-preservation-off",
+      "page": null,
+      "source": "engine",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          1,
+          12,
+          71
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 3,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": false,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "29-2-72",
+        "epd": "30-1-72",
+        "dr": null,
+        "remission": "1mth",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "30days",
+        "flags": [],
+        "render": "       1-12-71   D/S\n          3           S\n                 ----------------------------------\n        1-3-72   \n             1   Grace\n                 ----------------------------------\n       29-2-72   LPD\n          1           1/3 Rem on 3mths\n                 ----------------------------------\n       29-1-72   \n             1   Add\n                 ----------------------------------\n       30-1-72   EPD"
+      },
+      "booklet_says": null,
+      "note": "A4 switch off: 29-2-72 less 1 month stays 29-1-72, EPD 30-1-72"
+    }
+  ]
+}
