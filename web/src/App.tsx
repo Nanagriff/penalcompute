@@ -51,39 +51,43 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
   }
 
   return (
-    <main>
+    <>
       <header className="chrome masthead">
-        <p className="eyebrow">Ghana Prisons Service</p>
-        <h1>Sentence computation</h1>
-        <p className="sub">
-          The register working, line by line, with the rule behind each line.
-          Works offline once loaded.
-        </p>
-      </header>
-      <VersionNotice updateReady={updateReady} onReload={onReload} />
-      <div className="columns">
-        <Form state={state} onChange={(s) => { setState(s); }} onCompute={compute} onClear={clear} errors={errors} />
-        <div className="output" ref={resultRef}>
-          {computed ? (
-            <ResultView key={runs} spec={computed.spec} outcome={computed.outcome} sex={computed.sex} />
-          ) : (
-            <div className="chrome empty" aria-hidden="true">
-              <p className="empty-title">Register working</p>
-              <p>
-                Enter the court's order and press <b>Compute</b>. The working appears here
-                exactly as it is set out in the register, ready to check against your own
-                computation and to print.
-              </p>
-            </div>
-          )}
+        <div className="wrap">
+          <p className="service">Ghana Prisons Service</p>
+          <h1>Sentence computation</h1>
+          <p className="sub">
+            The register working, line by line, with the rule behind each line.
+            Works offline once loaded.
+          </p>
         </div>
-      </div>
+      </header>
+      <main>
+        <VersionNotice updateReady={updateReady} onReload={onReload} />
+        <div className="columns">
+          <Form state={state} onChange={(s) => { setState(s); }} onCompute={compute} onClear={clear} errors={errors} />
+          <div className={computed ? "output sheet" : "output sheet is-empty"} ref={resultRef}>
+            {computed ? (
+              <ResultView key={runs} spec={computed.spec} outcome={computed.outcome} sex={computed.sex} />
+            ) : (
+              <div className="chrome empty" aria-hidden="true">
+                <h2 className="sheet-title">Register</h2>
+                <p>
+                  Enter the court's order and press <b>Compute</b>. The working appears here
+                  exactly as it is set out in the register, ready to check against your own
+                  computation and to print.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
       <footer className="chrome">
-        <p className="credit">A project by Officer Cadet Course Intake 36.</p>
-        <p>
-          Nothing typed here leaves this device unless you report an answer as wrong.
-        </p>
+        <div className="wrap">
+          <p className="credit">Developed by Officer Cadet Course Intake 36</p>
+          <p>Nothing typed here leaves this device unless you report an answer as wrong.</p>
+        </div>
       </footer>
-    </main>
+    </>
   );
 }

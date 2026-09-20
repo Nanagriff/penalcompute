@@ -28,9 +28,9 @@ export function Register({ lines }: { lines: Line[] }) {
     <table className="register" aria-label="Register working">
       <thead>
         <tr>
-          <th scope="col" className="cell">D</th>
-          <th scope="col" className="cell">M</th>
-          <th scope="col" className="cell">Y</th>
+          <th scope="col" className="cell d">Day</th>
+          <th scope="col" className="cell m">Mth</th>
+          <th scope="col" className="cell y">Year</th>
           <th scope="col" className="label"><span className="visually-hidden">Line</span></th>
         </tr>
       </thead>

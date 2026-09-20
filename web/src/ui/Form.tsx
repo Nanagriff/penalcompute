@@ -19,14 +19,14 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
 
   return (
     <form
-      className="chrome inputs"
+      className="chrome inputs sheet"
       onSubmit={(e) => {
         e.preventDefault();
         onCompute();
       }}
       noValidate
     >
-      <h2 className="section-title">Court's order</h2>
+      <h2 className="sheet-title">Court's order</h2>
       <Select
         id="scenario"
         label="Type of order"

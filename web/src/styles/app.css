@@ -1,108 +1,113 @@
-/* Design tokens: see DESIGN.md. Five colours, two typefaces, nothing else. */
+/* Design tokens: see DESIGN.md. Ghana Prisons Service brown and white. */
 :root {
-  --ink: #1a1a18;
-  --paper: #fbfaf7;
-  --rule: #c9c4b8;
-  --flag: #8a5a2b;
-  --confirm: #2f5d3f;
+  --brown: #4a2c17;      /* service brown: masthead, headings, drawn rules, the Compute button */
+  --brown-deep: #33200f; /* masthead shade */
+  --tan: #a67c52;        /* input borders, ledger column rules */
+  --tan-line: #dccbb4;   /* faint ledger ruling */
+  --sand: #f3ece1;       /* the desk behind the sheets, and the key register rows */
+  --paper: #ffffff;      /* the sheets */
+  --ink: #241a12;
+  --flag: #a3321c;       /* annotation: an officer must read this */
+  --confirm: #2f5d3f;    /* a confirmed working day, nothing else */
   --mono: ui-monospace, "Cascadia Mono", "DejaVu Sans Mono", "Roboto Mono", "Droid Sans Mono", monospace;
   --sans: system-ui, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --serif: Georgia, "Noto Serif", "Times New Roman", "Droid Serif", serif;
+  --gutter: 16px;
   color-scheme: light;
 }
 
 * { box-sizing: border-box; }
 
-html { background: var(--paper); }
+html { background: var(--sand); }
 
 body {
   margin: 0;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--sand);
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.45;
   -webkit-text-size-adjust: 100%;
 }
 
-main {
-  max-width: 44rem;
-  margin: 0 auto;
-  padding: 1.25rem 16px 3rem;
-}
-
-/* ---- masthead ---------------------------------------------------------- */
-
-.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 0.9rem; margin-bottom: 1.25rem; }
-.eyebrow {
-  margin: 0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  opacity: 0.75;
-}
-h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0.1rem 0 0;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-.sub { margin: 0.4rem 0 0; color: var(--ink); opacity: 0.8; max-width: 38rem; }
-
-h2.section-title {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  opacity: 0.75;
-  margin: 0 0 0.75rem;
-}
-
-/* ---- two columns on a wide screen: order on the left, working on the right ---- */
-
-.columns { display: block; }
-.output { min-width: 0; }
-@media (min-width: 60rem) {
-  main { max-width: 72rem; }
-  .columns {
-    display: grid;
-    grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
-    gap: 0 3rem;
-    align-items: start;
-  }
-  .output {
-    position: sticky;
-    top: 0;
-    max-height: 100vh;
-    overflow-y: auto;
-    padding-top: 0;
-  }
-  .output .result { border-top: 0; margin-top: 0; padding-top: 0; }
-}
-
-.empty { padding: 0.5rem 0 1rem; opacity: 0.7; max-width: 32rem; }
-.empty-title { font-weight: 600; margin: 0 0 0.35rem; }
-.empty p { margin: 0; }
-@media (max-width: 59.99rem) { .empty { display: none; } }
+.wrap { max-width: 44rem; margin: 0 auto; padding: 0 var(--gutter); }
+main { max-width: 44rem; margin: 0 auto; padding: 1.25rem var(--gutter) 2rem; }
 
 .mono { font-family: var(--mono); }
 .hint { display: block; font-size: 0.85rem; opacity: 0.8; margin-top: 0.25rem; }
 .flag { color: var(--flag); }
 .confirm { color: var(--confirm); }
 
+/* ---- masthead: service brown, white title ------------------------------- */
+
+.masthead {
+  background: var(--brown);
+  background-image: linear-gradient(180deg, var(--brown) 0%, var(--brown-deep) 100%);
+  color: var(--paper);
+  padding: 1.5rem 0 1.4rem;
+  border-bottom: 4px solid var(--tan);
+}
+.masthead .service {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--sand);
+}
+.masthead h1 {
+  font-family: var(--serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin: 0.15rem 0 0;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  color: var(--paper);
+}
+.masthead .sub { margin: 0.5rem 0 0; color: var(--sand); opacity: 0.9; max-width: 36rem; }
+
+/* ---- sheets: the order form and the register page ---------------------- */
+
+.sheet {
+  background: var(--paper);
+  border: 1px solid var(--tan-line);
+  border-top: 5px solid var(--brown);
+  padding: 1.1rem var(--gutter) 1.25rem;
+  margin: 0 0 1.25rem;
+  box-shadow: 0 1px 0 var(--tan-line);
+}
+h2.sheet-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--brown);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--tan-line);
+}
+
+/* two columns on a wide screen: the order on the left, the register on the right */
+.columns { display: block; }
+.output { min-width: 0; }
+@media (min-width: 60rem) {
+  main { max-width: 74rem; padding-top: 1.75rem; }
+  .masthead .wrap, footer .wrap { max-width: 74rem; }
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
+    gap: 0 2rem;
+    align-items: start;
+  }
+  .sheet { padding: 1.5rem 1.5rem 1.6rem; }
+}
+
+.empty { color: var(--brown); max-width: 32rem; }
+.empty p { margin: 0; opacity: 0.85; }
+@media (max-width: 59.99rem) { .output.is-empty { display: none; } }
+
 /* ---- inputs ------------------------------------------------------------ */
 
-form.inputs { padding-top: 0.25rem; }
-@media (min-width: 60rem) { form.inputs { padding-top: 0; } }
-
-fieldset {
-  border: 0;
-  margin: 0 0 1rem;
-  padding: 0;
-  min-width: 0;
-}
-legend { font-weight: 600; padding: 0; margin-bottom: 0.3rem; }
+fieldset { border: 0; margin: 0 0 1rem; padding: 0; min-width: 0; }
+legend { font-weight: 600; padding: 0; margin-bottom: 0.3rem; color: var(--brown); }
 
 fieldset.date, fieldset.duration {
   display: flex;
@@ -115,19 +120,19 @@ fieldset .hint { width: 100%; }
 
 fieldset label { display: flex; flex-direction: column; font-size: 0.8rem; }
 fieldset label span { margin-bottom: 0.15rem; }
-.sep { align-self: flex-end; padding-bottom: 0.45rem; font-family: var(--mono); }
+.sep { align-self: flex-end; padding-bottom: 0.45rem; font-family: var(--mono); color: var(--tan); }
 
 input, select, textarea, button {
   font: inherit;
   color: var(--ink);
   background: var(--paper);
-  border: 1px solid var(--rule);
-  border-radius: 0;
+  border: 1px solid var(--tan);
+  border-radius: 2px;
   padding: 0.45rem 0.5rem;
   min-height: 2.5rem;
 }
 input { font-family: var(--mono); font-size: 1.05rem; }
-input::placeholder { color: var(--rule); opacity: 1; }
+input::placeholder { color: var(--tan-line); opacity: 1; }
 input.w2 { width: 4.5ch; text-align: right; }
 input.w3 { width: 5.5ch; text-align: right; }
 input.w4 { width: 7ch; text-align: right; }
@@ -136,34 +141,37 @@ select {
   padding-right: 2rem;
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%231a1a18' stroke-width='1.5'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%234a2c17' stroke-width='1.6'/></svg>");
   background-repeat: no-repeat;
   background-position: right 0.6rem center;
 }
 input:focus, select:focus, textarea:focus, button:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--brown);
   outline-offset: 1px;
 }
 textarea { width: 100%; font-family: var(--sans); resize: vertical; }
 
 .select { margin: 0 0 1rem; display: flex; flex-direction: column; }
-.select > label { font-weight: 600; margin-bottom: 0.3rem; }
+.select > label { font-weight: 600; margin-bottom: 0.3rem; color: var(--brown); }
 .select select { max-width: 100%; width: 100%; }
 
 label.inline { display: flex; flex-direction: column; margin: 0.5rem 0; }
 label.inline > span { margin-bottom: 0.25rem; }
 label.inline.check { flex-direction: row; align-items: center; gap: 0.5rem; }
-label.inline.check input { min-height: 0; width: 1.1rem; height: 1.1rem; margin: 0; }
+label.inline.check input { min-height: 0; width: 1.1rem; height: 1.1rem; margin: 0; accent-color: var(--brown); }
 label.stack { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 0; }
 
-details { border-top: 1px solid var(--rule); padding: 0.5rem 0 0.25rem; margin: 0 0 1rem; }
-summary { cursor: pointer; font-weight: 600; padding: 0.25rem 0; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+details { border-top: 1px solid var(--tan-line); padding: 0.5rem 0 0.25rem; margin: 0 0 1rem; }
+summary {
+  cursor: pointer; font-weight: 600; color: var(--brown);
+  padding: 0.25rem 0; list-style: none; display: flex; align-items: center; gap: 0.5rem;
+}
 summary::-webkit-details-marker { display: none; }
-summary::before { content: "+"; font-family: var(--mono); width: 1ch; opacity: 0.7; }
+summary::before { content: "+"; font-family: var(--mono); width: 1ch; color: var(--tan); }
 details[open] > summary::before { content: "\2212"; }
 details[open] > summary { margin-bottom: 0.25rem; }
 
-.counts .count { border-left: 2px solid var(--rule); padding-left: 0.75rem; margin-bottom: 0.5rem; }
+.counts .count { border-left: 3px solid var(--tan-line); padding-left: 0.75rem; margin-bottom: 0.5rem; }
 .counts .count fieldset { margin-bottom: 0.5rem; }
 
 .row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
@@ -171,90 +179,92 @@ details[open] > summary { margin-bottom: 0.25rem; }
 
 button {
   cursor: pointer;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--brown);
+  color: var(--brown);
   padding: 0.5rem 1.25rem;
   font-weight: 600;
 }
-button[type="submit"] { background: var(--ink); color: var(--paper); }
-button[type="submit"]:hover { opacity: 0.9; }
-button.quiet { font-weight: 400; border-color: var(--rule); }
-button.quiet:hover { border-color: var(--ink); }
+button[type="submit"] { background: var(--brown); color: var(--paper); }
+button[type="submit"]:hover { background: var(--brown-deep); }
+button.quiet { font-weight: 500; border-color: var(--tan); }
+button.quiet:hover { border-color: var(--brown); background: var(--sand); }
+button.link {
+  border: 0; padding: 0; min-height: 0; background: none;
+  text-decoration: underline; font-weight: 400; color: var(--brown);
+}
+button:disabled { opacity: 0.5; cursor: default; }
 form.inputs .actions button[type="submit"] { min-width: 9rem; }
 @media (max-width: 30rem) {
   form.inputs .actions button[type="submit"] { flex: 1 1 auto; }
 }
-button.link {
-  border: 0; padding: 0; min-height: 0; background: none;
-  text-decoration: underline; font-weight: 400;
-}
-button:disabled { opacity: 0.5; cursor: default; }
 
 .errors {
   margin: 0.75rem 0;
   padding: 0.5rem 0.75rem 0.5rem 1.75rem;
   color: var(--flag);
   border-left: 3px solid var(--flag);
+  background: #fbf3f0;
 }
 .privacy { margin-top: 1rem; }
 
 /* ---- result ------------------------------------------------------------ */
 
-.result {
-  border-top: 1px solid var(--ink);
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  animation: reveal 180ms ease-out;
-}
+.result { animation: reveal 200ms ease-out; }
 @keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .result { animation: none; } }
 
 dl { margin: 0 0 1rem; }
 dl > div { display: flex; flex-wrap: wrap; gap: 0 0.75rem; padding: 0.15rem 0; }
-dt { font-weight: 600; min-width: 11rem; }
+dt { font-weight: 600; min-width: 11rem; color: var(--brown); }
 dd { margin: 0; }
-.summary-inputs { font-size: 0.95rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; }
-.answers {
-  margin: 1rem 0;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--rule);
-  max-width: 34rem;
-}
-.answers .note { opacity: 0.8; font-size: 0.9rem; }
-.answers dd.mono { font-size: 1.05rem; font-weight: 700; }
+.summary-inputs { font-size: 0.95rem; border-bottom: 1px solid var(--tan-line); padding-bottom: 0.5rem; }
 
-/* The register: monospace, three ruled columns (day, month, year), rules only where drawn. */
+/* The register: a ruled ledger. Day, month and year in their own columns,
+   faint tan ruling between them, brown rules only where the booklet draws them. */
 table.register {
   border-collapse: collapse;
   font-family: var(--mono);
   font-size: 1rem;
   line-height: 1.5;
-  margin: 0.75rem 0;
+  margin: 0.9rem 0;
   width: 100%;
-  max-width: 34rem;
+  max-width: 36rem;
+  border: 1px solid var(--tan);
+  background: var(--paper);
 }
-table.register th, table.register td { padding: 0.05rem 0; vertical-align: baseline; }
+table.register th, table.register td { padding: 0.2rem 0.75ch; vertical-align: baseline; }
 table.register th {
   font-family: var(--sans);
   font-weight: 600;
   font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  opacity: 0.7;
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.2rem;
+  color: var(--brown);
+  background: var(--sand);
+  border-bottom: 1px solid var(--tan);
+  padding: 0.3rem 0.75ch;
 }
 table.register .cell { text-align: right; white-space: nowrap; }
-table.register .d { width: 7ch; }
-table.register .m { width: 4ch; }
-table.register .y { width: 6ch; }
-table.register .m, table.register .y { padding-left: 1.5ch; }
-table.register .label { padding-left: 2.5ch; white-space: nowrap; text-align: left; }
-table.register tr.ruled td { border-bottom: 1px solid var(--ink); }
-table.register tr.key td { font-weight: 700; }
+table.register .d { width: 8ch; }
+table.register .m { width: 5ch; }
+table.register .y { width: 7ch; }
+table.register .d, table.register .m, table.register .y { border-right: 1px solid var(--tan-line); }
+table.register .label { padding-left: 2ch; white-space: nowrap; text-align: left; }
+table.register tr.ruled td { border-bottom: 1.5px solid var(--brown); }
+table.register tr.key td { font-weight: 700; background: var(--sand); color: var(--brown); }
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;
 }
+
+.answers {
+  margin: 1rem 0;
+  padding: 0.6rem 0.9rem;
+  border-left: 5px solid var(--brown);
+  background: var(--sand);
+  max-width: 36rem;
+}
+.answers .note { opacity: 0.8; font-size: 0.9rem; }
+.answers dd.mono { font-size: 1.1rem; font-weight: 700; color: var(--brown); }
 
 .flags {
   list-style: none;
@@ -270,34 +280,45 @@ table.register tr.key td { font-weight: 700; }
   list-style: none;
   padding: 0.5rem 0 0;
   margin: 0.75rem 0;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--tan-line);
   font-size: 0.95rem;
 }
 .discharge li { padding: 0.1rem 0; }
-.discharge .head { font-weight: 600; }
+.discharge .head { font-weight: 600; color: var(--brown); }
 .discharge .k { font-weight: 600; }
 
 .versions { font-family: var(--mono); font-size: 0.8rem; opacity: 0.8; margin: 0.75rem 0; }
 .print-only { display: none; }
 
-.feedback { border-top: 1px solid var(--rule); margin-top: 1rem; padding-top: 0.75rem; }
+.feedback { border-top: 1px solid var(--tan-line); margin-top: 1rem; padding-top: 0.75rem; }
 .feedback-done { color: var(--confirm); margin-top: 1rem; }
 
 .notice {
-  border: 1px solid var(--rule);
+  border: 1px solid var(--tan);
+  background: var(--paper);
   padding: 0.5rem 0.75rem;
   margin: 0 0 1rem;
   font-size: 0.9rem;
 }
 
-footer { margin-top: 2.5rem; font-size: 0.85rem; opacity: 0.85; border-top: 1px solid var(--rule); padding-top: 0.75rem; }
-footer p { margin: 0.25rem 0; }
-footer .credit { font-weight: 600; opacity: 1; }
+/* ---- footer ------------------------------------------------------------- */
+
+footer {
+  border-top: 4px solid var(--brown);
+  background: var(--paper);
+  padding: 1rem 0 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+footer p { margin: 0.2rem 0; }
+footer .credit { font-family: var(--serif); font-size: 1.05rem; color: var(--brown); }
 
 @media (max-width: 400px) {
   body { font-size: 15px; }
+  .masthead h1 { font-size: 1.8rem; }
   table.register { font-size: 0.95rem; }
-  table.register .label { padding-left: 1.5ch; white-space: normal; }
+  table.register th, table.register td { padding: 0.2rem 0.5ch; }
+  table.register .label { padding-left: 1.2ch; white-space: normal; }
   dt { min-width: 9rem; }
 }
 
@@ -306,20 +327,20 @@ footer .credit { font-weight: 600; opacity: 1; }
 @page { size: A4; margin: 18mm 16mm; }
 
 @media print {
-  :root { --ink: #000; --paper: #fff; --rule: #888; --flag: #000; --confirm: #000; }
+  :root { --ink: #000; --paper: #fff; --sand: #fff; --brown: #000; --tan: #666; --tan-line: #999; --flag: #000; --confirm: #000; }
   html, body { background: #fff; color: #000; }
   main { max-width: none; padding: 0; }
   .columns { display: block; }
-  .output { position: static; max-height: none; overflow: visible; border-top: 0; padding-top: 0; }
-  .empty { display: none; }
+  .sheet { border: 0; padding: 0; margin: 0; box-shadow: none; }
   /* the register and the inputs only: no chrome, no answers restated, no working-day layer */
-  .chrome, .notice, .feedback, .feedback-done, footer, form.inputs, .answers, .discharge { display: none !important; }
-  .result { border-top: 0; margin-top: 0; padding-top: 0; animation: none; }
+  .chrome, .notice, .feedback, .feedback-done, footer, form.inputs, .answers, .discharge, .empty { display: none !important; }
+  .result { animation: none; }
   .summary-inputs { border-bottom: 1px solid #000; }
-  table.register { font-size: 11pt; }
+  table.register { font-size: 11pt; border-color: #000; }
+  table.register th { background: #fff; border-bottom: 1px solid #000; }
+  table.register tr.key td { background: #fff; }
   table.register tr.ruled td { border-bottom: 1px solid #000; }
-  .flags, .discharge { font-size: 10pt; }
-  .discharge { page-break-inside: avoid; }
+  .flags { font-size: 10pt; }
   .versions {
     display: block;
     margin-top: 8mm;
