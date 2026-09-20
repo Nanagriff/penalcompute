@@ -56,6 +56,8 @@ export interface FormState {
   // reduction: the order says "reduced by" (a cut) or "reduced to" (a new term)
   reductionMode: "by" | "to";
   newTerm: DurInput;
+  /** Recorded on the register, never used in the working (p.10 rule d). */
+  dateOfReduction: DateInput;
   // single escape
   dateOfEscape: DateInput;
   dateOfRecapture: DateInput;
@@ -95,6 +97,7 @@ export function initialState(): FormState {
     cut: emptyDur(),
     reductionMode: "by",
     newTerm: emptyDur(),
+    dateOfReduction: emptyDate(),
     dateOfEscape: emptyDate(),
     dateOfRecapture: emptyDate(),
     dateOfEscape1: emptyDate(),
@@ -119,8 +122,13 @@ export function initialState(): FormState {
 // --------------------------------------------------------------------------
 
 export type Parsed =
-  | { ok: true; spec: CaseSpec; sex: string }
+  | { ok: true; spec: CaseSpec; sex: string; recorded: Recorded }
   | { ok: false; errors: string[] };
+
+/** Facts written on the register that take no part in the arithmetic. */
+export interface Recorded {
+  dateOfReduction?: WireDate;
+}
 
 function intOf(s: string): number | null {
   const t = s.trim();
@@ -179,6 +187,7 @@ export function toCaseSpec(s: FormState): Parsed {
   const policy = policyOf(s);
   const cls = s.offenceClass;
   let spec: CaseSpec | null = null;
+  const recorded: Recorded = {};
 
   switch (s.scenario) {
     case "simple": {
@@ -248,6 +257,11 @@ export function toCaseSpec(s: FormState): Parsed {
       } else {
         cut = parseDur(s.cut, "Reduction", errors, true);
       }
+      const dr = s.dateOfReduction;
+      if (dr.d.trim() || dr.m.trim() || dr.y.trim()) {
+        const parsed = parseDate(dr, "Date of reduction", errors);
+        if (parsed) recorded.dateOfReduction = parsed;
+      }
       spec = { scenario: "reduction", inputs: { date_of_sentence: ds, sentence, cut, offence_class: cls }, policy };
       break;
     }
@@ -300,7 +314,7 @@ export function toCaseSpec(s: FormState): Parsed {
   }
 
   if (errors.length || !spec) return { ok: false, errors };
-  return { ok: true, spec, sex: s.sex };
+  return { ok: true, spec, sex: s.sex, recorded };
 }
 
 /** The term that licence eligibility is judged on (R8.8): the total sentence. */

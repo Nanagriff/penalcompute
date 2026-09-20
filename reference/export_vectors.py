@@ -269,6 +269,16 @@ def build_cases() -> List[Dict[str, Any]]:
                   booklet_says={"remission_label": "1yr 10mths"},
                   note="right figure under a label reading '1yr 10mths' (R8.2, R8.3)"))
 
+    # ---- p.10 reduction on appeal (Yaw Atta) -----------------------------
+    # The question gives 10yrs 3mths and an appeal decided on 17/11/99; the
+    # working uses 10yrs 4mths and never touches the appeal date (rule (d)).
+    C.append(case("p10-appeal-reduction", 10, "reduction",
+                  {"date_of_sentence": [31, 3, 1998],
+                   "sentence": dur(years=10, months=4), "cut": dur(years=3),
+                   "offence_class": "felony"},
+                  booklet_says={"sentence_in_question": "10yrs 3mths"},
+                  note="worked from the original D/S; the date of the appeal is recorded, not used (R8.4, p.10 rule d)"))
+
     # ---- p.11 presidential pardon ----------------------------------------
     C.append(case("p11-pardon", 11, "reduction",
                   {"date_of_sentence": [30, 12, 1998],

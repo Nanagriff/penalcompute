@@ -3,12 +3,13 @@ import { runCase, type CaseOutcome, type CaseSpec } from "./engine";
 import { Form } from "./ui/Form";
 import { ResultView } from "./ui/ResultView";
 import { VersionNotice } from "./ui/VersionNotice";
-import { initialState, toCaseSpec, type FormState } from "./ui/state";
+import { initialState, toCaseSpec, type FormState, type Recorded } from "./ui/state";
 
 interface Computed {
   spec: CaseSpec;
   outcome: CaseOutcome;
   sex: string;
+  recorded: Recorded;
 }
 
 export function App({ updateReady, onReload }: { updateReady: boolean; onReload: () => void }) {
@@ -28,7 +29,7 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
     try {
       const outcome = runCase(parsed.spec);
       setErrors([]);
-      setComputed({ spec: parsed.spec, outcome, sex: parsed.sex });
+      setComputed({ spec: parsed.spec, outcome, sex: parsed.sex, recorded: parsed.recorded });
       setRuns((n) => n + 1);
     } catch (e) {
       setErrors([e instanceof Error ? e.message : String(e)]);
@@ -68,7 +69,7 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
           <Form state={state} onChange={(s) => { setState(s); }} onCompute={compute} onClear={clear} errors={errors} />
           <div className={computed ? "output sheet" : "output sheet is-empty"} ref={resultRef}>
             {computed ? (
-              <ResultView key={runs} spec={computed.spec} outcome={computed.outcome} sex={computed.sex} />
+              <ResultView key={runs} spec={computed.spec} outcome={computed.outcome} sex={computed.sex} recorded={computed.recorded} />
             ) : (
               <div className="chrome empty" aria-hidden="true">
                 <h2 className="sheet-title">Register</h2>

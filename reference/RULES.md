@@ -170,7 +170,19 @@ the groups. (p.9 example 2: counts 1, 3, 4 concurrent = 18mths; counts 2, 5, 6
 concurrent = 2yrs; the two groups consecutive = 3yrs 6mths.)
 
 **R8.4 Reduction or pardon.** Deduct from the sentence, then work from the
-original D/S. Remission runs on the balance to serve. (p.11)
+original D/S. Remission runs on the balance to serve. (p.10, p.11)
+
+p.10, supplied 2026-09-20, lists the grounds: (a) an appeal substitutes a
+lesser sentence, (b) a meritorious act such as helping to quell a riot, (c)
+general amnesty. Rule (d): for (a) and (b) subtract the fresh sentence from
+the original and start working from the first date of conviction, unless the
+court makes a special order. Rule (e): amnesty follows the Government's
+directive of the day. The Yaw Atta example (10yrs 4mths from 31-3-1998,
+reduced by 3yrs on appeal decided 17-11-1999) never uses the appeal date: the
+balance of 7yrs 4mths runs from 31-3-1998 to LPD 30-7-2005 and EPD 21-2-2003.
+The date of the reduction is therefore recorded on the register, not computed
+with. The question states the sentence as 10yrs 3mths and the working as
+10yrs 4mths; the working is followed.
 
 **R8.5 Single escape.** Period served = date of escape - D/S. Sentence remaining
 = sentence - period served. Work forward from the date of recapture. The period at
@@ -235,9 +247,9 @@ method cannot flag and the engine must.
 - Recording of life and condemned sentences: excluded from remission, no
   computation shown.
 - The lettered general rules, the definition pages, technique 2 and 3, the
-  reduction example, the bailed-out example, the forfeiture example and the two
-  licence examples are on pages 1, 2, 6, 10, 13, 17 and 20, which were not
-  supplied.
+  bailed-out example, the forfeiture example and the two licence examples are
+  on pages 1, 2, 6, 13, 17 and 20, which were not supplied. Page 10, with the
+  reduction rules and example, was supplied later and is now under R8.4.
 
 ---
 

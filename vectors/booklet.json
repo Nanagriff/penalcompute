@@ -542,6 +542,52 @@
       "note": "right figure under a label reading '1yr 10mths' (R8.2, R8.3)"
     },
     {
+      "id": "p10-appeal-reduction",
+      "page": 10,
+      "source": "booklet",
+      "scenario": "reduction",
+      "inputs": {
+        "date_of_sentence": [
+          31,
+          3,
+          1998
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 4,
+          "years": 10
+        },
+        "cut": {
+          "days": 0,
+          "months": 0,
+          "years": 3
+        },
+        "offence_class": "felony"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "30-7-2005",
+        "epd": "21-2-2003",
+        "dr": null,
+        "remission": "2yrs 5mths 10days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "2yrs 5mths 9days",
+        "flags": [
+          "R8.4: 10yrs 4mths less 3yrs = 7yrs 4mths, worked from original D/S"
+        ],
+        "render": "     31-3-1998   D/S\n          4       7   S\n                 ----------------------------------\n     31-7-2005   \n             1   Grace\n                 ----------------------------------\n     30-7-2005   LPD\n  10      5       2   1/3 Rem on 7yrs 4mths\n                 ----------------------------------\n     20-2-2003   \n             1   Add\n                 ----------------------------------\n     21-2-2003   EPD\n\n  ! R8.4: 10yrs 4mths less 3yrs = 7yrs 4mths, worked from original D/S",
+        "balance": "7yrs 4mths"
+      },
+      "booklet_says": {
+        "sentence_in_question": "10yrs 3mths"
+      },
+      "note": "worked from the original D/S; the date of the appeal is recorded, not used (R8.4, p.10 rule d)"
+    },
+    {
       "id": "p11-pardon",
       "page": 11,
       "source": "booklet",

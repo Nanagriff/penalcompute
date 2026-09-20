@@ -122,11 +122,13 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
           </div>
           {state.reductionMode === "to" ? (
             <DurationFields legend="New sentence" value={state.newTerm} onChange={set("newTerm")}
-              hint="The term the court substituted. The difference is deducted and the new term is worked from the original date of sentence; remission runs on it (R8.4). The date of the appeal decision is not needed." />
+              hint="The term the court substituted. The difference is deducted and the new term is worked from the original date of sentence; remission runs on it (R8.4)." />
           ) : (
             <DurationFields legend="Reduction or pardon" value={state.cut} onChange={set("cut")}
-              hint="Deducted from the sentence; remission runs on the balance, worked from the original date of sentence (R8.4). The date of the appeal decision is not needed." />
+              hint="Deducted from the sentence; remission runs on the balance, worked from the original date of sentence (R8.4)." />
           )}
+          <DateFields legend="Date of reduction, if known" value={state.dateOfReduction} onChange={set("dateOfReduction")}
+            hint="Written on the register for the file. It takes no part in the working, which runs from the original date of sentence (p.10, rule d)." />
         </>
       )}
 

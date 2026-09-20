@@ -96,6 +96,14 @@ check("p.9 ex2 EPD", r.epd, "28-7-2009")
 check("p.9 ex2 remission", r.remission, "1yr 2mths",
       booklet_says="the right figure under a label reading '1yr 10mths'")
 
+# ---- p.10 reduction on appeal (Yaw Atta) --------------------------------
+balance = Duration.of(years=10, months=4) - Duration.of(years=3)
+check("p.10 balance to serve", balance, "7yrs 4mths")
+r = compute(RegDate(31, 3, 1998), balance, "felony")
+check("p.10 LPD", r.lpd, "30-7-2005")
+check("p.10 EPD", r.epd, "21-2-2003")
+check("p.10 remission", r.remission, "2yrs 5mths 10days")
+
 # ---- p.11 presidential pardon -------------------------------------------
 balance = Duration.of(years=14, months=3, days=1) - Duration.of(years=2)
 check("p.11 balance to serve", balance, "12yrs 3mths 1day")

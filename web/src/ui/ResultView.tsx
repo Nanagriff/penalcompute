@@ -1,16 +1,17 @@
 import { useMemo, useState } from "react";
 import {
-  Duration, dischargeDate, format, licenceEligible, versionLine,
+  Duration, dischargeDate, format, licenceEligible, ordinal, regDate, versionLine,
   type CaseOutcome, type CaseSpec, type RegDate,
 } from "../engine";
 import { Feedback } from "./Feedback";
 import { Register } from "./Register";
-import { OFFENCE_CLASSES, UI_SCENARIOS, sentenceForLicence } from "./state";
+import { OFFENCE_CLASSES, UI_SCENARIOS, sentenceForLicence, type Recorded } from "./state";
 
 interface Props {
   spec: CaseSpec;
   outcome: CaseOutcome;
   sex: string;
+  recorded?: Recorded;
 }
 
 const fmtWire = (v: unknown): string => {
@@ -51,7 +52,7 @@ function Discharge({ date, isLpd, label }: { date: RegDate; isLpd: boolean; labe
   );
 }
 
-export function ResultView({ spec, outcome, sex }: Props) {
+export function ResultView({ spec, outcome, sex, recorded = {} }: Props) {
   const { result, expect } = outcome;
   const [copied, setCopied] = useState(false);
 
@@ -69,6 +70,12 @@ export function ResultView({ spec, outcome, sex }: Props) {
   }, [spec, expect, sex]);
 
   if (!result) return null;
+
+  const reductionDate = recorded.dateOfReduction
+    ? regDate(recorded.dateOfReduction[0], recorded.dateOfReduction[1], recorded.dateOfReduction[2])
+    : null;
+  const releaseDate = result.epd ?? result.dr;
+  const overdue = reductionDate && releaseDate && ordinal(releaseDate) < ordinal(reductionDate);
 
   const scenarioLabel = UI_SCENARIOS.find((s) => s.id === spec.scenario)?.label
     ?? (spec.scenario === "hospital" || spec.scenario === "forfeiture" ? "Single sentence with adjustments" : spec.scenario);
@@ -112,6 +119,9 @@ export function ResultView({ spec, outcome, sex }: Props) {
         {extras.map(([k, v]) => (
           <div key={k}><dt>{EXTRA_LABELS[k]}</dt><dd>{String(v)}</dd></div>
         ))}
+        {reductionDate && (
+          <div><dt>Date of reduction</dt><dd>{format(reductionDate)} <span className="note">recorded; not used in the working (p.10, rule d)</span></dd></div>
+        )}
       </dl>
 
       <Register lines={result.lines} />
@@ -135,9 +145,15 @@ export function ResultView({ spec, outcome, sex }: Props) {
         )}
       </dl>
 
-      {result.flags.length > 0 && (
+      {(result.flags.length > 0 || overdue) && (
         <ul className="flags" aria-label="Flags">
           {result.flags.map((f) => <li key={f}>{f}</li>)}
+          {overdue && (
+            <li key="overdue">
+              The {result.epd ? "EPD" : "D/R"} of {format(releaseDate!)} falls before the date of reduction,{" "}
+              {format(reductionDate!)}: release was already due when the reduction took effect.
+            </li>
+          )}
         </ul>
       )}
 
