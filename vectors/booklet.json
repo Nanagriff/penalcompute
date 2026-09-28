@@ -1269,6 +1269,42 @@
       "note": "R7.4 hard cap: forfeiture may not push past the LPD"
     },
     {
+      "id": "reviewer-9mths-90days",
+      "page": null,
+      "source": "reviewer",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          30,
+          6,
+          1995
+        ],
+        "sentence": {
+          "days": 90,
+          "months": 9,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "27-6-1996",
+        "epd": "29-2-1996",
+        "dr": null,
+        "remission": "3mths 30days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "3mths 29days",
+        "flags": [],
+        "render": "     30-6-1995   D/S\n  90      9           S\n                 ----------------------------------\n    120-3-1996   \n            31   Mar\n                 ----------------------------------\n     89-4-1996   \n            30   Apr\n                 ----------------------------------\n     59-5-1996   \n            31   May\n                 ----------------------------------\n     28-6-1996   \n             1   Grace\n                 ----------------------------------\n     27-6-1996   LPD\n  30      3           1/3 Rem on 9mths 90days\n                 ----------------------------------\n     28-2-1996   \n             1   Add\n                 ----------------------------------\n     29-2-1996   EPD"
+      },
+      "booklet_says": null,
+      "note": "reviewer report 2026-09: one third of 9mths 90days is 3mths 30days, divided column by column and never rolled up to 4mths (R6.7); 30 days off the day column then 3 months gives EPD 29-2-1996, not 28-2-1996"
+    },
+    {
       "id": "x-punishment-same-date",
       "page": null,
       "source": "engine",

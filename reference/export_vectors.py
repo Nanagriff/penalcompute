@@ -364,6 +364,11 @@ def build_cases() -> List[Dict[str, Any]]:
                   {"date_of_sentence": [17, 10, 2006], "sentence": dur(weeks=5, days=2),
                    "offence_class": "stealing", "forfeited_days": 20},
                   source="engine", note="R7.4 hard cap: forfeiture may not push past the LPD"))
+    C.append(case("reviewer-9mths-90days", None, "simple",
+                  {"date_of_sentence": [30, 6, 1995], "sentence": dur(months=9, days=90),
+                   "offence_class": "stealing"},
+                  source="reviewer",
+                  note="reviewer report 2026-09: one third of 9mths 90days is 3mths 30days, divided column by column and never rolled up to 4mths (R6.7); 30 days off the day column then 3 months gives EPD 29-2-1996, not 28-2-1996"))
     C.append(case("x-punishment-same-date", None, "punishment_loss",
                   {"close_days": 6, "diet_days": 3, "same_date": True},
                   source="engine", note="R7.3 same date: higher of the two, divided by three"))

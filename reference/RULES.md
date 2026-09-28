@@ -28,8 +28,9 @@ A computation needs exactly four things:
 you borrow or repay the true length of the month named in the date.
 
 **R2.2 Remission months are 30 days, and a remission year is 360 days.** All
-remission is computed by converting the sentence to a total day count at
-30 days per month, dividing, and converting back at 30 days per month.
+remission is divided column by column, carrying remainders down at twelve
+months to the year and 30 days to the month, and never carrying days back up
+into months (R6.7).
 
 These two conventions operate inside the same sum. R2.1 governs the date lines;
 R2.2 governs the deduction rows.
@@ -255,20 +256,33 @@ method cannot flag and the engine must.
 
 ## 11. Rule found by testing, not by reading
 
-**R6.7 Remission is expressed in the same units as the sentence.** A sentence
-stated in days only takes its remission in days and is subtracted from the date
-as days. A sentence carrying months or years takes its remission in months and
-days at 30 days to the month.
+**R6.7 Remission is divided column by column and never rolled up.** Years are
+divided by three and the remainder carried down into months at twelve to the
+year; months are divided by three and the remainder carried down into days at
+30 to the month (R2.2); days are divided by three with R6.4 rounding. Nothing is
+carried back up: a day column of 30 or more stays in the day column. The total
+is the same as one third of the whole sentence at 30 days to the month, and so
+is the rounding; only the way the figure is written differs, and it differs
+only when the sentence's own day column is 30 or more.
 
-This rule appears nowhere in the pages supplied. It surfaced only when the
+`100 days -> 33 days`, not 1mth 3days. (p.5)
+`9mths 90days -> 3mths 30days`, not 4mths. (reviewer report, 2026-09)
+
+This rule appears nowhere in the pages supplied. It surfaced first when the
 engine disagreed with the booklet on Kwesi Mensah (p.5, 100 days from 6-11-2005).
 One third of 100 days is 33 days. Subtracted as 33 days from the LPD of
 13-2-2006 it gives 11-1-2006 and an EPD of 12-1-2006, which is what the booklet
 prints. Rewritten as 1mth 3days and subtracted column-wise it gives 10-1-2006
-and an EPD of 11-1-2006, one day out.
+and an EPD of 11-1-2006, one day out. The engine first handled that as a
+special case for day-only sentences. A reviewer then reported 9mths 90days from
+30-6-1995: the engine rolled the remission up to 4mths and gave an EPD of
+28-2-1996, where the register keeps 3mths 30days, takes 30 days off the day
+column and then 3 months off the month column, and gives 29-2-1996. The general
+rule above covers both.
 
 The two are not interchangeable, because R2.1 and R2.2 disagree about what a
-month is. Any officer who converts a small day-remission into months for
-convenience will be one or two days wrong, in the direction of holding a
-prisoner too long, and nothing in the method will tell him. It is probably
+month is. Any officer who converts a day-remission into months for convenience
+will be one or two days wrong, and nothing in the method will tell him. It is
+probably stated on one of the missing pages. If it is not, it needs to be
+written down.
 stated on one of the missing pages. If it is not, it needs to be written down.

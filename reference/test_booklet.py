@@ -50,6 +50,12 @@ check("p.5 Kwesi Mensah LPD", r.lpd, "13-2-2006")
 check("p.5 Kwesi Mensah EPD", r.epd, "12-1-2006")
 check("p.5 Kwesi Mensah remission stays in days (R6.7)", r.remission, "33days")
 
+# ---- reviewer report, 2026-09: remission divided column by column (R6.7) --
+r = simple(RegDate(30, 6, 1995), Duration.of(months=9, days=90), "stealing")
+check("reviewer 9mths 90days remission stays 3mths 30days (R6.7)", r.remission, "3mths 30days")
+check("reviewer 9mths 90days LPD", r.lpd, "27-6-1996")
+check("reviewer 9mths 90days EPD (30 days off the day column, then 3 months)", r.epd, "29-2-1996")
+
 r = simple(RegDate(17, 11, 2004), Duration.of(years=6), "stealing")
 check("p.5 6yrs LPD", r.lpd, "16-11-2010")
 check("p.5 6yrs EPD", r.epd, "17-11-2008")

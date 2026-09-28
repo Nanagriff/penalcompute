@@ -80,6 +80,14 @@ describe("Task 2.4 remission", () => {
     const [rem] = remissionFor(Duration.of({ months: 9, days: 14 }), "assault");
     expect(rem.format()).toBe("3mths 5days");
   });
+  it("R6.7 the day column never carries up into months (reviewer, 9mths 90days)", () => {
+    const [rem] = remissionFor(Duration.of({ months: 9, days: 90 }), "stealing");
+    expect(rem.format()).toBe("3mths 30days");
+    expect(rem.totalDays).toBe(120);
+    // remainders carry down: 7yrs 4mths -> 2yrs 5mths 10days (p.10), 20mths -> 6mths 20days
+    expect(remissionFor(Duration.of({ years: 7, months: 4 }))[0].format()).toBe("2yrs 5mths 10days");
+    expect(remissionFor(Duration.of({ months: 20 }))[0].format()).toBe("6mths 20days");
+  });
   it("R6.1 / R6.2 thresholds", () => {
     expect(remissionFor(Duration.of({ days: 30 }))[0].totalDays).toBe(0);
     expect(remissionFor(Duration.of({ days: 31 }))[0].format()).toBe("1day");

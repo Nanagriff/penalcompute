@@ -10,7 +10,8 @@ Design notes
 * Dates are (day, month, year) triples that are allowed to be impossible.
   31 February and 54 October are legitimate intermediate states in this system,
   so datetime.date is deliberately not used for the register arithmetic.
-* All remission arithmetic is in whole days at 30 days to the month (R2.2).
+* Remission is divided column by column, remainders carried down at 30 days
+  to the month (R2.2, R6.7); days never carry back up into months.
   No floats anywhere: rounding is done on the integer remainder (R6.4).
 * Where the booklet is ambiguous, Policy carries a switch and the result
   carries a flag. The engine never resolves an ambiguity silently.
@@ -231,22 +232,30 @@ def one_third(total_days: int) -> int:
     return q + (1 if r == 2 else 0)
 
 
-def _as_sentence_units(n: int, sentence: Duration) -> Duration:
+def one_third_columns(sentence: Duration) -> Duration:
     """
-    R6.7. Remission is expressed in the same units as the sentence. A sentence
-    stated in days only takes its remission in days and is subtracted from the
-    date as days; any sentence carrying months or years takes its remission in
-    months and days at 30 days to the month.
+    R6.3 worked column by column, as the register does it (R6.7).
 
-    This matters. Kwesi Mensah, 100 days, earns 33 days. Subtracting 33 days
-    from 13-2-2006 gives 11-1-2006 and an EPD of 12-1-2006, which is what the
-    booklet prints. Subtracting the same 33 days rewritten as 1mth 3days gives
-    10-1-2006 and an EPD of 11-1-2006, one day out. The two are not
-    interchangeable because a calendar month is not 30 days (R2.1 against R2.2).
+    Years are divided by three and the remainder carried down into months at
+    twelve to the year; months are divided by three and the remainder carried
+    down into days at 30 to the month (R2.2); the days are divided by three
+    with R6.4 rounding. Nothing is ever carried back up: a day column of 30 or
+    more stays in the day column. The total in days is the same as one third of
+    the whole sentence at 30 days to the month, and so is the rounding, since
+    360 and 30 are both multiples of three.
+
+    This matters because the day column is subtracted as calendar days and the
+    month column as calendar months (R2.1). Kwesi Mensah, 100 days, earns 33
+    days. Subtracting 33 days from 13-2-2006 gives 11-1-2006 and an EPD of
+    12-1-2006, which is what the booklet prints; 1mth 3days would give
+    11-1-2006, one day out. A reviewer's case, 9mths 90days from 30-6-1995,
+    earns 3mths 30days, subtracted as 30 days and then 3 months from 27-6-1996
+    for an EPD of 29-2-1996; rolled up to 4mths it would give 28-2-1996.
     """
-    if sentence.months == 0 and sentence.years == 0:
-        return Duration(days=n)
-    return Duration.from_days(n)
+    years, r = divmod(sentence.years, 3)
+    months, r = divmod(r * 12 + sentence.months, 3)
+    days = one_third(r * 30 + sentence.days)
+    return Duration(days, months, years)
 
 
 def remission_for(sentence: Duration, offence_class: str = "felony") -> Tuple[Duration, str]:
@@ -256,8 +265,8 @@ def remission_for(sentence: Duration, offence_class: str = "felony") -> Tuple[Du
     if total < 31:
         return Duration(), "no remission: sentence below 31 days (R6.1)"
     if total <= 41:
-        return _as_sentence_units(total - 30, sentence), "ordinary remission (R6.2)"
-    return _as_sentence_units(one_third(total), sentence), "one-third remission (R6.3)"
+        return Duration(days=total - 30), "ordinary remission (R6.2)"
+    return one_third_columns(sentence), "one-third remission (R6.3)"
 
 
 def hospital_loss(period: Duration) -> Duration:
