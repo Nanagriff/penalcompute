@@ -4,6 +4,7 @@ import { Form } from "./ui/Form";
 import { ResultView } from "./ui/ResultView";
 import { VersionNotice } from "./ui/VersionNotice";
 import { initialState, toCaseSpec, type FormState, type Recorded } from "./ui/state";
+import { recordUse, startUsage } from "./ui/usageClient";
 
 interface Computed {
   spec: CaseSpec;
@@ -31,11 +32,18 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
       setErrors([]);
       setComputed({ spec: parsed.spec, outcome, sex: parsed.sex, recorded: parsed.recorded });
       setRuns((n) => n + 1);
+      recordUse(parsed.spec.scenario, true);
     } catch (e) {
       setErrors([e instanceof Error ? e.message : String(e)]);
       setComputed(null);
+      recordUse(parsed.spec.scenario, false);
     }
   }
+
+  // Counts made while offline in an earlier session go out once the network is there.
+  useEffect(() => {
+    startUsage();
+  }, []);
 
   // On a phone the form fills the screen, so bring the working into view once it exists.
   useEffect(() => {
@@ -58,8 +66,8 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
           <p className="service">Ghana Prisons Service</p>
           <h1>Sentence computation</h1>
           <p className="sub">
-            The register working, line by line, with the rule behind each line.
-            Works offline once loaded.
+            The system works with computational rules behind it.
+            It works offline once loaded.
           </p>
         </div>
       </header>
@@ -71,12 +79,20 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
             {computed ? (
               <ResultView key={runs} spec={computed.spec} outcome={computed.outcome} sex={computed.sex} recorded={computed.recorded} />
             ) : (
-              <div className="chrome empty" aria-hidden="true">
-                <h2 className="sheet-title">Register</h2>
+              <div className="chrome empty">
+                <h2 className="sheet-title">How to use</h2>
+                <ol>
+                  <li>Choose the type of order.</li>
+                  <li>Enter the date of sentence as written on the warrant.</li>
+                  <li>Enter the sentence and choose the offence class.</li>
+                  <li>Press <b>Compute</b>.</li>
+                </ol>
                 <p>
-                  Enter the court's order and press <b>Compute</b>. The working appears here
-                  exactly as it is set out in the register, ready to check against your own
-                  computation and to print.
+                  The working is shown step by step, so that the receptionist can verify it
+                  against their own computation.
+                </p>
+                <p>
+                  It can be printed, in case it needs to be attached to the Form 88.
                 </p>
               </div>
             )}
@@ -86,7 +102,10 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
       <footer className="chrome">
         <div className="wrap">
           <p className="credit">Developed by Officer Cadet Course Intake 36</p>
-          <p>Nothing typed here leaves this device unless you report an answer as wrong.</p>
+          <p>
+            Nothing typed here leaves this device unless you report an answer as wrong.
+            The kind of computation and the version are counted, to show how the tool is used.
+          </p>
         </div>
       </footer>
     </>

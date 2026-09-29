@@ -5,3 +5,4 @@ web/dist-single
 api/venv
 **/__pycache__
 *.sqlite3*
+**/admin.hash

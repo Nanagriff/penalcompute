@@ -226,6 +226,7 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
       </div>
       <p className="hint privacy">
         No case details are collected: there is no field for a name, prison number or file reference.
+        Each computation is counted by its kind only, never its dates or sentence.
       </p>
     </form>
   );

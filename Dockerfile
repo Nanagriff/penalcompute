@@ -1,5 +1,5 @@
-# One container: nginx serves the built site and proxies /feedback to uvicorn
-# inside the same container. TLS is terminated by the host's Traefik proxy.
+# One container: nginx serves the built site and proxies /feedback, /usage and
+# /admin to uvicorn inside the same container. TLS is terminated by the host's Traefik proxy.
 #
 #   docker build -t computation .
 #   docker run -p 8080:80 -v computation-data:/var/lib/computation computation
@@ -22,7 +22,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends nginx curl \
 WORKDIR /opt/computation/api
 COPY api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY api/main.py api/to_vectors.py ./
+COPY api/main.py api/admin.py api/to_vectors.py ./
+COPY api/admin_ui ./admin_ui
+# the reference engine, so the admin page can show what the engine says now for a reported case
+COPY reference/computation.py reference/export_vectors.py /opt/computation/reference/
 COPY --from=web /src/web/dist /var/www/computation
 COPY deploy/nginx.container.conf /etc/nginx/conf.d/computation.conf
 COPY deploy/entrypoint.sh /entrypoint.sh

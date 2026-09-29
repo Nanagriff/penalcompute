@@ -10,6 +10,9 @@ function engineVersions() {
   return { engine: pick("ENGINE_VERSION"), ruleset: pick("RULESET_VERSION") };
 }
 
+const API = "http://127.0.0.1:8001";
+const API_PROXY = { "/feedback": API, "/usage": API, "/admin": API };
+
 export const BUILD_DATE = new Date().toISOString().slice(0, 19) + "Z";
 
 /** Emit /version.json at build so the app can tell when its cached build is behind (Task 3.5). */
@@ -56,7 +59,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest}"],
         globIgnores: ["version.json"],
         navigateFallback: "index.html",
-        navigateFallbackDenylist: [/^\/feedback/, /^\/version\.json/],
+        navigateFallbackDenylist: [/^\/feedback/, /^\/usage/, /^\/admin/, /^\/version\.json/],
         runtimeCaching: [
           { urlPattern: /\/version\.json$/, handler: "NetworkOnly" },
         ],
@@ -68,6 +71,6 @@ export default defineConfig({
     sourcemap: false,
   },
   // local development and preview only: nginx does this in production
-  server: { proxy: { "/feedback": "http://127.0.0.1:8001" } },
-  preview: { proxy: { "/feedback": "http://127.0.0.1:8001" }, port: 4173, strictPort: true },
+  server: { proxy: API_PROXY },
+  preview: { proxy: API_PROXY, port: 4173, strictPort: true },
 });

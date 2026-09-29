@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 """
-Feedback API. One route: POST /feedback. SQLite via sqlite3, no ORM, no auth.
+Feedback API. SQLite via sqlite3, no ORM.
 
-Receives a reviewer's disagreement with the engine: the abstract inputs, the
-engine's answer, the reviewer's answer, and a reason. Nothing else is
-accepted. inputs_json may contain only the known abstract input keys; any
-unexpected key (a name, a prison number, anything) is rejected with 422.
+POST /feedback receives a reviewer's disagreement with the engine: the
+abstract inputs, the engine's answer, the reviewer's answer, and a reason.
+Nothing else is accepted. inputs_json may contain only the known abstract
+input keys; any unexpected key (a name, a prison number, anything) is
+rejected with 422.
+
+POST /usage receives usage counts: which kind of computation was run, when,
+and on which version. It has no field for a date of sentence, a sentence or
+any other input, so it cannot carry one.
+
+The private side, /admin, is in admin.py.
 
 Run:  uvicorn main:app --host 127.0.0.1 --port 8001
-Env:  COMPUTATION_DB      path to the SQLite file (default ./feedback.sqlite3)
-      COMPUTATION_ORIGIN  the site origin allowed by CORS
-      COMPUTATION_RATE    requests per hour per IP (default 30)
+Env:  COMPUTATION_DB          path to the SQLite file (default ./feedback.sqlite3)
+      COMPUTATION_ORIGIN      the site origin allowed by CORS
+      COMPUTATION_RATE        reports per hour per IP (default 30)
+      COMPUTATION_USAGE_RATE  usage posts per hour per IP (default 600)
 """
 
 from __future__ import annotations
@@ -23,7 +31,8 @@ import threading
 import time
 from collections import defaultdict, deque
 from datetime import datetime, timezone
-from typing import Any, Deque, Dict, Optional
+from datetime import timedelta
+from typing import Any, Deque, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,6 +42,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 DB_PATH = os.environ.get("COMPUTATION_DB", os.path.join(os.path.dirname(__file__), "feedback.sqlite3"))
 ORIGIN = os.environ.get("COMPUTATION_ORIGIN", "https://computation.example.org")
 RATE_PER_HOUR = int(os.environ.get("COMPUTATION_RATE", "30"))
+USAGE_PER_HOUR = int(os.environ.get("COMPUTATION_USAGE_RATE", "600"))
 MAX_BODY = 32 * 1024
 
 # --------------------------------------------------------------------------
@@ -175,6 +185,34 @@ class Feedback(BaseModel):
         return self
 
 
+class UsageEvent(BaseModel):
+    """One press of Compute. There is no field here that could hold a case detail."""
+    model_config = ConfigDict(extra="forbid")
+
+    scenario: str
+    at: str = Field(max_length=32, pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$")
+    ok: bool = True
+    offline: bool = False
+    engine_version: str = Field(max_length=32, pattern=r"^[0-9A-Za-z.+-]+$")
+    ruleset_version: str = Field(max_length=64, pattern=r"^[0-9A-Za-z.+-]+$")
+    build_date: Optional[str] = Field(None, max_length=32, pattern=r"^[0-9A-Za-z:.TZ-]+$")
+
+    @field_validator("scenario")
+    @classmethod
+    def _scenario(cls, v: str) -> str:
+        if v not in SCENARIOS:
+            raise ValueError("unknown scenario")
+        return v
+
+
+class Usage(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    device_id: Optional[str] = Field(None, pattern=r"^[A-Za-z0-9-]{8,64}$")
+    installed: bool = False
+    events: List[UsageEvent] = Field(min_length=1, max_length=100)
+
+
 # --------------------------------------------------------------------------
 # Storage
 # --------------------------------------------------------------------------
@@ -196,6 +234,27 @@ CREATE TABLE IF NOT EXISTS feedback (
   comment         TEXT,
   user_agent      TEXT
 );
+CREATE TABLE IF NOT EXISTS report_status (
+  feedback_id     INTEGER PRIMARY KEY REFERENCES feedback(id),
+  status          TEXT NOT NULL,
+  note            TEXT NOT NULL DEFAULT '',
+  updated_at      TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS usage (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  received_at     TEXT NOT NULL,
+  at              TEXT NOT NULL,
+  day             TEXT NOT NULL,
+  device_id       TEXT,
+  installed       INTEGER NOT NULL DEFAULT 0,
+  offline         INTEGER NOT NULL DEFAULT 0,
+  ok              INTEGER NOT NULL DEFAULT 1,
+  engine_version  TEXT NOT NULL,
+  ruleset_version TEXT NOT NULL,
+  build_date      TEXT,
+  scenario        TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS usage_day ON usage(day);
 """
 
 _db_lock = threading.Lock()
@@ -226,11 +285,46 @@ def store(fb: Feedback, user_agent: str) -> Dict[str, Any]:
         return {"id": cur.lastrowid, "received_at": received_at}
 
 
+MAX_EVENT_AGE = timedelta(days=60)   # an offline device may hold its counts this long
+MAX_CLOCK_SKEW = timedelta(minutes=10)
+
+
+def event_time(at: str, received: datetime) -> datetime:
+    """The device's clock, unless it is in the future or too far in the past to believe."""
+    try:
+        t = datetime.strptime(at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return received
+    if t > received + MAX_CLOCK_SKEW or t < received - MAX_EVENT_AGE:
+        return received
+    return t
+
+
+def store_usage(u: Usage) -> int:
+    received = datetime.now(timezone.utc).replace(microsecond=0)
+    rows = []
+    for e in u.events:
+        t = event_time(e.at, received)
+        rows.append((
+            received.isoformat(timespec="seconds"), t.isoformat(timespec="seconds"), t.date().isoformat(),
+            u.device_id, int(u.installed), int(e.offline), int(e.ok),
+            e.engine_version, e.ruleset_version, e.build_date, e.scenario,
+        ))
+    with _db_lock, db() as conn:
+        conn.executemany(
+            "INSERT INTO usage (received_at, at, day, device_id, installed, offline, ok, "
+            "engine_version, ruleset_version, build_date, scenario) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            rows,
+        )
+    return len(rows)
+
+
 # --------------------------------------------------------------------------
 # Rate limit by IP, in memory
 # --------------------------------------------------------------------------
 
 _hits: Dict[str, Deque[float]] = defaultdict(deque)
+_usage_hits: Dict[str, Deque[float]] = defaultdict(deque)
 _hits_lock = threading.Lock()
 
 
@@ -241,13 +335,15 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
-def rate_limited(ip: str) -> bool:
+def rate_limited(ip: str, hits: Optional[Dict[str, Deque[float]]] = None, limit: Optional[int] = None) -> bool:
+    hits = _hits if hits is None else hits
+    limit = RATE_PER_HOUR if limit is None else limit
     now = time.monotonic()
     with _hits_lock:
-        q = _hits[ip]
+        q = hits[ip]
         while q and now - q[0] > 3600:
             q.popleft()
-        if len(q) >= RATE_PER_HOUR:
+        if len(q) >= limit:
             return True
         q.append(now)
         return False
@@ -296,6 +392,32 @@ def _short_errors(e: Exception) -> Any:
     return str(e)
 
 
+@app.post("/usage", status_code=201)
+async def post_usage(request: Request) -> JSONResponse:
+    length = request.headers.get("content-length")
+    if length and length.isdigit() and int(length) > MAX_BODY:
+        raise HTTPException(413, "body too large")
+    if rate_limited(client_ip(request), _usage_hits, USAGE_PER_HOUR):
+        raise HTTPException(429, "too many usage posts from this address; try again later")
+    body = await request.body()
+    if len(body) > MAX_BODY:
+        raise HTTPException(413, "body too large")
+    try:
+        data = json.loads(body)
+    except (ValueError, UnicodeDecodeError):
+        raise HTTPException(422, "body is not valid JSON")
+    try:
+        u = Usage.model_validate(data)
+    except Exception as e:  # pydantic ValidationError
+        return JSONResponse(status_code=422, content={"detail": _short_errors(e)})
+    return JSONResponse(status_code=201, content={"stored": store_usage(u)})
+
+
 @app.get("/feedback/health")
 async def health() -> Dict[str, str]:
     return {"status": "ok"}
+
+
+from admin import router as admin_router  # noqa: E402  (admin reads this module's configuration)
+
+app.include_router(admin_router)

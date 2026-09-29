@@ -101,8 +101,9 @@ h2.sheet-title {
 }
 
 .empty { color: var(--brown); max-width: 32rem; }
-.empty p { margin: 0; opacity: 0.85; }
-@media (max-width: 59.99rem) { .output.is-empty { display: none; } }
+.empty p { margin: 0.6rem 0 0; opacity: 0.85; }
+.empty ol { margin: 0.6rem 0 0; padding-left: 1.4rem; }
+.empty li { margin: 0.2rem 0; }
 
 /* ---- inputs ------------------------------------------------------------ */
 

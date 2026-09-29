@@ -10,7 +10,7 @@
 #      app and writes version.json with the commit hash)
 #   4. replace the running container; Traefik picks it up by label and issues
 #      the certificate; the SQLite file lives in a named volume, never in the image
-#   5. check version.json, robots.txt and the API health over HTTPS
+#   5. check version.json, robots.txt, the API health and the admin routes over HTTPS
 set -euo pipefail
 
 HOST="${DEPLOY_HOST:?set DEPLOY_HOST (an ssh host alias or user@host)}"
@@ -69,4 +69,11 @@ for i in $(seq 1 12); do
 done
 curl -fsS "https://${DOMAIN}/feedback/health" && echo
 curl -fsS "https://${DOMAIN}/robots.txt"
+code() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$@"; }
+[ "$(code "https://${DOMAIN}/admin")" = 200 ] || { echo "!! /admin is not being served" >&2; exit 1; }
+[ "$(code "https://${DOMAIN}/admin/api/reports")" = 401 ] || { echo "!! /admin/api/reports is not refusing a visitor who has not signed in" >&2; exit 1; }
+[ "$(code -X POST -H 'Content-Type: application/json' -d '{}' "https://${DOMAIN}/usage")" = 422 ] || { echo "!! /usage is not reaching the API" >&2; exit 1; }
+echo "admin page served, its data refused without a session, usage endpoint reachable"
+curl -fsS "https://${DOMAIN}/admin/api/session" | grep -q '"configured":true' \
+  || echo "!! no admin password is set yet: run ./deploy/set-admin-password.sh" >&2
 echo "== deployed ${COMMIT} to https://${DOMAIN}"
