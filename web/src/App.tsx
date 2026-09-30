@@ -3,6 +3,7 @@ import { runCase, type CaseOutcome, type CaseSpec } from "./engine";
 import { Form } from "./ui/Form";
 import { ResultView } from "./ui/ResultView";
 import { VersionNotice } from "./ui/VersionNotice";
+import { InstallPrompt } from "./ui/InstallPrompt";
 import { initialState, toCaseSpec, type FormState, type Recorded } from "./ui/state";
 import { recordUse, startUsage } from "./ui/usageClient";
 
@@ -73,6 +74,7 @@ export function App({ updateReady, onReload }: { updateReady: boolean; onReload:
       </header>
       <main>
         <VersionNotice updateReady={updateReady} onReload={onReload} />
+        <InstallPrompt />
         <div className="columns">
           <Form state={state} onChange={(s) => { setState(s); }} onCompute={compute} onClear={clear} errors={errors} />
           <div className={computed ? "output sheet" : "output sheet is-empty"} ref={resultRef}>

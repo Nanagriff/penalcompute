@@ -313,6 +313,28 @@ table.register tr.key td { font-weight: 700; background: var(--sand); color: var
   font-size: 0.9rem;
 }
 
+/* ---- install strip: keep the tool on the phone -------------------------- */
+
+.install {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  border-left: 4px solid var(--brown);
+}
+.install-icon { flex: none; width: 40px; height: 40px; }
+.install-text { flex: 1 1 14rem; min-width: 0; }
+.install-text p { margin: 0; }
+.install-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
+.install-button {
+  background: var(--brown);
+  color: var(--paper);
+  border-color: var(--brown);
+  padding: 0.4rem 1rem;
+}
+.install-button:hover { background: var(--brown-deep); }
+.share-glyph { vertical-align: -0.2em; margin: 0 0.1em; }
+
 /* ---- footer ------------------------------------------------------------- */
 
 footer {
@@ -346,7 +368,7 @@ footer .credit { font-family: var(--serif); font-size: 1.05rem; color: var(--bro
   .columns { display: block; }
   .sheet { border: 0; padding: 0; margin: 0; box-shadow: none; }
   /* the register and the inputs only: no chrome, no answers restated, no working-day layer */
-  .chrome, .notice, .feedback, .feedback-done, footer, form.inputs, .answers, .discharge, .empty { display: none !important; }
+  .chrome, .notice, .install, .feedback, .feedback-done, footer, form.inputs, .answers, .discharge, .empty { display: none !important; }
   .result { animation: none; }
   .summary-inputs { border-bottom: 1px solid #000; }
   table.register { font-size: 11pt; border-color: #000; }

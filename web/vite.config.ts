@@ -40,19 +40,29 @@ export default defineConfig({
     versionJson(),
     VitePWA({
       registerType: "prompt",
-      includeAssets: ["robots.txt", "icon-192.png", "icon-512.png"],
+      includeAssets: [
+        "robots.txt", "icon.svg", "apple-touch-icon.png",
+        "icon-192.png", "icon-512.png", "icon-maskable-192.png", "icon-maskable-512.png",
+      ],
       manifest: {
+        id: "/",
         name: "Sentence Computation",
         short_name: "Computation",
         description: "Ghana Prisons Service sentence computation register.",
+        lang: "en",
         start_url: "/",
         scope: "/",
         display: "standalone",
         background_color: "#f3ece1",
         theme_color: "#4a2c17",
+        // Android wants 192 and 512 in both purposes; "maskable" keeps the crest
+        // inside the safe zone when the launcher crops to a circle.
         icons: [
-          { src: "icon-192.png", sizes: "192x192", type: "image/png" },
+          { src: "icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
           { src: "icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+          { src: "icon-maskable-192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
+          { src: "icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+          { src: "icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
         ],
       },
       workbox: {

@@ -1,7 +1,11 @@
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { captureInstallPrompt } from "./ui/install";
 import "./styles/app.css";
+
+// beforeinstallprompt can fire before React mounts, so listen before rendering.
+if (!__SINGLE_FILE__) captureInstallPrompt();
 
 function Root() {
   const [updateReady, setUpdateReady] = useState(false);
