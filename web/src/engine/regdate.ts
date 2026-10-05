@@ -85,6 +85,31 @@ export function working(dt: RegDate): RegDate {
   return { d: dt.d, m: dt.m, y: dt.y };
 }
 
+/**
+ * R4.3 step by step, as it is written by hand. Each borrow adds the length of
+ * the preceding month to the day column and steps the month back, until n days
+ * can be taken off.
+ */
+export function borrowDays(
+  dt: RegDate,
+  n: number,
+  rule: LeapRule = "gregorian",
+): { length: number; month: number; after: RegDate }[] {
+  const steps: { length: number; month: number; after: RegDate }[] = [];
+  let { d, m, y } = dt;
+  while (d - n < 1) {
+    m -= 1;
+    if (m < 1) {
+      m = 12;
+      y -= 1;
+    }
+    const length = monthLen(m, y, rule);
+    d += length;
+    steps.push({ length, month: m, after: { d, m, y } });
+  }
+  return steps;
+}
+
 /** R4.3. Borrow the length of the preceding month. */
 export function subDays(dt: RegDate, n: number, rule: LeapRule = "gregorian"): RegDate {
   let d = dt.d - n;

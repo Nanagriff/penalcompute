@@ -39,7 +39,7 @@ export function Register({ lines }: { lines: Line[] }) {
         {lines.map((ln, i) => {
           const isDate = ln.date !== undefined;
           const c = isDate ? dateCells(ln) : deductionCells(ln.deduction ?? "");
-          const key = ln.label === "LPD" || ln.label === "EPD" || ln.label === "D/R" || ln.label === "EPD (adjusted)";
+          const key = ln.label === "LPD" || ln.label === "EPD" || ln.label === "D/R" || ln.label === "EPD (adjusted)" || ln.label === "EPD (amended)";
           const cls = [isDate ? "date" : "deduction", ln.rule ? "ruled" : "", key ? "key" : ""].join(" ").trim();
           return (
             <tr key={i} className={cls}>

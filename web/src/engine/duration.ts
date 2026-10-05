@@ -3,11 +3,11 @@
  * Also the column-wise date arithmetic that consumes them (R4.1, R4.3,
  * R4.7, R4.8).
  */
-import { divmod, int, monthLen } from "./calendar";
+import { MONTH_NAME, divmod, int, monthLen } from "./calendar";
 import type { Policy } from "./policy";
 import { DEFAULT_POLICY } from "./policy";
 import type { RegDate } from "./regdate";
-import { carryMonths, isMonthEnd, subDays, working } from "./regdate";
+import { borrowDays, carryMonths, isMonthEnd, subDays, working } from "./regdate";
 
 export interface DurationParts {
   days?: number;
@@ -119,6 +119,35 @@ export function subDuration(
     }
   }
   return { date: cur, flags };
+}
+
+export interface BorrowStep {
+  figure: string;
+  label: string;
+  after: RegDate;
+}
+
+/**
+ * The borrows behind subDuration, for the register: months borrowed into the
+ * day column first, then a year borrowed into the month column as twelve
+ * months.
+ */
+export function borrowSteps(dt: RegDate, dur: Duration, policy: Policy = DEFAULT_POLICY): BorrowStep[] {
+  const out: BorrowStep[] = [];
+  let cur = working(dt);
+  if (dur.days) {
+    for (const s of borrowDays(cur, dur.days, policy.leapRule)) {
+      out.push({ figure: String(s.length), label: `Borrow ${MONTH_NAME[s.month]}`, after: s.after });
+      cur = s.after;
+    }
+  }
+  let { m, y } = cur;
+  while (m - dur.months < 1) {
+    m += 12;
+    y -= 1;
+    out.push({ figure: new Duration(0, 12, 0).columns(), label: "Borrow 1yr", after: { d: cur.d, m, y } });
+  }
+  return out;
 }
 
 /** R4.8. Column-wise with borrowing, used for period served and licence period. */

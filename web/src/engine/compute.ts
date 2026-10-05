@@ -10,7 +10,8 @@
  *   + forfeiture, hospital loss    -> adjusted EPD, capped at LPD (R7.4)
  */
 import { MONTH_NAME, monthLen } from "./calendar";
-import { Duration, addSentence, dateDiff, subDuration } from "./duration";
+import { Duration, addSentence, borrowSteps, dateDiff, subDuration } from "./duration";
+import type { BorrowStep } from "./duration";
 import type { Policy } from "./policy";
 import { DEFAULT_POLICY } from "./policy";
 import type { RegDate } from "./regdate";
@@ -150,6 +151,14 @@ export function compute(
     }
   }
 
+  const showBorrows = (steps: BorrowStep[]) => {
+    for (const s of steps) {
+      add({ deduction: s.figure, label: s.label, rule: true, op: "+" });
+      add({ date: s.after, label: "", rule: false });
+    }
+  };
+
+  showBorrows(borrowSteps(cur, new Duration(1), policy));
   add({ deduction: "1", label: "Grace", rule: true, op: "-" });
   cur = subDays(cur, 1, rule); // R5.1
   // A7: the notes write the bracket rule (P2) only for a sentence passed on
@@ -193,6 +202,7 @@ export function compute(
   } else {
     remLabel = note.includes("third") ? `1/3 Rem on ${base.format()}` : `Rem on ${base.format()}`;
   }
+  showBorrows(borrowSteps(cur, rem, policy));
   add({ deduction: rem.columns(), label: remLabel, rule: true, op: "-" });
 
   const sub = subDuration(cur, rem, policy);
@@ -238,6 +248,7 @@ export function compute(
 
   if (specialDays) {
     // R7.6: special and restored remission come off after the add-one line
+    showBorrows(borrowSteps(res.epd, new Duration(specialDays), policy));
     add({ deduction: String(specialDays), label: "Spec Rem", rule: true, op: "-" });
     cur = subDays({ d: res.epd.d, m: res.epd.m, y: res.epd.y }, specialDays, rule);
     res.epd = cur;

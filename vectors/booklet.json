@@ -74,7 +74,7 @@
         "flags": [
           "no remission: sentence below 31 days (R6.1)"
         ],
-        "render": "      1-1-2007   D/S\n          1           S\n                 ----------------------------------\n      1-2-2007   \n             1   Grace\n                 ----------------------------------\n     31-1-2007   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+        "render": "      1-1-2007   D/S\n          1           S\n                 ----------------------------------\n      1-2-2007   \n            31   Borrow Jan\n                 ----------------------------------\n     32-1-2007   \n             1   Grace\n                 ----------------------------------\n     31-1-2007   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
       },
       "booklet_says": null,
       "note": "1 month = 30 days under R2.2, below 31, D/R"
@@ -146,7 +146,7 @@
         "remission_note": "ordinary remission (R6.2)",
         "licence_period": "9days",
         "flags": [],
-        "render": "      1-1-2006   D/S\n  40                  S\n                 ----------------------------------\n     41-1-2006   \n            31   Jan\n                 ----------------------------------\n     10-2-2006   \n             1   Grace\n                 ----------------------------------\n      9-2-2006   LPD\n  10                  Rem on 40days\n                 ----------------------------------\n     30-1-2006   \n             1   Add\n                 ----------------------------------\n     31-1-2006   EPD"
+        "render": "      1-1-2006   D/S\n  40                  S\n                 ----------------------------------\n     41-1-2006   \n            31   Jan\n                 ----------------------------------\n     10-2-2006   \n             1   Grace\n                 ----------------------------------\n      9-2-2006   LPD\n            31   Borrow Jan\n                 ----------------------------------\n     40-1-2006   \n  10                  Rem on 40days\n                 ----------------------------------\n     30-1-2006   \n             1   Add\n                 ----------------------------------\n     31-1-2006   EPD"
       },
       "booklet_says": null,
       "note": "ordinary remission 10 days (R6.2)"
@@ -182,7 +182,7 @@
         "remission_note": "one-third remission (R6.3)",
         "licence_period": "1mth 1day",
         "flags": [],
-        "render": "     6-11-2005   D/S\n 100                  S\n                 ----------------------------------\n   106-11-2005   \n            30   Nov\n                 ----------------------------------\n    76-12-2005   \n            31   Dec\n                 ----------------------------------\n     45-1-2006   \n            31   Jan\n                 ----------------------------------\n     14-2-2006   \n             1   Grace\n                 ----------------------------------\n     13-2-2006   LPD\n  33                  1/3 Rem on 100days\n                 ----------------------------------\n     11-1-2006   \n             1   Add\n                 ----------------------------------\n     12-1-2006   EPD"
+        "render": "     6-11-2005   D/S\n 100                  S\n                 ----------------------------------\n   106-11-2005   \n            30   Nov\n                 ----------------------------------\n    76-12-2005   \n            31   Dec\n                 ----------------------------------\n     45-1-2006   \n            31   Jan\n                 ----------------------------------\n     14-2-2006   \n             1   Grace\n                 ----------------------------------\n     13-2-2006   LPD\n            31   Borrow Jan\n                 ----------------------------------\n     44-1-2006   \n  33                  1/3 Rem on 100days\n                 ----------------------------------\n     11-1-2006   \n             1   Add\n                 ----------------------------------\n     12-1-2006   EPD"
       },
       "booklet_says": null,
       "note": "remission stays in days, R6.7; roll-forward sequence 106-11, 76-12, 45-1, 14-2 (R4.2)"
@@ -330,7 +330,7 @@
         "remission_note": "one-third remission (R6.3)",
         "licence_period": "28days",
         "flags": [],
-        "render": "       1-12-71   D/S\n          3           S\n                 ----------------------------------\n        1-3-72   \n             1   Grace\n                 ----------------------------------\n       29-2-72   LPD\n          1           1/3 Rem on 3mths\n                 ----------------------------------\n   31(29)-1-72   \n             1   Add\n                 ----------------------------------\n        1-2-72   EPD"
+        "render": "       1-12-71   D/S\n          3           S\n                 ----------------------------------\n        1-3-72   \n            29   Borrow Feb\n                 ----------------------------------\n       30-2-72   \n             1   Grace\n                 ----------------------------------\n       29-2-72   LPD\n          1           1/3 Rem on 3mths\n                 ----------------------------------\n   31(29)-1-72   \n             1   Add\n                 ----------------------------------\n        1-2-72   EPD"
       },
       "booklet_says": null,
       "note": "month-end preserved across whole-month subtraction (R4.7)"
@@ -368,7 +368,7 @@
         "flags": [
           "A3: LPD landed on an impossible date, clamped back (p.16)"
         ],
-        "render": "     31-1-1999   D/S\n          1       5   S\n                 ----------------------------------\n     31-2-2004   \n             1   Grace\n                 ----------------------------------\n 29(30)-2-2004   LPD\n  10      8       1   1/3 Rem on 5yrs 1mth\n                 ----------------------------------\n     20-6-2002   \n             1   Add\n                 ----------------------------------\n     21-6-2002   EPD\n\n  ! A3: LPD landed on an impossible date, clamped back (p.16)"
+        "render": "     31-1-1999   D/S\n          1       5   S\n                 ----------------------------------\n     31-2-2004   \n             1   Grace\n                 ----------------------------------\n 29(30)-2-2004   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n    30-14-2003   \n  10      8       1   1/3 Rem on 5yrs 1mth\n                 ----------------------------------\n     20-6-2002   \n             1   Add\n                 ----------------------------------\n     21-6-2002   EPD\n\n  ! A3: LPD landed on an impossible date, clamped back (p.16)"
       },
       "booklet_says": null,
       "note": "remission is taken from the bracketed day of 29(30)-2-2004, so 20-6-2002 then EPD 21-6-2002 (R4.9, officer ruling 2026-10-05)"
@@ -405,7 +405,7 @@
         "remission_note": "one-sixth remission (R6.5)",
         "licence_period": "3yrs 1mth 30days",
         "flags": [],
-        "render": "     20-1-2000   D/S\n                 20   S\n                 ----------------------------------\n     20-1-2020   \n             1   Grace\n                 ----------------------------------\n     19-1-2020   LPD\n          2       3   1/6 Rem on 20yrs less 1yr\n                 ----------------------------------\n    19-11-2016   \n             1   Add\n                 ----------------------------------\n    20-11-2016   EPD"
+        "render": "     20-1-2000   D/S\n                 20   S\n                 ----------------------------------\n     20-1-2020   \n             1   Grace\n                 ----------------------------------\n     19-1-2020   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n    19-13-2019   \n          2       3   1/6 Rem on 20yrs less 1yr\n                 ----------------------------------\n    19-11-2016   \n             1   Add\n                 ----------------------------------\n    20-11-2016   EPD"
       },
       "booklet_says": null,
       "note": "one sixth of 20yrs less 1yr is 3yrs 2mths (R6.5)"
@@ -442,7 +442,7 @@
         "remission_note": "one-sixth remission (R6.5)",
         "licence_period": "1yr 3mths 30days",
         "flags": [],
-        "render": "     19-4-2008   D/S\n                  9   S\n                 ----------------------------------\n     19-4-2017   \n             1   Grace\n                 ----------------------------------\n     18-4-2017   LPD\n          4       1   1/6 Rem on 9yrs less 1yr\n                 ----------------------------------\n    18-12-2015   \n             1   Add\n                 ----------------------------------\n    19-12-2015   EPD"
+        "render": "     19-4-2008   D/S\n                  9   S\n                 ----------------------------------\n     19-4-2017   \n             1   Grace\n                 ----------------------------------\n     18-4-2017   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n    18-16-2016   \n          4       1   1/6 Rem on 9yrs less 1yr\n                 ----------------------------------\n    18-12-2015   \n             1   Add\n                 ----------------------------------\n    19-12-2015   EPD"
       },
       "booklet_says": null,
       "note": "one sixth of 9yrs less 1yr is 1yr 4mths (R6.5)"
@@ -479,7 +479,7 @@
         "remission_note": "one-sixth remission (R6.5)",
         "licence_period": "2yrs 3mths 27days",
         "flags": [],
-        "render": "      4-3-2016   D/S\n                 15   S\n                 ----------------------------------\n      4-3-2031   \n             1   Grace\n                 ----------------------------------\n      3-3-2031   LPD\n          4       2   1/6 Rem on 15yrs less 1yr\n                 ----------------------------------\n     3-11-2028   \n             1   Add\n                 ----------------------------------\n     4-11-2028   EPD"
+        "render": "      4-3-2016   D/S\n                 15   S\n                 ----------------------------------\n      4-3-2031   \n             1   Grace\n                 ----------------------------------\n      3-3-2031   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n     3-15-2030   \n          4       2   1/6 Rem on 15yrs less 1yr\n                 ----------------------------------\n     3-11-2028   \n             1   Add\n                 ----------------------------------\n     4-11-2028   EPD"
       },
       "booklet_says": null,
       "note": "2yrs 4mths remission; licence period 2yrs 3mths 27days, borrowing February 2031 = 28"
@@ -681,7 +681,7 @@
         "flags": [
           "R8.1: total sentence 5yrs 10mths 70days, remission base 5yrs 10mths 70days"
         ],
-        "render": "      5-1-2016   D/S\n  70     10       5   S\n                 ----------------------------------\n    75-11-2021   \n            30   Nov\n                 ----------------------------------\n    45-12-2021   \n            31   Dec\n                 ----------------------------------\n     14-1-2022   \n             1   Grace\n                 ----------------------------------\n     13-1-2022   LPD\n  33     11       1   1/3 Rem on 5yrs 10mths 70days\n                 ----------------------------------\n     11-1-2020   \n             1   Add\n                 ----------------------------------\n     12-1-2020   EPD\n\n  ! R8.1: total sentence 5yrs 10mths 70days, remission base 5yrs 10mths 70days"
+        "render": "      5-1-2016   D/S\n  70     10       5   S\n                 ----------------------------------\n    75-11-2021   \n            30   Nov\n                 ----------------------------------\n    45-12-2021   \n            31   Dec\n                 ----------------------------------\n     14-1-2022   \n             1   Grace\n                 ----------------------------------\n     13-1-2022   LPD\n            31   Borrow Dec\n                 ----------------------------------\n    44-12-2021   \n  33     11       1   1/3 Rem on 5yrs 10mths 70days\n                 ----------------------------------\n     11-1-2020   \n             1   Add\n                 ----------------------------------\n     12-1-2020   EPD\n\n  ! R8.1: total sentence 5yrs 10mths 70days, remission base 5yrs 10mths 70days"
       },
       "booklet_says": null,
       "note": "sentences are added column by column: 5yrs 10mths 70days, the 70 days taken off as November 30 and December 31, LPD 13-1-2022 not 14-1-2022; remission 1yr 11mths 33days kept in days (R6.7), EPD 12-1-2020"
@@ -769,7 +769,7 @@
         "flags": [
           "R8.1: total sentence 4yrs 10mths 26days, remission base 4yrs 10mths 26days"
         ],
-        "render": "    24-10-2003   D/S\n  26     10       4   S\n                 ----------------------------------\n     50-8-2008   \n            31   Aug\n                 ----------------------------------\n     19-9-2008   \n             1   Grace\n                 ----------------------------------\n     18-9-2008   LPD\n  19      7       1   1/3 Rem on 4yrs 10mths 26days\n                 ----------------------------------\n     30-1-2007   \n             1   Add\n                 ----------------------------------\n     31-1-2007   EPD\n\n  ! R8.1: total sentence 4yrs 10mths 26days, remission base 4yrs 10mths 26days"
+        "render": "    24-10-2003   D/S\n  26     10       4   S\n                 ----------------------------------\n     50-8-2008   \n            31   Aug\n                 ----------------------------------\n     19-9-2008   \n             1   Grace\n                 ----------------------------------\n     18-9-2008   LPD\n            31   Borrow Aug\n                 ----------------------------------\n     49-8-2008   \n  19      7       1   1/3 Rem on 4yrs 10mths 26days\n                 ----------------------------------\n     30-1-2007   \n             1   Add\n                 ----------------------------------\n     31-1-2007   EPD\n\n  ! R8.1: total sentence 4yrs 10mths 26days, remission base 4yrs 10mths 26days"
       },
       "booklet_says": null,
       "note": ""
@@ -1085,7 +1085,7 @@
           "A1: remission taken on the residue (1yr 9mths 7days); the other reading gives a different EPD",
           "A4: deduction mixes days with whole months from a month-end date; month-end preservation not applied, booklet shows no example"
         ],
-        "render": "     25-8-2007   D/R (recapture)\n   7      9       1   S\n                 ----------------------------------\n     32-5-2009   \n            31   May\n                 ----------------------------------\n      1-6-2009   \n             1   Grace\n                 ----------------------------------\n     31-5-2009   LPD\n   2      7           1/3 Rem on 1yr 9mths 7days\n                 ----------------------------------\n    29-10-2008   \n             1   Add\n                 ----------------------------------\n    30-10-2008   EPD\n\n  ! R8.5: served 2mths 23days, residue 1yr 9mths 7days\n  ! A1: remission taken on the residue (1yr 9mths 7days); the other reading gives a different EPD\n  ! A4: deduction mixes days with whole months from a month-end date; month-end preservation not applied, booklet shows no example"
+        "render": "     25-8-2007   D/R (recapture)\n   7      9       1   S\n                 ----------------------------------\n     32-5-2009   \n            31   May\n                 ----------------------------------\n      1-6-2009   \n            31   Borrow May\n                 ----------------------------------\n     32-5-2009   \n             1   Grace\n                 ----------------------------------\n     31-5-2009   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n    31-17-2008   \n   2      7           1/3 Rem on 1yr 9mths 7days\n                 ----------------------------------\n    29-10-2008   \n             1   Add\n                 ----------------------------------\n    30-10-2008   EPD\n\n  ! R8.5: served 2mths 23days, residue 1yr 9mths 7days\n  ! A1: remission taken on the residue (1yr 9mths 7days); the other reading gives a different EPD\n  ! A4: deduction mixes days with whole months from a month-end date; month-end preservation not applied, booklet shows no example"
       },
       "booklet_says": null,
       "note": "the booklet's own worked example takes remission on the residue (A1)"
@@ -1134,7 +1134,7 @@
           "R8.5: served 2mths 23days, residue 1yr 9mths 7days",
           "A1: remission taken on the original (2yrs); the other reading gives a different EPD"
         ],
-        "render": "     25-8-2007   D/R (recapture)\n   7      9       1   S\n                 ----------------------------------\n     32-5-2009   \n            31   May\n                 ----------------------------------\n      1-6-2009   \n             1   Grace\n                 ----------------------------------\n     31-5-2009   LPD\n          8           1/3 Rem on 2yrs\n                 ----------------------------------\n 30(31)-9-2008   \n             1   Add\n                 ----------------------------------\n     1-10-2008   EPD\n\n  ! R8.5: served 2mths 23days, residue 1yr 9mths 7days\n  ! A1: remission taken on the original (2yrs); the other reading gives a different EPD"
+        "render": "     25-8-2007   D/R (recapture)\n   7      9       1   S\n                 ----------------------------------\n     32-5-2009   \n            31   May\n                 ----------------------------------\n      1-6-2009   \n            31   Borrow May\n                 ----------------------------------\n     32-5-2009   \n             1   Grace\n                 ----------------------------------\n     31-5-2009   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n    31-17-2008   \n          8           1/3 Rem on 2yrs\n                 ----------------------------------\n 30(31)-9-2008   \n             1   Add\n                 ----------------------------------\n     1-10-2008   EPD\n\n  ! R8.5: served 2mths 23days, residue 1yr 9mths 7days\n  ! A1: remission taken on the original (2yrs); the other reading gives a different EPD"
       },
       "booklet_says": null,
       "note": "rule (h): remission on the original 2yrs, the engine default (A1)"
@@ -1260,7 +1260,7 @@
         "flags": [
           "R8.6: served 1yr 2mths 14days + 1mth 24days = 1yr 4mths 8days; total sentence 2yrs 6mths; residue 1yr 1mth 22days"
         ],
-        "render": "      13-12-72   2nd D/R\n  22      1       1   S\n                 ----------------------------------\n       35-1-74   \n            31   Jan\n                 ----------------------------------\n        4-2-74   \n             1   Grace\n                 ----------------------------------\n        3-2-74   LPD\n         10           1/3 Rem on 2yrs 6mths\n                 ----------------------------------\n        3-4-73   \n             1   Add\n                 ----------------------------------\n        4-4-73   EPD\n\n  ! R8.6: served 1yr 2mths 14days + 1mth 24days = 1yr 4mths 8days; total sentence 2yrs 6mths; residue 1yr 1mth 22days"
+        "render": "      13-12-72   2nd D/R\n  22      1       1   S\n                 ----------------------------------\n       35-1-74   \n            31   Jan\n                 ----------------------------------\n        4-2-74   \n             1   Grace\n                 ----------------------------------\n        3-2-74   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n       3-14-73   \n         10           1/3 Rem on 2yrs 6mths\n                 ----------------------------------\n        3-4-73   \n             1   Add\n                 ----------------------------------\n        4-4-73   EPD\n\n  ! R8.6: served 1yr 2mths 14days + 1mth 24days = 1yr 4mths 8days; total sentence 2yrs 6mths; residue 1yr 1mth 22days"
       },
       "booklet_says": null,
       "note": "the question's dates are impossible (escape 22/12/72, recapture 20/12/72); the working uses 13-12-72 as the 2nd date of recapture"
@@ -1538,7 +1538,7 @@
         "flags": [
           "R8.7: served 3mths, residue 1yr 9mths"
         ],
-        "render": "      1-9-2006   D/R (re-admission)\n          9       1   S\n                 ----------------------------------\n      1-6-2008   \n             1   Grace\n                 ----------------------------------\n     31-5-2008   LPD\n          8           1/3 Rem on 2yrs\n                 ----------------------------------\n 30(31)-9-2007   \n             1   Add\n                 ----------------------------------\n     1-10-2007   EPD\n\n  ! R8.7: served 3mths, residue 1yr 9mths"
+        "render": "      1-9-2006   D/R (re-admission)\n          9       1   S\n                 ----------------------------------\n      1-6-2008   \n            31   Borrow May\n                 ----------------------------------\n     32-5-2008   \n             1   Grace\n                 ----------------------------------\n     31-5-2008   LPD\n         12           Borrow 1yr\n                 ----------------------------------\n    31-17-2007   \n          8           1/3 Rem on 2yrs\n                 ----------------------------------\n 30(31)-9-2007   \n             1   Add\n                 ----------------------------------\n     1-10-2007   EPD\n\n  ! R8.7: served 3mths, residue 1yr 9mths"
       },
       "booklet_says": null,
       "note": "R8.7; the worked example is on p.13, which was not supplied"
@@ -1650,7 +1650,7 @@
         "remission_note": "one-third remission (R6.3)",
         "licence_period": "3mths 29days",
         "flags": [],
-        "render": "     30-6-1995   D/S\n  90      9           S\n                 ----------------------------------\n    120-3-1996   \n            31   Mar\n                 ----------------------------------\n     89-4-1996   \n            30   Apr\n                 ----------------------------------\n     59-5-1996   \n            31   May\n                 ----------------------------------\n     28-6-1996   \n             1   Grace\n                 ----------------------------------\n     27-6-1996   LPD\n  30      3           1/3 Rem on 9mths 90days\n                 ----------------------------------\n     28-2-1996   \n             1   Add\n                 ----------------------------------\n     29-2-1996   EPD"
+        "render": "     30-6-1995   D/S\n  90      9           S\n                 ----------------------------------\n    120-3-1996   \n            31   Mar\n                 ----------------------------------\n     89-4-1996   \n            30   Apr\n                 ----------------------------------\n     59-5-1996   \n            31   May\n                 ----------------------------------\n     28-6-1996   \n             1   Grace\n                 ----------------------------------\n     27-6-1996   LPD\n            31   Borrow May\n                 ----------------------------------\n     58-5-1996   \n  30      3           1/3 Rem on 9mths 90days\n                 ----------------------------------\n     28-2-1996   \n             1   Add\n                 ----------------------------------\n     29-2-1996   EPD"
       },
       "booklet_says": null,
       "note": "reviewer report 2026-09: one third of 9mths 90days is 3mths 30days, divided column by column and never rolled up to 4mths (R6.7); 30 days off the day column then 3 months gives EPD 29-2-1996, not 28-2-1996"
@@ -1768,7 +1768,7 @@
         "flags": [
           "no remission: sentence below 31 days (R6.1)"
         ],
-        "render": "      1-2-1900   D/S\n  29                  S\n                 ----------------------------------\n     30-2-1900   \n            29   Feb\n                 ----------------------------------\n      1-3-1900   \n             1   Grace\n                 ----------------------------------\n     29-2-1900   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
+        "render": "      1-2-1900   D/S\n  29                  S\n                 ----------------------------------\n     30-2-1900   \n            29   Feb\n                 ----------------------------------\n      1-3-1900   \n            29   Borrow Feb\n                 ----------------------------------\n     30-2-1900   \n             1   Grace\n                 ----------------------------------\n     29-2-1900   D/R\n\n  ! no remission: sentence below 31 days (R6.1)"
       },
       "booklet_says": null,
       "note": "R2.4 booklet rule: 1900 treated as leap; 30-2-1900 rolls to 1-3-1900, grace gives D/R 29-2-1900"
@@ -1804,7 +1804,7 @@
         "remission_note": "one-third remission (R6.3)",
         "licence_period": "30days",
         "flags": [],
-        "render": "       1-12-71   D/S\n          3           S\n                 ----------------------------------\n        1-3-72   \n             1   Grace\n                 ----------------------------------\n       29-2-72   LPD\n          1           1/3 Rem on 3mths\n                 ----------------------------------\n       29-1-72   \n             1   Add\n                 ----------------------------------\n       30-1-72   EPD"
+        "render": "       1-12-71   D/S\n          3           S\n                 ----------------------------------\n        1-3-72   \n            29   Borrow Feb\n                 ----------------------------------\n       30-2-72   \n             1   Grace\n                 ----------------------------------\n       29-2-72   LPD\n          1           1/3 Rem on 3mths\n                 ----------------------------------\n       29-1-72   \n             1   Add\n                 ----------------------------------\n       30-1-72   EPD"
       },
       "booklet_says": null,
       "note": "A4 switch off: 29-2-72 less 1 month stays 29-1-72, EPD 30-1-72"

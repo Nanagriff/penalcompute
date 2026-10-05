@@ -131,6 +131,24 @@ def sub_days(dt: RegDate, n: int, policy: Policy = DEFAULT) -> RegDate:
     return RegDate(d, m, y)
 
 
+def borrow_days(dt: RegDate, n: int, policy: Policy = DEFAULT) -> List[Tuple[int, int, RegDate]]:
+    """
+    R4.3 step by step, as it is written by hand. Each borrow adds the length of
+    the preceding month to the day column and steps the month back, until n days
+    can be taken off. Returns (days borrowed, month borrowed, date after).
+    """
+    steps = []
+    d, m, y = dt.d, dt.m, dt.y
+    while d - n < 1:
+        m -= 1
+        if m < 1:
+            m, y = 12, y - 1
+        length = month_len(m, y, policy)
+        d += length
+        steps.append((length, m, RegDate(d, m, y)))
+    return steps
+
+
 def add_days(dt: RegDate, n: int, policy: Policy = DEFAULT) -> RegDate:
     """Normalise first if the date is impossible, then add (R4.6)."""
     base = roll_forward(dt, policy) if dt.is_impossible(policy) else RegDate(dt.d, dt.m, dt.y)
@@ -219,6 +237,26 @@ def sub_duration(
             if limit != cur.d:
                 cur = RegDate(limit, cur.m, cur.y, notional=cur.d)  # R4.7
     return cur, flags
+
+
+def borrow_steps(dt: RegDate, dur: Duration,
+                 policy: Policy = DEFAULT) -> List[Tuple[str, str, RegDate]]:
+    """
+    The borrows behind sub_duration, for the register: months borrowed into the
+    day column first, then a year borrowed into the month column as twelve
+    months. Returns (figure borrowed, label, date after) for each.
+    """
+    out: List[Tuple[str, str, RegDate]] = []
+    cur = working(dt)
+    if dur.days:
+        for length, m, after in borrow_days(cur, dur.days, policy):
+            out.append((str(length), f"Borrow {MONTH_NAME[m]}", after))
+            cur = after
+    m, y = cur.m, cur.y
+    while m - dur.months < 1:
+        m, y = m + 12, y - 1
+        out.append((Duration(months=12).columns(), "Borrow 1yr", RegDate(cur.d, m, y)))
+    return out
 
 
 def date_diff(later: RegDate, earlier: RegDate, policy: Policy = DEFAULT) -> Duration:
@@ -414,6 +452,12 @@ def compute(
             cur = _carry_months(RegDate(cur.d - length, cur.m + 1, cur.y))
             add(Line(date=cur))
 
+    def show_borrows(steps) -> None:
+        for figure, label, after in steps:
+            add(Line(deduction=figure, label=label, rule=True, op="+"))
+            add(Line(date=after))
+
+    show_borrows(borrow_steps(cur, Duration(days=1), policy))
     add(Line(deduction="1", label="Grace", rule=True, op="-"))
     cur = sub_days(cur, 1, policy)  # R5.1
     # A7: the notes write the bracket rule (P2) only for a sentence passed on
@@ -449,6 +493,7 @@ def compute(
                              "rounded up (R6.4), the notes show no such example")
     else:
         rem_label = f"1/3 Rem on {base}" if "third" in note else f"Rem on {base}"
+    show_borrows(borrow_steps(cur, rem, policy))
     add(Line(deduction=rem.columns(), label=rem_label, rule=True, op="-"))
 
     cur, fl = sub_duration(cur, rem, policy)
@@ -491,6 +536,7 @@ def compute(
 
     if special_days:
         # R7.6: special and restored remission come off after the add-one line
+        show_borrows(borrow_steps(res.epd, Duration(days=special_days), policy))
         add(Line(deduction=str(special_days), label="Spec Rem", rule=True, op="-"))
         cur = sub_days(RegDate(res.epd.d, res.epd.m, res.epd.y), special_days, policy)
         res.epd = cur

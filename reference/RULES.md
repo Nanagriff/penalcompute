@@ -72,6 +72,12 @@ less 31 (Dec) = `45-1-2006`; less 31 (Jan) = `14-2-2006`. (p.5)
 **R4.3 Day subtraction borrows from the preceding month.**
 `1-3-72 - 1 day`: borrow February 1972 (29 days) -> `29-2-72`. (p.7)
 
+The register shows every borrow as its own line before the figure is taken off:
+the month borrowed and its length added to the day column, and a year borrowed
+as twelve months added to the month column.
+`13-1-2022`, borrow Dec 31 = `44-12-2021`, less 33 days 11 mths 1 yr = `11-1-2020`.
+`29(30)-2-2004`, borrow 1 yr = `30-14-2003`, less 10 days 8 mths 1 yr = `20-6-2002`.
+
 **R4.4 A date that does not exist is written real(notional).**
 `28(30)-2-73` means the notional position is 30 February and the actual date is
 28 February. (p.7)
