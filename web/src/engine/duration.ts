@@ -7,7 +7,7 @@ import { divmod, int, monthLen } from "./calendar";
 import type { Policy } from "./policy";
 import { DEFAULT_POLICY } from "./policy";
 import type { RegDate } from "./regdate";
-import { carryMonths, isMonthEnd, subDays } from "./regdate";
+import { carryMonths, isMonthEnd, subDays, working } from "./regdate";
 
 export interface DurationParts {
   days?: number;
@@ -78,15 +78,15 @@ export function addSentence(dt: RegDate, dur: Duration): RegDate {
   return carryMonths({ d: dt.d + dur.days, m: dt.m + dur.months, y: dt.y + dur.years });
 }
 
-/** Days first with borrowing, then whole months and years. R4.3, R4.7. */
+/** Days first with borrowing, then whole months and years. R4.3, R4.7, R4.9. */
 export function subDuration(
   dt: RegDate,
   dur: Duration,
   policy: Policy = DEFAULT_POLICY,
 ): { date: RegDate; flags: string[] } {
   const flags: string[] = [];
-  const wasMonthEnd = isMonthEnd(dt, policy.leapRule);
-  let cur: RegDate = { d: dt.d, m: dt.m, y: dt.y };
+  let cur: RegDate = working(dt);
+  const wasMonthEnd = isMonthEnd(cur, policy.leapRule);
 
   if (dur.days) cur = subDays(cur, dur.days, policy.leapRule);
   cur = carryMonths({ d: cur.d, m: cur.m - dur.months, y: cur.y - dur.years });
@@ -107,6 +107,7 @@ export function subDuration(
 
 /** R4.8. Column-wise with borrowing, used for period served and licence period. */
 export function dateDiff(later: RegDate, earlier: RegDate, policy: Policy = DEFAULT_POLICY): Duration {
+  later = working(later); // R4.9
   let m = later.m;
   let y = later.y;
   let dd = later.d - earlier.d;

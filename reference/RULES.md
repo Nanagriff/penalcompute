@@ -93,6 +93,18 @@ days, the result is the last day of the target month.
 This is the rule behind the p.5 technique: a prisoner sentenced on the 1st of a
 month to a term of months or years divisible by 3 is discharged on the 1st.
 
+**R4.9 A bracketed LPD is worked from the bracketed day.** Once an LPD has been
+written real(notional) under R4.5, every later line of the working uses the day
+in the bracket. The real day is only the day the prisoner actually leaves.
+Remission is deducted from the bracketed day, and the licence period is measured
+from it. Month-end preservation (R4.7) does not arise, because the bracketed day
+is not a month-end.
+`31-1-1999 + 5yrs 1mth = 31-2-2004`, less 1 grace = `29(30)-2-2004 LPD`;
+`30-2-2004 - 1yr 8mths 10days = 20-6-2002`, then add 1 = `21-6-2002 EPD`.
+(Officer ruling, 2026-10-05; no booklet page shows this case.)
+This does not touch the R4.7 form `31(29)-1-72`, where the booklet itself goes on
+from the 31 to reach `1-2-72`.
+
 **R4.8 Difference between two dates.** Column-wise subtraction with borrowing
 under R4.3, giving a result in days, months and years. Used for period served,
 period at large, period in hospital and licence period.

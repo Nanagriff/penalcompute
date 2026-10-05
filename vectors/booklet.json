@@ -336,6 +336,44 @@
       "note": "month-end preserved across whole-month subtraction (R4.7)"
     },
     {
+      "id": "officer-5yrs-1mth-bracketed-lpd",
+      "page": null,
+      "source": "reviewer",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          31,
+          1,
+          1999
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 1,
+          "years": 5
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "29(30)-2-2004",
+        "epd": "21-6-2002",
+        "dr": null,
+        "remission": "1yr 8mths 10days",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "1yr 8mths 9days",
+        "flags": [
+          "A3: LPD landed on an impossible date, clamped back (p.16)"
+        ],
+        "render": "     31-1-1999   D/S\n          1       5   S\n                 ----------------------------------\n     31-2-2004   \n             1   Grace\n                 ----------------------------------\n 29(30)-2-2004   LPD\n  10      8       1   1/3 Rem on 5yrs 1mth\n                 ----------------------------------\n     20-6-2002   \n             1   Add\n                 ----------------------------------\n     21-6-2002   EPD\n\n  ! A3: LPD landed on an impossible date, clamped back (p.16)"
+      },
+      "booklet_says": null,
+      "note": "remission is taken from the bracketed day of 29(30)-2-2004, so 20-6-2002 then EPD 21-6-2002 (R4.9, officer ruling 2026-10-05)"
+    },
+    {
       "id": "p08-paul-mensah",
       "page": 8,
       "source": "booklet",

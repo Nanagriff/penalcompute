@@ -71,6 +71,12 @@ r = simple(RegDate(1, 12, 71), Duration.of(months=3), "stealing")
 check("p.7 3mths IHL LPD", r.lpd, "29-2-72")
 check("p.7 3mths IHL EPD (month-end preserved, R4.7)", r.epd, "1-2-72")
 
+# ---- officer ruling, 2026-10-05: work on from the bracketed day (R4.9) ----
+r = simple(RegDate(31, 1, 1999), Duration.of(years=5, months=1), "stealing")
+check("officer 5yrs 1mth LPD", r.lpd, "29(30)-2-2004")
+check("officer 5yrs 1mth EPD (remission off the bracketed 30)", r.epd, "21-6-2002")
+check("officer 5yrs 1mth licence period", r.licence_period, "1yr 8mths 9days")
+
 # ---- p.8 additional sentence --------------------------------------------
 r = additional(RegDate(25, 7, 2005), Duration.of(months=6), "debt",
                Duration.of(months=9, days=14), "assault")

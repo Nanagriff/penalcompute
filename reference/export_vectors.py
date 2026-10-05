@@ -242,6 +242,12 @@ def build_cases() -> List[Dict[str, Any]]:
                   {"date_of_sentence": [1, 12, 71], "sentence": dur(months=3),
                    "offence_class": "stealing"},
                   note="month-end preserved across whole-month subtraction (R4.7)"))
+    C.append(case("officer-5yrs-1mth-bracketed-lpd", None, "simple",
+                  {"date_of_sentence": [31, 1, 1999], "sentence": dur(years=5, months=1),
+                   "offence_class": "stealing"},
+                  source="reviewer",
+                  note="remission is taken from the bracketed day of 29(30)-2-2004, "
+                       "so 20-6-2002 then EPD 21-6-2002 (R4.9, officer ruling 2026-10-05)"))
 
     # ---- p.8 additional sentence -----------------------------------------
     C.append(case("p08-paul-mensah", 8, "additional",

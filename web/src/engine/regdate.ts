@@ -79,6 +79,12 @@ export function clampBack(dt: RegDate, rule: LeapRule = "gregorian"): RegDate {
   return dt;
 }
 
+/** R4.9. A clamped date is worked from the bracketed day, not the real one. */
+export function working(dt: RegDate): RegDate {
+  if (dt.notional && dt.notional > dt.d) return { d: dt.notional, m: dt.m, y: dt.y };
+  return { d: dt.d, m: dt.m, y: dt.y };
+}
+
 /** R4.3. Borrow the length of the preceding month. */
 export function subDays(dt: RegDate, n: number, rule: LeapRule = "gregorian"): RegDate {
   let d = dt.d - n;

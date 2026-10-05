@@ -113,6 +113,13 @@ def clamp_back(dt: RegDate, policy: Policy = DEFAULT) -> RegDate:
     return dt
 
 
+def working(dt: RegDate) -> RegDate:
+    """R4.9. A clamped date is worked from the bracketed day, not the real one."""
+    if dt.notional and dt.notional > dt.d:
+        return RegDate(dt.notional, dt.m, dt.y)
+    return RegDate(dt.d, dt.m, dt.y)
+
+
 def sub_days(dt: RegDate, n: int, policy: Policy = DEFAULT) -> RegDate:
     """R4.3. Borrow the length of the preceding month."""
     d, m, y = dt.d - n, dt.m, dt.y
@@ -182,10 +189,10 @@ def add_sentence(dt: RegDate, dur: Duration) -> RegDate:
 def sub_duration(
     dt: RegDate, dur: Duration, policy: Policy = DEFAULT
 ) -> Tuple[RegDate, List[str]]:
-    """Days first with borrowing, then whole months and years. R4.3, R4.7."""
+    """Days first with borrowing, then whole months and years. R4.3, R4.7, R4.9."""
     flags: List[str] = []
-    was_month_end = dt.is_month_end(policy)
-    cur = RegDate(dt.d, dt.m, dt.y)
+    cur = working(dt)
+    was_month_end = cur.is_month_end(policy)
 
     if dur.days:
         cur = sub_days(cur, dur.days, policy)
@@ -206,6 +213,7 @@ def sub_duration(
 
 def date_diff(later: RegDate, earlier: RegDate, policy: Policy = DEFAULT) -> Duration:
     """R4.8. Column-wise with borrowing, used for period served and licence period."""
+    later = working(later)  # R4.9
     d, m, y = later.d, later.m, later.y
     dd = d - earlier.d
     if dd < 0:

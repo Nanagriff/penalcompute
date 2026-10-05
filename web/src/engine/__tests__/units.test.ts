@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   BUILD_DATE, Duration, ENGINE_VERSION, RULESET_VERSION, clampBack, dateDiff, format,
   isLeap, monthLen, oneThird, regDate, remissionFor, rollForward, rollForwardTrace,
-  simple, subDays,
+  simple, subDays, subDuration,
 } from "../index";
 
 describe("Task 2.1 calendar (R2.4)", () => {
@@ -38,6 +38,12 @@ describe("Task 2.2 regdate", () => {
   it("R4.4 / R4.5 clamps and renders the notional in brackets", () => {
     expect(format(clampBack(regDate(30, 2, 73)))).toBe("28(30)-2-73");
     expect(format(clampBack(regDate(28, 2, 73)))).toBe("28-2-73");
+  });
+  it("R4.9 works on from the bracketed day of a clamped date", () => {
+    const lpd = clampBack(regDate(30, 2, 2004));
+    expect(format(lpd)).toBe("29(30)-2-2004");
+    expect(format(subDuration(lpd, new Duration(10, 8, 1)).date)).toBe("20-6-2002");
+    expect(String(dateDiff(lpd, regDate(21, 6, 2002)))).toBe("1yr 8mths 9days");
   });
   it("rejects non-integers (standing rule 3)", () => {
     expect(() => regDate(1.5, 1, 2000)).toThrow(TypeError);
