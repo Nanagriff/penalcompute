@@ -32,11 +32,19 @@ const INPUT_LABELS: Record<string, string> = {
   date_of_recapture_2: "Second recapture", extra_sentence: "Further sentence",
   date_of_bail: "Date bailed out", date_of_readmission: "Date re-admitted",
   hospital_from: "Admitted to hospital", hospital_to: "Discharged from hospital",
-  forfeited_days: "Days forfeited",
+  forfeited_days: "Days forfeited", custody: "Custody on the warrant",
+  special_remission_days: "Special or restored remission, days",
+  subsistence_rate: "Daily subsistence rate",
 };
 
-function Discharge({ date, isLpd, label }: { date: RegDate; isLpd: boolean; label: string }) {
-  const r = dischargeDate(date, isLpd);
+const CUSTODY_LABELS: Record<string, string> = {
+  preventive: "Preventive custody", protective: "Protective custody",
+  productive_hard_labour: "Productive hard labour",
+};
+const cedis = (pesewas: number) => `GH¢${Math.floor(pesewas / 100)}.${String(pesewas % 100).padStart(2, "0")}`;
+
+function Discharge({ date, label }: { date: RegDate; label: string }) {
+  const r = dischargeDate(date);
   if ("error" in r) return <li className="flag">{label}: {r.error}</li>;
   const moved = r.movedDays > 0;
   return (
@@ -44,9 +52,9 @@ function Discharge({ date, isLpd, label }: { date: RegDate; isLpd: boolean; labe
       <span className="k">{label}</span>{" "}
       <span className="mono">{r.discharge}</span> ({r.weekday})
       {moved
-        ? ` : moved ${r.movedDays} day${r.movedDays > 1 ? "s" : ""} ${isLpd ? "back" : "forward"}` +
-          (r.reason ? `, ${r.reason}` : "") + (isLpd ? " (R7.4: never past midnight on the LPD)" : "")
-        : " : a working day, unchanged"}
+        ? ` : moved ${r.movedDays} day${r.movedDays > 1 ? "s" : ""} back` +
+          (r.reason ? `, ${r.reason}` : "") + " (released the day before a Sunday or public holiday)"
+        : " : not a Sunday or public holiday, unchanged"}
       {r.provisional && <>. Provisional: {r.note}.</>}
     </li>
   );
@@ -112,7 +120,10 @@ export function ResultView({ spec, outcome, sex, recorded = {} }: Props) {
           }
           if (k === "policy") return null;
           const label = INPUT_LABELS[k] ?? k;
-          const val = k.endsWith("_class") ? clsLabel(v) : fmtWire(v);
+          const val = k.endsWith("_class") ? clsLabel(v)
+            : k === "custody" ? CUSTODY_LABELS[String(v)] ?? String(v)
+            : k === "subsistence_rate" ? cedis(Number(v))
+            : fmtWire(v);
           if (val === "nil") return null;
           return <div key={k}><dt>{label}</dt><dd>{val}</dd></div>;
         })}
@@ -134,6 +145,12 @@ export function ResultView({ spec, outcome, sex, recorded = {} }: Props) {
           <dt>Remission</dt>
           <dd>{result.remission.format()} <span className="note">{result.remissionNote}</span></dd>
         </div>
+        {typeof expect.subsistence_amount === "string" && (
+          <div>
+            <dt>Debtor's subsistence</dt>
+            <dd>{expect.subsistence_amount} <span className="note">{String(expect.subsistence_days)} days from D/S to D/R, both counted</span></dd>
+          </div>
+        )}
         {result.licencePeriod && (
           <div><dt>Licence period (R8.8)</dt><dd>{result.licencePeriod.format()}</dd></div>
         )}
@@ -157,12 +174,12 @@ export function ResultView({ spec, outcome, sex, recorded = {} }: Props) {
         </ul>
       )}
 
-      <ul className="discharge" aria-label="Working-day discharge">
-        <li className="head">Working-day discharge (A6). Separate from the computation above; the register dates stand.</li>
+      <ul className="discharge" aria-label="Release day">
+        <li className="head">Release day. A Sunday, Christmas or public holiday moves to the day before; the register dates above stand.</li>
         {(result.epd ?? result.dr) && (
-          <Discharge date={(result.epd ?? result.dr)!} isLpd={false} label={result.epd ? "EPD, next working day" : "D/R, next working day"} />
+          <Discharge date={(result.epd ?? result.dr)!} label={result.epd ? "EPD, release day" : "D/R, release day"} />
         )}
-        {result.lpd && <Discharge date={result.lpd} isLpd label="LPD, previous working day" />}
+        {result.lpd && <Discharge date={result.lpd} label="LPD, release day" />}
       </ul>
 
       <p className="versions print-only">{versionLine()}</p>

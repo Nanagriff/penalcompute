@@ -30,7 +30,7 @@ from typing import Any, Dict, List
 from computation import (
     Duration, Policy, RegDate, additional, bailed_out, compute, date_diff,
     double_escape, hospital_loss, licence_eligible, one_third, punishment_loss,
-    reduction, resolve_counts, simple, single_escape,
+    reduction, resolve_counts, simple, single_escape, subsistence,
 )
 
 OUT = Path(__file__).resolve().parent.parent / "vectors" / "booklet.json"
@@ -89,14 +89,26 @@ def result_expect(r) -> Dict[str, Any]:
 # the dispatcher: one scenario name -> one engine call
 # --------------------------------------------------------------------------
 
+def single_expect(i: Dict[str, Any], p: Policy, **kw) -> Dict[str, Any]:
+    """A single sentence, with the optional custody, special remission and subsistence."""
+    r = compute(D(i["date_of_sentence"]), Dur(i["sentence"]), i["offence_class"],
+                custody=i.get("custody"), special_days=i.get("special_remission_days", 0),
+                policy=p, **kw)
+    e = result_expect(r)
+    if i.get("subsistence_rate") and r.dr is not None:
+        days, amount = subsistence(D(i["date_of_sentence"]), r.dr, i["subsistence_rate"], p)
+        e["subsistence_days"] = days
+        e["subsistence_amount"] = amount
+    return e
+
+
 def run_case(case: Dict[str, Any]) -> Dict[str, Any]:
     s = case["scenario"]
     i = case["inputs"]
     p = policy_from(case.get("policy", {}))
 
     if s == "simple":
-        r = simple(D(i["date_of_sentence"]), Dur(i["sentence"]), i["offence_class"], policy=p)
-        return result_expect(r)
+        return single_expect(i, p)
 
     if s == "additional":
         r = additional(D(i["date_of_sentence"]), Dur(i["first"]), i["first_class"],
@@ -140,17 +152,14 @@ def run_case(case: Dict[str, Any]) -> Dict[str, Any]:
 
     if s == "hospital":
         period = date_diff(D(i["hospital_to"]), D(i["hospital_from"]), p)
-        r = compute(D(i["date_of_sentence"]), Dur(i["sentence"]), i["offence_class"],
-                    hospital_period=period, policy=p)
-        e = result_expect(r)
+        e = single_expect(i, p, hospital_period=period,
+                          forfeited_days=i.get("forfeited_days", 0))
         e["hospital_period"] = str(period)
         e["hospital_loss"] = str(hospital_loss(period))
         return e
 
     if s == "forfeiture":
-        r = compute(D(i["date_of_sentence"]), Dur(i["sentence"]), i["offence_class"],
-                    forfeited_days=i["forfeited_days"], policy=p)
-        return result_expect(r)
+        return single_expect(i, p, forfeited_days=i["forfeited_days"])
 
     if s == "date_diff":
         return {"diff": str(date_diff(D(i["later"]), D(i["earlier"]), p))}
@@ -248,6 +257,40 @@ def build_cases() -> List[Dict[str, Any]]:
                   source="reviewer",
                   note="remission is taken from the bracketed day of 29(30)-2-2004, "
                        "so 20-6-2002 then EPD 21-6-2002 (R4.9, officer ruling 2026-10-05)"))
+
+    # ---- officer's notes, 2026-10-05 --------------------------------------
+    N = dict(source="officer-notes")
+    C.append(case("notes-ex09-one-sixth-20yrs-preventive", None, "simple",
+                  {"date_of_sentence": [20, 1, 2000], "sentence": dur(years=20),
+                   "offence_class": "felony", "custody": "preventive"},
+                  note="one sixth of 20yrs less 1yr is 3yrs 2mths (R6.5)", **N))
+    C.append(case("notes-ex10-one-sixth-9yrs-productive", None, "simple",
+                  {"date_of_sentence": [19, 4, 2008], "sentence": dur(years=9),
+                   "offence_class": "felony", "custody": "productive_hard_labour"},
+                  note="one sixth of 9yrs less 1yr is 1yr 4mths (R6.5)", **N))
+    C.append(case("notes-p06-one-sixth-15yrs-robbery", None, "simple",
+                  {"date_of_sentence": [4, 3, 2016], "sentence": dur(years=15),
+                   "offence_class": "robbery", "custody": "preventive"},
+                  note="2yrs 4mths remission; licence period 2yrs 3mths 27days, "
+                       "borrowing February 2031 = 28", **N))
+    C.append(case("notes-ex20-special-remission-14-days", None, "simple",
+                  {"date_of_sentence": [30, 11, 2005], "sentence": dur(months=12),
+                   "offence_class": "robbery", "special_remission_days": 14},
+                  note="special remission comes off after the add-one line: "
+                       "30-7-2006 less 14 = 16-7-2006 (R7.6)", **N))
+    C.append(case("notes-ex22-subsistence-9-months", None, "simple",
+                  {"date_of_sentence": [11, 2, 2008], "sentence": dur(months=9),
+                   "offence_class": "debt", "subsistence_rate": 180},
+                  note="274 days from D/S to D/R, both counted, at GH¢1.80 (R8.9)", **N))
+    C.append(case("notes-p16-subsistence-3-months", None, "simple",
+                  {"date_of_sentence": [10, 1, 2024], "sentence": dur(months=3),
+                   "offence_class": "debt", "subsistence_rate": 180},
+                  note="91 days: 22 + 29 + 31 + 9 (R8.9)", **N))
+    C.append(case("notes-a7-30th-lands-abnormal", None, "simple",
+                  {"date_of_sentence": [30, 1, 2007], "sentence": dur(months=1),
+                   "offence_class": "stealing"},
+                  note="not a month-end D/S, lands on 30-2: bracketed and flagged "
+                       "for confirmation by hand (A7)", **N))
 
     # ---- p.8 additional sentence -----------------------------------------
     C.append(case("p08-paul-mensah", 8, "additional",

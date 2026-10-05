@@ -1,5 +1,5 @@
 /**
- * Working-day layer (A6). Deliberately separate from the computation.
+ * Release-day layer (R9.1). Deliberately separate from the computation.
  * This is the one file in the engine where Date is permitted, and it is
  * used only in UTC so no time zone can shift a day.
  */
@@ -105,11 +105,11 @@ export interface DischargeError {
 }
 
 /**
- * A6. Move the discharge to a working day. Forward at the EPD, because any
- * date before the LPD is lawful. BACKWARD at the LPD, because R7.4 forbids
- * detention past midnight on the LPD.
+ * R9.1. A release date falling on a Sunday, Christmas or a public holiday
+ * moves to the day BEFORE, for the EPD, the D/R and the LPD alike. Saturday is
+ * a release day.
  */
-export function dischargeDate(target: RegDate, isLpd = false): Discharge | DischargeError {
+export function dischargeDate(target: RegDate): Discharge | DischargeError {
   const year = target.y > 1000 ? target.y : 1900 + target.y;
   const day = utc(year, target.m, target.d);
   if (
@@ -120,22 +120,21 @@ export function dischargeDate(target: RegDate, isLpd = false): Discharge | Disch
   ) {
     return { error: `${format(target)} is not a real date` };
   }
-  const step = isLpd ? -1 : 1;
   let moved = day;
   let guard = 0;
   while (guard < 30) {
     const hol = holidays(moved.getUTCFullYear());
-    if (weekday(moved) < 5 && !hol.has(key(moved))) break;
-    moved = plus(moved, step);
+    if (weekday(moved) !== 6 && !hol.has(key(moved))) break;
+    moved = plus(moved, -1);
     guard += 1;
   }
-  const reason = holidays(year).get(key(day)) ?? (weekday(day) >= 5 ? "weekend" : null);
+  const reason = holidays(year).get(key(day)) ?? (weekday(day) === 6 ? "Sunday" : null);
   const provisional = year > CALENDAR_CONFIRMED_THROUGH;
   return {
     computed: key(day),
     discharge: key(moved),
     weekday: WEEKDAY[weekday(moved)],
-    direction: isLpd ? "backward (LPD, R7.4)" : "forward (EPD)",
+    direction: "backward (R9.1)",
     movedDays: Math.abs(Math.round((moved.getTime() - day.getTime()) / 86_400_000)),
     reason,
     provisional,

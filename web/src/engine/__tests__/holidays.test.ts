@@ -1,4 +1,4 @@
-/** Task 2.9: the working-day layer and its asymmetry (A6, R7.4). */
+/** Task 2.9: the release-day layer (R9.1). */
 import { describe, expect, it } from "vitest";
 import { CALENDAR_CONFIRMED_THROUGH, dischargeDate, easter, holidays, regDate } from "../index";
 
@@ -20,46 +20,60 @@ describe("Task 2.9 holidays", () => {
     // Constitution Day did not exist in 2010
     expect(holidays(2010).has("2010-01-07")).toBe(false);
   });
-  it("an EPD on 25 December moves FORWARD to the 27th or later", () => {
-    const r = dischargeDate(regDate(25, 12, 2025), false);
-    expect("error" in r).toBe(false);
-    if ("error" in r) return;
-    expect(r.direction).toBe("forward (EPD)");
+  it("a release on 25 December moves to the day before (R9.1)", () => {
+    const r = dischargeDate(regDate(25, 12, 2025));
+    if ("error" in r) throw new Error(r.error);
+    expect(r.direction).toBe("backward (R9.1)");
     expect(r.reason).toBe("Christmas Day");
-    expect(r.discharge >= "2025-12-27").toBe(true);
-    expect(r.discharge).toBe("2025-12-29"); // 26 Boxing Day, 27/28 weekend
-    expect(r.weekday).toBe("Monday");
-    expect(r.movedDays).toBe(4);
+    expect(r.discharge).toBe("2025-12-24");
+    expect(r.weekday).toBe("Wednesday");
+    expect(r.movedDays).toBe(1);
     expect(r.provisional).toBe(false);
   });
-  it("an LPD on 25 December moves BACKWARD to the 24th or earlier (R7.4)", () => {
-    const r = dischargeDate(regDate(25, 12, 2025), true);
+  it("a Sunday moves to the Saturday, and a Saturday does not move (R9.1)", () => {
+    const sun = dischargeDate(regDate(16, 11, 2025));
+    if ("error" in sun) throw new Error(sun.error);
+    expect(sun.reason).toBe("Sunday");
+    expect(sun.discharge).toBe("2025-11-15");
+    expect(sun.weekday).toBe("Saturday");
+    const sat = dischargeDate(regDate(15, 11, 2025));
+    if ("error" in sat) throw new Error(sat.error);
+    expect(sat.movedDays).toBe(0);
+  });
+  it("Christmas then Boxing Day: keeps stepping back to the 24th", () => {
+    const r = dischargeDate(regDate(26, 12, 2025));
     if ("error" in r) throw new Error(r.error);
-    expect(r.direction).toBe("backward (LPD, R7.4)");
-    expect(r.discharge <= "2025-12-24").toBe(true);
+    expect(r.reason).toBe("Boxing Day");
     expect(r.discharge).toBe("2025-12-24");
-    expect(r.movedDays).toBe(1);
+    expect(r.movedDays).toBe(2);
+  });
+  it("a holiday observed on Monday after a Sunday moves back to the Saturday", () => {
+    // 21 Sep 2025 is a Sunday holiday, observed Monday 22nd
+    const r = dischargeDate(regDate(22, 9, 2025));
+    if ("error" in r) throw new Error(r.error);
+    expect(r.discharge).toBe("2025-09-20");
+    expect(r.movedDays).toBe(2);
   });
   it("a date beyond the confirmed calendar is provisional", () => {
-    const r = dischargeDate(regDate(3, 3, 2031), false);
+    const r = dischargeDate(regDate(3, 3, 2031));
     if ("error" in r) throw new Error(r.error);
     expect(r.provisional).toBe(true);
     expect(r.note).toContain(String(CALENDAR_CONFIRMED_THROUGH));
     expect(r.note).toContain("Eid");
   });
-  it("a working day does not move", () => {
-    const r = dischargeDate(regDate(16, 11, 2006), false);
+  it("an ordinary day does not move", () => {
+    const r = dischargeDate(regDate(16, 11, 2006));
     if ("error" in r) throw new Error(r.error);
     expect(r.discharge).toBe("2006-11-16");
     expect(r.movedDays).toBe(0);
     expect(r.reason).toBeNull();
   });
   it("two-digit years are read as 19xx, as the booklet writes them", () => {
-    const r = dischargeDate(regDate(1, 2, 72), false);
+    const r = dischargeDate(regDate(1, 2, 72));
     if ("error" in r) throw new Error(r.error);
     expect(r.computed).toBe("1972-02-01");
   });
   it("an impossible date is an error, not a silent normalisation", () => {
-    expect(dischargeDate(regDate(30, 2, 2007), false)).toEqual({ error: "30-2-2007 is not a real date" });
+    expect(dischargeDate(regDate(30, 2, 2007))).toEqual({ error: "30-2-2007 is not a real date" });
   });
 });

@@ -8,7 +8,8 @@
  * durations  {days, months, years}   (weeks already folded in, R2.3)
  * policy     the three switches, snake_case as the Python writes them
  */
-import { compute } from "./compute";
+import { compute, subsistence } from "./compute";
+import type { ComputeOptions } from "./compute";
 import type { Result } from "./compute";
 import { Duration, dateDiff } from "./duration";
 import type { Policy } from "./policy";
@@ -17,8 +18,7 @@ import type { RegDate } from "./regdate";
 import { format, regDate } from "./regdate";
 import { hospitalLoss, oneThird, punishmentLoss } from "./remission";
 import {
-  additional, bailedOut, doubleEscape, licenceEligible, reduction, resolveCounts, simple,
-  singleEscape,
+  additional, bailedOut, doubleEscape, licenceEligible, reduction, resolveCounts, singleEscape,
 } from "./scenarios";
 
 export type WireDate = [number, number, number];
@@ -49,6 +49,7 @@ export const INPUT_KEYS = [
   "date_of_escape_1", "date_of_recapture_1", "date_of_escape_2", "date_of_recapture_2",
   "extra_sentence", "date_of_bail", "date_of_readmission",
   "hospital_from", "hospital_to", "forfeited_days",
+  "custody", "special_remission_days", "subsistence_rate",
   "later", "earlier", "a", "b", "n", "close_days", "diet_days", "same_date",
   "sex", "offence",
 ] as const;
@@ -126,9 +127,24 @@ export function runCase(c: CaseSpec): CaseOutcome {
   const Dur = wireDuration;
   const cls = (v: unknown) => (typeof v === "string" ? v : "felony");
 
+  /** A single sentence, with the optional custody, special remission and subsistence. */
+  const single = (opts: ComputeOptions, extras: Record<string, unknown> = {}): CaseOutcome => {
+    const ds = D(i.date_of_sentence);
+    const r = compute(ds, Dur(i.sentence), cls(i.offence_class), {
+      ...opts, custody: i.custody ?? null, specialDays: i.special_remission_days ?? 0, policy: p,
+    });
+    const e: Record<string, unknown> = {};
+    if (i.subsistence_rate && r.dr !== null) {
+      const [days, amount] = subsistence(ds, r.dr, i.subsistence_rate, p);
+      e.subsistence_days = days;
+      e.subsistence_amount = amount;
+    }
+    return outcome(r, { ...e, ...extras });
+  };
+
   switch (c.scenario) {
     case "simple":
-      return outcome(simple(D(i.date_of_sentence), Dur(i.sentence), cls(i.offence_class), p));
+      return single({});
 
     case "additional":
       return outcome(additional(D(i.date_of_sentence), Dur(i.first), cls(i.first_class),
@@ -162,14 +178,12 @@ export function runCase(c: CaseSpec): CaseOutcome {
 
     case "hospital": {
       const period = dateDiff(D(i.hospital_to), D(i.hospital_from), p);
-      return outcome(compute(D(i.date_of_sentence), Dur(i.sentence), cls(i.offence_class),
-        { hospitalPeriod: period, forfeitedDays: i.forfeited_days ?? 0, policy: p }),
+      return single({ hospitalPeriod: period, forfeitedDays: i.forfeited_days ?? 0 },
         { hospital_period: period.format(), hospital_loss: hospitalLoss(period).format() });
     }
 
     case "forfeiture":
-      return outcome(compute(D(i.date_of_sentence), Dur(i.sentence), cls(i.offence_class),
-        { forfeitedDays: i.forfeited_days ?? 0, policy: p }));
+      return single({ forfeitedDays: i.forfeited_days ?? 0 });
 
     case "date_diff":
       return { result: null, expect: { diff: dateDiff(D(i.later), D(i.earlier), p).format() } };

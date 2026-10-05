@@ -1,5 +1,7 @@
 import { DateFields, DurationFields, Select } from "./fields";
-import { OFFENCE_CLASSES, UI_SCENARIOS, emptyDur, type FormState, type UiScenario } from "./state";
+import {
+  CUSTODY_TYPES, OFFENCE_CLASSES, UI_SCENARIOS, emptyDur, type FormState, type UiScenario,
+} from "./state";
 
 interface Props {
   state: FormState;
@@ -55,6 +57,19 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
         options={OFFENCE_CLASSES}
         onChange={set("offenceClass")}
       />
+
+      {sc === "simple" && (
+        <Select id="custody" label="Custody on the warrant" value={state.custody}
+          options={CUSTODY_TYPES} onChange={set("custody")} />
+      )}
+
+      {sc === "simple" && state.offenceClass === "debt" && (
+        <label className="inline">
+          <span>Daily subsistence rate, GH¢</span>
+          <input inputMode="decimal" className="w3" value={state.subsistenceRate}
+            onChange={(e) => onChange({ ...state, subsistenceRate: e.target.value })} />
+        </label>
+      )}
 
       {sc === "additional" && (
         <>
@@ -173,6 +188,11 @@ export function Form({ state, onChange, onCompute, onClear, errors }: Props) {
             <span>Days forfeited for misconduct (R7.1)</span>
             <input inputMode="numeric" pattern="[0-9]*" className="w3" value={state.forfeitedDays}
               onChange={(e) => onChange({ ...state, forfeitedDays: e.target.value })} />
+          </label>
+          <label className="inline">
+            <span>Special or restored remission, days (taken off after the add-one line)</span>
+            <input inputMode="numeric" pattern="[0-9]*" className="w3" value={state.specialDays}
+              onChange={(e) => onChange({ ...state, specialDays: e.target.value })} />
           </label>
           <label className="inline check">
             <input type="checkbox" checked={state.hospital}

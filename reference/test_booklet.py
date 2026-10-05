@@ -11,7 +11,7 @@ misprint.
 from computation import (
     Duration, Policy, RegDate, additional, date_diff, double_escape,
     hospital_loss, licence_eligible, one_third, resolve_counts, simple,
-    single_escape, compute,
+    single_escape, compute, subsistence,
 )
 
 PASS, FAIL = [], []
@@ -76,6 +76,34 @@ r = simple(RegDate(31, 1, 1999), Duration.of(years=5, months=1), "stealing")
 check("officer 5yrs 1mth LPD", r.lpd, "29(30)-2-2004")
 check("officer 5yrs 1mth EPD (remission off the bracketed 30)", r.epd, "21-6-2002")
 check("officer 5yrs 1mth licence period", r.licence_period, "1yr 8mths 9days")
+
+# ---- officer's notes, 2026-10-05: one-sixth, special remission, subsistence
+r = compute(RegDate(20, 1, 2000), Duration.of(years=20), "felony", custody="preventive")
+check("notes Ex 9 remission", r.remission, "3yrs 2mths")
+check("notes Ex 9 LPD", r.lpd, "19-1-2020")
+check("notes Ex 9 EPD", r.epd, "20-11-2016")
+r = compute(RegDate(19, 4, 2008), Duration.of(years=9), "felony", custody="productive_hard_labour")
+check("notes Ex 10 remission", r.remission, "1yr 4mths")
+check("notes Ex 10 LPD", r.lpd, "18-4-2017")
+check("notes Ex 10 EPD", r.epd, "19-12-2015")
+r = compute(RegDate(4, 3, 2016), Duration.of(years=15), "robbery", custody="preventive")
+check("notes P6 remission", r.remission, "2yrs 4mths")
+check("notes P6 LPD", r.lpd, "3-3-2031")
+check("notes P6 EPD", r.epd, "4-11-2028")
+check("notes P6 licence period", r.licence_period, "2yrs 3mths 27days")
+r = compute(RegDate(30, 11, 2005), Duration.of(months=12), "robbery", special_days=14)
+check("notes Ex 20 LPD", r.lpd, "29-11-2006")
+check("notes Ex 20 remission", r.remission, "4mths")
+check("notes Ex 20 EPD after 14 days special remission", r.epd, "16-7-2006")
+r = simple(RegDate(11, 2, 2008), Duration.of(months=9), "debt")
+check("notes Ex 22 D/R", r.dr, "10-11-2008")
+check("notes Ex 22 subsistence", subsistence(RegDate(11, 2, 2008), r.dr, 180), (274, "GH¢493.20"))
+r = simple(RegDate(10, 1, 2024), Duration.of(months=3), "debt")
+check("notes P16 D/R", r.dr, "9-4-2024")
+check("notes P16 subsistence", subsistence(RegDate(10, 1, 2024), r.dr, 180), (91, "GH¢163.80"))
+r = simple(RegDate(30, 1, 2007), Duration.of(months=1), "stealing")
+check("notes 30th lands abnormal, bracketed", r.dr, "28(29)-2-2007")
+check("notes 30th lands abnormal, flagged A7", any(f.startswith("A7") for f in r.flags), True)
 
 # ---- p.8 additional sentence --------------------------------------------
 r = additional(RegDate(25, 7, 2005), Duration.of(months=6), "debt",

@@ -266,9 +266,39 @@ def one_third_columns(sentence: Duration) -> Duration:
     return Duration(days, months, years)
 
 
-def remission_for(sentence: Duration, offence_class: str = "felony") -> Tuple[Duration, str]:
+ONE_SIXTH_CUSTODY = {"preventive", "protective", "productive_hard_labour"}
+
+
+def one_sixth_columns(sentence: Duration) -> Tuple[Duration, bool]:
+    """
+    R6.5. Take one year off the sentence, then divide by six column by column,
+    remainders carried down as in R6.7. Returns the remission and whether the
+    division was exact. An inexact day column rounds up at two thirds and over
+    (R6.4); the notes show no such example, so the caller flags it.
+    """
+    total = sentence.total_days
+    if total <= 360:
+        return Duration(), True
+    if sentence.years >= 1:
+        y, m, d = sentence.years - 1, sentence.months, sentence.days
+    else:
+        rest = Duration.from_days(total - 360)
+        y, m, d = rest.years, rest.months, rest.days
+    years, r = divmod(y, 6)
+    months, r = divmod(r * 12 + m, 6)
+    days, r = divmod(r * 30 + d, 6)
+    return Duration(days + (1 if r >= 4 else 0), months, years), r == 0
+
+
+def remission_for(sentence: Duration, offence_class: str = "felony",
+                  custody: Optional[str] = None) -> Tuple[Duration, str]:
     if offence_class.lower() in NO_REMISSION_CLASSES:
         return Duration(), f"no remission: {offence_class} (R6.1)"
+    if custody in ONE_SIXTH_CUSTODY:
+        rem, _ = one_sixth_columns(sentence)
+        if rem.total_days == 0:
+            return Duration(), "no remission: one-sixth leaves nothing on this sentence (R6.5)"
+        return rem, "one-sixth remission (R6.5)"
     total = sentence.total_days
     if total < 31:
         return Duration(), "no remission: sentence below 31 days (R6.1)"
@@ -344,6 +374,8 @@ def compute(
     hospital_period: Optional[Duration] = None,
     label_ds: str = "D/S",
     policy: Policy = DEFAULT,
+    custody: Optional[str] = None,
+    special_days: int = 0,
 ) -> Result:
     """
     The skeleton of RULES.md section 3.
@@ -374,9 +406,12 @@ def compute(
 
     add(Line(deduction="1", label="Grace", rule=True, op="-"))
     cur = sub_days(cur, 1, policy)  # R5.1
+    # A7: the notes write the bracket rule (P2) only for a sentence passed on
+    # the last day of a month
+    unconfirmed = cur.is_impossible(policy) and not d_s.is_month_end(policy)
 
     base = remission_base if remission_base is not None else sentence
-    rem, note = remission_for(base, offence_class)
+    rem, note = remission_for(base, offence_class, custody)
     res.remission, res.remission_note = rem, note
 
     if rem.total_days == 0:
@@ -384,15 +419,27 @@ def compute(
         res.dr = cur
         add(Line(date=cur, label="D/R"))
         res.flags.append(note)
+        if unconfirmed:
+            res.flags.append(A7)
+        if special_days:
+            res.flags.append("R7.6: special remission not applied, there is no EPD to take it from")
         return res
 
     if cur.is_impossible(policy):
         cur = clamp_back(cur, policy)  # R4.5: never detain past the LPD
         res.flags.append("A3: LPD landed on an impossible date, clamped back (p.16)")
+        if unconfirmed:
+            res.flags.append(A7)
     res.lpd = cur
     add(Line(date=cur, label="LPD"))
-    add(Line(deduction=rem.columns(), label=f"1/3 Rem on {base}" if "third" in note
-             else f"Rem on {base}", rule=True, op="-"))
+    if "sixth" in note:
+        rem_label = f"1/6 Rem on {base} less 1yr"
+        if not one_sixth_columns(base)[1]:
+            res.flags.append("A8: one-sixth did not divide exactly; two thirds and over "
+                             "rounded up (R6.4), the notes show no such example")
+    else:
+        rem_label = f"1/3 Rem on {base}" if "third" in note else f"Rem on {base}"
+    add(Line(deduction=rem.columns(), label=rem_label, rule=True, op="-"))
 
     cur, fl = sub_duration(cur, rem, policy)
     res.flags.extend(fl)
@@ -432,9 +479,40 @@ def compute(
                 "R7.4: forfeiture pushed the EPD past the LPD; capped at the LPD"
             )
 
+    if special_days:
+        # R7.6: special and restored remission come off after the add-one line
+        add(Line(deduction=str(special_days), label="Spec Rem", rule=True, op="-"))
+        cur = sub_days(RegDate(res.epd.d, res.epd.m, res.epd.y), special_days, policy)
+        res.epd = cur
+        add(Line(date=cur, label="EPD (amended)"))
+
     if res.lpd and res.epd:
         res.licence_period = date_diff(res.lpd, res.epd, policy)  # R8.8
     return res
+
+
+A7 = ("A7: the date of sentence is not a month-end but the sentence lands on an "
+      "abnormal date; bracketed as for a month-end sentence, confirm by hand")
+
+
+def days_inclusive(first: RegDate, last: RegDate, policy: Policy = DEFAULT) -> int:
+    """Calendar days from first to last, both ends counted."""
+    if (first.y, first.m) == (last.y, last.m):
+        return last.d - first.d + 1
+    n = month_len(first.m, first.y, policy) - first.d + 1
+    cur = _carry_months(RegDate(1, first.m + 1, first.y))
+    while (cur.y, cur.m) != (last.y, last.m):
+        n += month_len(cur.m, cur.y, policy)
+        cur = _carry_months(RegDate(1, cur.m + 1, cur.y))
+    return n + last.d
+
+
+def subsistence(d_s: RegDate, d_r: RegDate, rate_pesewas: int,
+                policy: Policy = DEFAULT) -> Tuple[int, str]:
+    """R8.9. Debtor's subsistence: days from D/S to D/R, both counted, at the daily rate."""
+    days = days_inclusive(d_s, d_r, policy)
+    total = days * rate_pesewas
+    return days, f"GH¢{total // 100}.{total % 100:02d}"
 
 
 def _ordinal(dt: RegDate, policy: Policy = DEFAULT) -> int:
@@ -530,7 +608,7 @@ def bailed_out(d_s: RegDate, sentence: Duration, d_bail: RegDate,
 
 
 # --------------------------------------------------------------------------
-# Working-day layer (A6). Deliberately separate from the computation.
+# Release-day layer (R9.1). Deliberately separate from the computation.
 # --------------------------------------------------------------------------
 
 import datetime as _dt
@@ -589,33 +667,32 @@ def holidays(year: int) -> dict:
     return out
 
 
-def discharge_date(target: RegDate, is_lpd: bool = False) -> dict:
+def discharge_date(target: RegDate) -> dict:
     """
-    A6. Move the discharge to a working day. Forward at the EPD, because any
-    date before the LPD is lawful. BACKWARD at the LPD, because R7.4 forbids
-    detention past midnight on the LPD.
+    R9.1. A release date falling on a Sunday, Christmas or a public holiday
+    moves to the day BEFORE, for the EPD, the D/R and the LPD alike. Saturday is
+    a release day.
     """
     try:
         day = _dt.date(target.y if target.y > 1000 else 1900 + target.y, target.m, target.d)
     except ValueError:
         return {"error": f"{target} is not a real date"}
-    step = -1 if is_lpd else 1
     hol = {}
     moved = day
     guard = 0
     while guard < 30:
         hol = holidays(moved.year)
-        if moved.weekday() < 5 and moved not in hol:
+        if moved.weekday() != 6 and moved not in hol:
             break
-        moved += _dt.timedelta(days=step)
+        moved -= _dt.timedelta(days=1)
         guard += 1
     return {
         "computed": day.isoformat(),
         "discharge": moved.isoformat(),
         "weekday": moved.strftime("%A"),
-        "direction": "backward (LPD, R7.4)" if is_lpd else "forward (EPD)",
+        "direction": "backward (R9.1)",
         "moved_days": abs((moved - day).days),
-        "reason": hol.get(day) or ("weekend" if day.weekday() >= 5 else None),
+        "reason": holidays(day.year).get(day) or ("Sunday" if day.weekday() == 6 else None),
         "provisional": day.year > CALENDAR_CONFIRMED_THROUGH,
         "note": (
             f"holiday calendar unconfirmed beyond {CALENDAR_CONFIRMED_THROUGH}; "

@@ -5,7 +5,7 @@
  */
 declare const __BUILD_DATE__: string | undefined;
 
-export const ENGINE_VERSION = "1.1.1";
+export const ENGINE_VERSION = "1.2.0";
 export const RULESET_VERSION = "booklet-as-supplied-2026-09";
 export const BUILD_DATE: string = typeof __BUILD_DATE__ === "string" ? __BUILD_DATE__ : "dev";
 

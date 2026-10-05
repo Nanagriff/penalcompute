@@ -42,10 +42,49 @@ export function oneThirdColumns(sentence: Duration): Duration {
   return new Duration(days, months, years);
 }
 
-/** R6.1 to R6.3. Returns the remission and the note naming the rule applied. */
-export function remissionFor(sentence: Duration, offenceClass = "felony"): [Duration, string] {
+export const ONE_SIXTH_CUSTODY: ReadonlySet<string> = new Set([
+  "preventive", "protective", "productive_hard_labour",
+]);
+
+/**
+ * R6.5. Take one year off the sentence, then divide by six column by column,
+ * remainders carried down as in R6.7. Returns the remission and whether the
+ * division was exact. An inexact day column rounds up at two thirds and over
+ * (R6.4); the notes show no such example, so the caller flags it.
+ */
+export function oneSixthColumns(sentence: Duration): [Duration, boolean] {
+  const total = sentence.totalDays;
+  if (total <= 360) return [new Duration(), true];
+  let { years: y, months: m, days: d } = sentence;
+  if (y >= 1) {
+    y -= 1;
+  } else {
+    const rest = Duration.fromDays(total - 360);
+    y = rest.years;
+    m = rest.months;
+    d = rest.days;
+  }
+  const [years, ry] = divmod(y, 6);
+  const [months, rm] = divmod(ry * 12 + m, 6);
+  const [days, rd] = divmod(rm * 30 + d, 6);
+  return [new Duration(days + (rd >= 4 ? 1 : 0), months, years), rd === 0];
+}
+
+/** R6.1 to R6.5. Returns the remission and the note naming the rule applied. */
+export function remissionFor(
+  sentence: Duration,
+  offenceClass = "felony",
+  custody?: string | null,
+): [Duration, string] {
   if (NO_REMISSION_CLASSES.has(offenceClass.toLowerCase())) {
     return [new Duration(), `no remission: ${offenceClass} (R6.1)`];
+  }
+  if (custody && ONE_SIXTH_CUSTODY.has(custody)) {
+    const [rem] = oneSixthColumns(sentence);
+    if (rem.totalDays === 0) {
+      return [new Duration(), "no remission: one-sixth leaves nothing on this sentence (R6.5)"];
+    }
+    return [rem, "one-sixth remission (R6.5)"];
   }
   const total = sentence.totalDays;
   if (total < 31) return [new Duration(), "no remission: sentence below 31 days (R6.1)"];

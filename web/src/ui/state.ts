@@ -38,6 +38,16 @@ export const OFFENCE_CLASSES = [
   { id: "life", label: "Life (no remission)" },
 ] as const;
 
+/** The current daily rate for a debtor's subsistence, in cedis. Editable on the form. */
+export const SUBSISTENCE_RATE_DEFAULT = "5.00";
+
+export const CUSTODY_TYPES = [
+  { id: "", label: "IHL (imprisonment with hard labour)" },
+  { id: "preventive", label: "Preventive custody (one-sixth remission)" },
+  { id: "protective", label: "Protective custody (one-sixth remission)" },
+  { id: "productive_hard_labour", label: "Productive hard labour (one-sixth remission)" },
+] as const;
+
 export interface CountInput { dur: DurInput; group: string }
 
 export interface FormState {
@@ -70,7 +80,11 @@ export interface FormState {
   // bailed out
   dateOfBail: DateInput;
   dateOfReadmission: DateInput;
+  // single sentence only: custody on the warrant, and the debtor's daily rate
+  custody: string;
+  subsistenceRate: string;
   // adjustments after the EPD (single sentence only)
+  specialDays: string;
   forfeitedDays: string;
   hospital: boolean;
   hospitalFrom: DateInput;
@@ -107,6 +121,9 @@ export function initialState(): FormState {
     extraSentence: emptyDur(),
     dateOfBail: emptyDate(),
     dateOfReadmission: emptyDate(),
+    custody: "",
+    subsistenceRate: SUBSISTENCE_RATE_DEFAULT,
+    specialDays: "",
     forfeitedDays: "",
     hospital: false,
     hospitalFrom: emptyDate(),
@@ -194,7 +211,17 @@ export function toCaseSpec(s: FormState): Parsed {
       const sentence = parseDur(s.sentence, "Sentence", errors, true);
       const forfeited = intOf(s.forfeitedDays);
       if (forfeited === null) errors.push("Days forfeited: whole numbers only");
+      const special = intOf(s.specialDays);
+      if (special === null) errors.push("Special or restored remission: whole numbers only");
       const inputs: Record<string, unknown> = { date_of_sentence: ds, sentence, offence_class: cls };
+      if (s.custody) inputs.custody = s.custody;
+      if (special) inputs.special_remission_days = special;
+      if (cls === "debt" && s.subsistenceRate.trim() !== "") {
+        // cedis and pesewas, kept as whole pesewas (no floats)
+        const m = /^(\d+)(?:\.(\d{1,2}))?$/.exec(s.subsistenceRate.trim());
+        if (!m) errors.push("Daily subsistence rate: an amount in cedis, such as 1.80");
+        else inputs.subsistence_rate = Number(m[1]) * 100 + Number((m[2] ?? "").padEnd(2, "0"));
+      }
       if (s.hospital) {
         inputs.hospital_from = parseDate(s.hospitalFrom, "Admitted to hospital", errors);
         inputs.hospital_to = parseDate(s.hospitalTo, "Discharged from hospital", errors);

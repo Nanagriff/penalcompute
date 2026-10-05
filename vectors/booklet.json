@@ -374,6 +374,275 @@
       "note": "remission is taken from the bracketed day of 29(30)-2-2004, so 20-6-2002 then EPD 21-6-2002 (R4.9, officer ruling 2026-10-05)"
     },
     {
+      "id": "notes-ex09-one-sixth-20yrs-preventive",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          20,
+          1,
+          2000
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 20
+        },
+        "offence_class": "felony",
+        "custody": "preventive"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "19-1-2020",
+        "epd": "20-11-2016",
+        "dr": null,
+        "remission": "3yrs 2mths",
+        "remission_note": "one-sixth remission (R6.5)",
+        "licence_period": "3yrs 1mth 30days",
+        "flags": [],
+        "render": "     20-1-2000   D/S\n                 20   S\n                 ----------------------------------\n     20-1-2020   \n             1   Grace\n                 ----------------------------------\n     19-1-2020   LPD\n          2       3   1/6 Rem on 20yrs less 1yr\n                 ----------------------------------\n    19-11-2016   \n             1   Add\n                 ----------------------------------\n    20-11-2016   EPD"
+      },
+      "booklet_says": null,
+      "note": "one sixth of 20yrs less 1yr is 3yrs 2mths (R6.5)"
+    },
+    {
+      "id": "notes-ex10-one-sixth-9yrs-productive",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          19,
+          4,
+          2008
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 9
+        },
+        "offence_class": "felony",
+        "custody": "productive_hard_labour"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "18-4-2017",
+        "epd": "19-12-2015",
+        "dr": null,
+        "remission": "1yr 4mths",
+        "remission_note": "one-sixth remission (R6.5)",
+        "licence_period": "1yr 3mths 30days",
+        "flags": [],
+        "render": "     19-4-2008   D/S\n                  9   S\n                 ----------------------------------\n     19-4-2017   \n             1   Grace\n                 ----------------------------------\n     18-4-2017   LPD\n          4       1   1/6 Rem on 9yrs less 1yr\n                 ----------------------------------\n    18-12-2015   \n             1   Add\n                 ----------------------------------\n    19-12-2015   EPD"
+      },
+      "booklet_says": null,
+      "note": "one sixth of 9yrs less 1yr is 1yr 4mths (R6.5)"
+    },
+    {
+      "id": "notes-p06-one-sixth-15yrs-robbery",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          4,
+          3,
+          2016
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 0,
+          "years": 15
+        },
+        "offence_class": "robbery",
+        "custody": "preventive"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "3-3-2031",
+        "epd": "4-11-2028",
+        "dr": null,
+        "remission": "2yrs 4mths",
+        "remission_note": "one-sixth remission (R6.5)",
+        "licence_period": "2yrs 3mths 27days",
+        "flags": [],
+        "render": "      4-3-2016   D/S\n                 15   S\n                 ----------------------------------\n      4-3-2031   \n             1   Grace\n                 ----------------------------------\n      3-3-2031   LPD\n          4       2   1/6 Rem on 15yrs less 1yr\n                 ----------------------------------\n     3-11-2028   \n             1   Add\n                 ----------------------------------\n     4-11-2028   EPD"
+      },
+      "booklet_says": null,
+      "note": "2yrs 4mths remission; licence period 2yrs 3mths 27days, borrowing February 2031 = 28"
+    },
+    {
+      "id": "notes-ex20-special-remission-14-days",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          30,
+          11,
+          2005
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 12,
+          "years": 0
+        },
+        "offence_class": "robbery",
+        "special_remission_days": 14
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": "29-11-2006",
+        "epd": "16-7-2006",
+        "dr": null,
+        "remission": "4mths",
+        "remission_note": "one-third remission (R6.3)",
+        "licence_period": "4mths 13days",
+        "flags": [],
+        "render": "    30-11-2005   D/S\n         12           S\n                 ----------------------------------\n    30-11-2006   \n             1   Grace\n                 ----------------------------------\n    29-11-2006   LPD\n          4           1/3 Rem on 12mths\n                 ----------------------------------\n     29-7-2006   \n             1   Add\n                 ----------------------------------\n     30-7-2006   EPD\n            14   Spec Rem\n                 ----------------------------------\n     16-7-2006   EPD (amended)"
+      },
+      "booklet_says": null,
+      "note": "special remission comes off after the add-one line: 30-7-2006 less 14 = 16-7-2006 (R7.6)"
+    },
+    {
+      "id": "notes-ex22-subsistence-9-months",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          11,
+          2,
+          2008
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 9,
+          "years": 0
+        },
+        "offence_class": "debt",
+        "subsistence_rate": 180
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "10-11-2008",
+        "remission": "nil",
+        "remission_note": "no remission: debt (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: debt (R6.1)"
+        ],
+        "render": "     11-2-2008   D/S\n          9           S\n                 ----------------------------------\n    11-11-2008   \n             1   Grace\n                 ----------------------------------\n    10-11-2008   D/R\n\n  ! no remission: debt (R6.1)",
+        "subsistence_days": 274,
+        "subsistence_amount": "GH¢493.20"
+      },
+      "booklet_says": null,
+      "note": "274 days from D/S to D/R, both counted, at GH¢1.80 (R8.9)"
+    },
+    {
+      "id": "notes-p16-subsistence-3-months",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          10,
+          1,
+          2024
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 3,
+          "years": 0
+        },
+        "offence_class": "debt",
+        "subsistence_rate": 180
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "9-4-2024",
+        "remission": "nil",
+        "remission_note": "no remission: debt (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: debt (R6.1)"
+        ],
+        "render": "     10-1-2024   D/S\n          3           S\n                 ----------------------------------\n     10-4-2024   \n             1   Grace\n                 ----------------------------------\n      9-4-2024   D/R\n\n  ! no remission: debt (R6.1)",
+        "subsistence_days": 91,
+        "subsistence_amount": "GH¢163.80"
+      },
+      "booklet_says": null,
+      "note": "91 days: 22 + 29 + 31 + 9 (R8.9)"
+    },
+    {
+      "id": "notes-a7-30th-lands-abnormal",
+      "page": null,
+      "source": "officer-notes",
+      "scenario": "simple",
+      "inputs": {
+        "date_of_sentence": [
+          30,
+          1,
+          2007
+        ],
+        "sentence": {
+          "days": 0,
+          "months": 1,
+          "years": 0
+        },
+        "offence_class": "stealing"
+      },
+      "policy": {
+        "leap_rule": "gregorian",
+        "month_end_preservation": true,
+        "escape_remission_base": "original"
+      },
+      "expect": {
+        "lpd": null,
+        "epd": null,
+        "dr": "28(29)-2-2007",
+        "remission": "nil",
+        "remission_note": "no remission: sentence below 31 days (R6.1)",
+        "licence_period": null,
+        "flags": [
+          "no remission: sentence below 31 days (R6.1)",
+          "A7: the date of sentence is not a month-end but the sentence lands on an abnormal date; bracketed as for a month-end sentence, confirm by hand"
+        ],
+        "render": "     30-1-2007   D/S\n          1           S\n                 ----------------------------------\n     30-2-2007   \n             1   Grace\n                 ----------------------------------\n 28(29)-2-2007   D/R\n\n  ! no remission: sentence below 31 days (R6.1)\n  ! A7: the date of sentence is not a month-end but the sentence lands on an abnormal date; bracketed as for a month-end sentence, confirm by hand"
+      },
+      "booklet_says": null,
+      "note": "not a month-end D/S, lands on 30-2: bracketed and flagged for confirmation by hand (A7)"
+    },
+    {
       "id": "p08-paul-mensah",
       "page": 8,
       "source": "booklet",

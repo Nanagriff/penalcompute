@@ -15,9 +15,9 @@ import type { Policy } from "./policy";
 import { DEFAULT_POLICY } from "./policy";
 import type { RegDate } from "./regdate";
 import {
-  addDays, carryMonths, clampBack, format, isImpossible, ordinal, rollForward, subDays,
+  addDays, carryMonths, clampBack, format, isImpossible, isMonthEnd, ordinal, rollForward, subDays,
 } from "./regdate";
-import { hospitalLoss, remissionFor } from "./remission";
+import { hospitalLoss, oneSixthColumns, remissionFor } from "./remission";
 import { VERSION, versionLine } from "./version";
 import type { VersionStamp } from "./version";
 
@@ -83,6 +83,39 @@ export interface ComputeOptions {
   hospitalPeriod?: Duration;
   labelDs?: string;
   policy?: Policy;
+  /** Preventive or protective custody, or productive hard labour: one-sixth remission (R6.5). */
+  custody?: string | null;
+  /** Special or restored remission in days, taken off after the add-one line (R7.6). */
+  specialDays?: number;
+}
+
+const A7 =
+  "A7: the date of sentence is not a month-end but the sentence lands on an " +
+  "abnormal date; bracketed as for a month-end sentence, confirm by hand";
+
+/** Calendar days from first to last, both ends counted. */
+export function daysInclusive(first: RegDate, last: RegDate, policy: Policy = DEFAULT_POLICY): number {
+  const rule = policy.leapRule;
+  if (first.y === last.y && first.m === last.m) return last.d - first.d + 1;
+  let n = monthLen(first.m, first.y, rule) - first.d + 1;
+  let cur = carryMonths({ d: 1, m: first.m + 1, y: first.y });
+  while (cur.y !== last.y || cur.m !== last.m) {
+    n += monthLen(cur.m, cur.y, rule);
+    cur = carryMonths({ d: 1, m: cur.m + 1, y: cur.y });
+  }
+  return n + last.d;
+}
+
+/** R8.9. Debtor's subsistence: days from D/S to D/R, both counted, at the daily rate. */
+export function subsistence(
+  ds: RegDate,
+  dr: RegDate,
+  ratePesewas: number,
+  policy: Policy = DEFAULT_POLICY,
+): [number, string] {
+  const days = daysInclusive(ds, dr, policy);
+  const total = days * ratePesewas;
+  return [days, `GH¢${Math.floor(total / 100)}.${String(total % 100).padStart(2, "0")}`];
 }
 
 export function compute(
@@ -119,9 +152,13 @@ export function compute(
 
   add({ deduction: "1", label: "Grace", rule: true, op: "-" });
   cur = subDays(cur, 1, rule); // R5.1
+  // A7: the notes write the bracket rule (P2) only for a sentence passed on
+  // the last day of a month
+  const unconfirmed = isImpossible(cur, rule) && !isMonthEnd(ds, rule);
+  const specialDays = opts.specialDays ?? 0;
 
   const base = opts.remissionBase ?? sentence;
-  const [rem, note] = remissionFor(base, offenceClass);
+  const [rem, note] = remissionFor(base, offenceClass, opts.custody);
   res.remission = rem;
   res.remissionNote = note;
 
@@ -130,21 +167,33 @@ export function compute(
     res.dr = cur;
     add({ date: cur, label: "D/R", rule: false });
     res.flags.push(note);
+    if (unconfirmed) res.flags.push(A7);
+    if (specialDays) {
+      res.flags.push("R7.6: special remission not applied, there is no EPD to take it from");
+    }
     return res;
   }
 
   if (isImpossible(cur, rule)) {
     cur = clampBack(cur, rule); // R4.5: never detain past the LPD
     res.flags.push("A3: LPD landed on an impossible date, clamped back (p.16)");
+    if (unconfirmed) res.flags.push(A7);
   }
   res.lpd = cur;
   add({ date: cur, label: "LPD", rule: false });
-  add({
-    deduction: rem.columns(),
-    label: note.includes("third") ? `1/3 Rem on ${base.format()}` : `Rem on ${base.format()}`,
-    rule: true,
-    op: "-",
-  });
+  let remLabel: string;
+  if (note.includes("sixth")) {
+    remLabel = `1/6 Rem on ${base.format()} less 1yr`;
+    if (!oneSixthColumns(base)[1]) {
+      res.flags.push(
+        "A8: one-sixth did not divide exactly; two thirds and over " +
+          "rounded up (R6.4), the notes show no such example",
+      );
+    }
+  } else {
+    remLabel = note.includes("third") ? `1/3 Rem on ${base.format()}` : `Rem on ${base.format()}`;
+  }
+  add({ deduction: rem.columns(), label: remLabel, rule: true, op: "-" });
 
   const sub = subDuration(cur, rem, policy);
   cur = sub.date;
@@ -185,6 +234,14 @@ export function compute(
       res.epd = res.lpd;
       res.flags.push("R7.4: forfeiture pushed the EPD past the LPD; capped at the LPD");
     }
+  }
+
+  if (specialDays) {
+    // R7.6: special and restored remission come off after the add-one line
+    add({ deduction: String(specialDays), label: "Spec Rem", rule: true, op: "-" });
+    cur = subDays({ d: res.epd.d, m: res.epd.m, y: res.epd.y }, specialDays, rule);
+    res.epd = cur;
+    add({ date: cur, label: "EPD (amended)", rule: false });
   }
 
   if (res.lpd && res.epd) res.licencePeriod = dateDiff(res.lpd, res.epd, policy); // R8.8

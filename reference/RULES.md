@@ -136,10 +136,16 @@ round up only when the remainder is 2.
 `284 / 3 = 94 r2 -> 95 days = 3mths 5days`. (p.8)
 `100 / 3 = 33 r1 -> 33 days`. (p.5)
 
-**R6.5** One-sixth remission exists in the booklet's list (take one year off the
-sentence, divide the remainder by six) but appears in no worked example on the
-pages supplied. It belongs to preventive custody and resurfaces at p.19(h) for
-licence periods. Not implemented. See section 9.
+**R6.5 One-sixth remission.** Where the warrant orders preventive custody,
+protective custody or productive hard labour: take one year off the sentence and
+divide the remainder by six, column by column as in R6.7. A sentence of one year
+or less earns nothing.
+`20yrs -> 19yrs / 6 = 3yrs 2mths`; D/S 20-1-2000, LPD 19-1-2020, EPD 20-11-2016.
+`9yrs -> 1yr 4mths`; D/S 19-4-2008, LPD 18-4-2017, EPD 19-12-2015.
+`15yrs -> 2yrs 4mths`; D/S 4-3-2016, LPD 3-3-2031, EPD 4-11-2028, licence period
+2yrs 3mths 27days. (Officer's notes, Ex 9, Ex 10, P6, supplied 2026-10-05.)
+The notes show no division that leaves a remainder in the day column; the engine
+rounds up at two thirds and over (R6.4) and flags it as A8.
 
 **R6.6 Remission attaches only to the remissionable part of a mixed sentence.**
 Paul Mensah, 6 months for debt plus 9mths 14days IHL: remission is one third of
@@ -167,6 +173,13 @@ LPD. (p.16) The engine caps and raises a flag rather than returning the excess.
 **R7.5 Lunatic criminals.** No remission accrues for the period spent in a mental
 hospital. Remission runs from the date of return to prison. The DG may restore
 remission for the earlier period if conduct in hospital was good. (p.16)
+
+**R7.6 Special and restored remission.** Special remission (a meritorious act,
+recommended by the OIC and approved by the DG) and restored remission are
+subtracted from the EPD after the add-one line. Forfeiture goes on, rewards come
+off.
+`12mths from 30-11-2005: LPD 29-11-2006, less 4mths = 29-7-2006, add 1 =
+30-7-2006, less 14 days special = 16-7-2006 EPD`. (Officer's notes, Ex 20.)
 
 ## 8. Scenario rules
 
@@ -215,6 +228,15 @@ earning-a-livelihood-by-dishonest-means class, including arson, excluding murder
 attempted murder and conspiracy to murder. Prison Form No. 10 goes to the local
 police at least one week before release. (p.18, p.19)
 
+**R8.9 Debtor's subsistence.** Paid by the judgment creditor; no remission.
+Compute the D/R, count the days from D/S to D/R with both ends included, and
+multiply by the daily rate. Money is held in whole pesewas.
+`9mths from 11-2-2008: D/R 10-11-2008, 274 days at GH¢1.80 = GH¢493.20`.
+`3mths from 10-1-2024: D/R 9-4-2024, 91 days = GH¢163.80`.
+(Officer's notes, Ex 22 and P16.) Those examples use the old rate of GH¢1.80.
+The rate now in force is GH¢5.00 a day (officer, 2026-10-05); the form starts at
+that figure and it can be changed.
+
 ## 9. Ambiguities: the switches
 
 These are places where the booklet gives two answers or none. Each is a policy
@@ -244,17 +266,29 @@ mixed case.
 **A5. `hospital_rounding`.** p.18 divides 96 by 3 exactly. The rounding direction
 for an inexact division is unstated. Engine uses R6.4 and flags.
 
-**A6. Working-day discharge.** Not mentioned anywhere in the pages supplied.
-Practice is that a prisoner due for discharge on a public holiday is released on
-the next working day. Note the asymmetry: pushing forward is lawful at the EPD,
-because any date before the LPD is lawful, but it is **not** lawful at the LPD,
-where R7.4 forbids detention past midnight. An LPD falling on a holiday must
-therefore move backwards, not forwards. This is the one holiday case the manual
-method cannot flag and the engine must.
+**A7. Abnormal date from a sentence not passed on a month-end.** The notes give
+the bracket rule (P2) only for a sentence passed on the last day of a month, and
+step 4 read literally would fix the date first. `30-1-2007 + 1mth = 30-2-2007`:
+bracketed, the D/R is `28(29)-2-2007`; fixed first, it is `1-3-2007`, a day later
+than a man sentenced on the 31st. The engine brackets, so that a later sentence
+never gives an earlier release, and flags the case for confirmation by hand.
+Unsettled until a worked example sentenced on the 29th or 30th is found.
+
+**A8. Inexact one-sixth.** See R6.5.
+
+**A6. Release day.** Settled by the officer's notes, 2026-10-05, as R9.1: release
+is from 09:00, and a release date falling on a Sunday, Christmas or a public
+holiday moves to the day before. This holds for the EPD, the D/R and the LPD
+alike. Saturday is a release day. A holiday observed on the Monday after a
+Sunday therefore moves back to the Saturday. Before this ruling the engine moved
+an EPD or D/R forward to the next working day and treated Saturday as closed.
 
 ## 10. Known gaps in the supplied pages
 
-- One-sixth remission: formula given, never demonstrated (R6.5).
+- Mental hospital time (R7.5) and breach of licence: rules stated, no worked
+  example, not computed.
+- A previous licence holder qualifying for licence, and an additional sentence
+  ordered concurrent: stated in the officer's notes, not yet in the engine.
 - Imprisonment in default of payment of a fine: not covered.
 - Remand time before sentence: not covered.
 - Recording of life and condemned sentences: excluded from remission, no

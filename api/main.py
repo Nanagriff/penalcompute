@@ -61,9 +61,11 @@ DATE_KEYS = {
 }
 DURATION_KEYS = {"sentence", "first", "second", "cut", "extra_sentence", "a", "b"}
 CLASS_KEYS = {"offence_class", "first_class", "second_class", "offence"}
-INT_KEYS = {"forfeited_days", "n", "close_days", "diet_days"}
+INT_KEYS = {"forfeited_days", "n", "close_days", "diet_days", "special_remission_days",
+            "subsistence_rate"}
+CUSTODY = {"preventive", "protective", "productive_hard_labour"}
 BOOL_KEYS = {"same_date"}
-OTHER_KEYS = {"groups", "sex", "policy"}
+OTHER_KEYS = {"groups", "sex", "policy", "custody"}
 INPUT_KEYS = DATE_KEYS | DURATION_KEYS | CLASS_KEYS | INT_KEYS | BOOL_KEYS | OTHER_KEYS
 
 OFFENCE_CLASSES = {
@@ -119,6 +121,10 @@ def validate_inputs(obj: Any) -> Dict[str, Any]:
         elif k in BOOL_KEYS:
             if not isinstance(v, bool):
                 raise ValueError(f"{k}: expected true or false")
+            out[k] = v
+        elif k == "custody":
+            if v not in CUSTODY:
+                raise ValueError("custody: not a known custody type")
             out[k] = v
         elif k == "sex":
             if v not in ("male", "female", "m", "f"):
