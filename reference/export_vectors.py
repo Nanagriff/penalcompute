@@ -292,6 +292,14 @@ def build_cases() -> List[Dict[str, Any]]:
                   note="not a month-end D/S, lands on 30-2: bracketed and flagged "
                        "for confirmation by hand (A7)", **N))
 
+    C.append(case("notes-additional-60mths-plus-10mths-70days", None, "additional",
+                  {"date_of_sentence": [5, 1, 2016], "first": dur(months=60),
+                   "first_class": "stealing", "second": dur(months=10, days=70),
+                   "second_class": "robbery"},
+                  note="sentences are added column by column: 5yrs 10mths 70days, the 70 days "
+                       "taken off as November 30 and December 31, LPD 13-1-2022 not 14-1-2022; "
+                       "remission 1yr 11mths 33days kept in days (R6.7), EPD 12-1-2020", **N))
+
     # ---- p.8 additional sentence -----------------------------------------
     C.append(case("p08-paul-mensah", 8, "additional",
                   {"date_of_sentence": [25, 7, 2005],

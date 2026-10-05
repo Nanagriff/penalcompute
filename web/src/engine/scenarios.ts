@@ -106,7 +106,8 @@ export function doubleEscape(
 ): Result {
   const served1 = dateDiff(dEscape1, ds, policy);
   const served2 = dateDiff(dEscape2, dRecapture1, policy);
-  const served = served1.add(served2);
+  // periods served are not sentences: their days carry at 30 to the month
+  const served = Duration.fromDays(served1.totalDays + served2.totalDays);
   const total = sentence.add(extraSentence).sub(cut);
   const residue = total.sub(served);
   const res = compute(dRecapture2, residue, offenceClass, {

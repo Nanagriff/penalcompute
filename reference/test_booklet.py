@@ -105,6 +105,13 @@ r = simple(RegDate(30, 1, 2007), Duration.of(months=1), "stealing")
 check("notes 30th lands abnormal, bracketed", r.dr, "28(29)-2-2007")
 check("notes 30th lands abnormal, flagged A7", any(f.startswith("A7") for f in r.flags), True)
 
+# ---- officer report, 2026-10-05: sentences added column by column --------
+r = additional(RegDate(5, 1, 2016), Duration.of(months=60), "stealing",
+               Duration.of(months=10, days=70), "robbery")
+check("officer 60mths + 10mths 70days LPD (days never rolled into months)", r.lpd, "13-1-2022")
+check("officer 60mths + 10mths 70days remission", r.remission, "1yr 11mths 33days")
+check("officer 60mths + 10mths 70days EPD", r.epd, "12-1-2020")
+
 # ---- p.8 additional sentence --------------------------------------------
 r = additional(RegDate(25, 7, 2005), Duration.of(months=6), "debt",
                Duration.of(months=9, days=14), "assault")

@@ -187,6 +187,19 @@ off.
 is added to it, and the computation runs from the **first** date of conviction,
 not the later one. (p.7)
 
+**R8.1a Sentences are added column by column.** Days to days, months to months,
+years to years. Months over twelve carry into years; days are never turned into
+months, whether in one sentence or in the sum of two (rule d). The day column
+then overflows through the real months under R4.2.
+`60mths + 10mths 70days = 5yrs 10mths 70days`; from 5-1-2016 that is 75-11-2021,
+less 30 (Nov) = 45-12-2021, less 31 (Dec) = 14-1-2022, less grace = 13-1-2022
+LPD. Rolled up at 30 days to the month it would be 6yrs 10days and an LPD of
+14-1-2022, one day of unlawful detention. Remission 1yr 11mths 33days, kept in
+days under R6.7, EPD 12-1-2020. (Officer report, 2026-10-05.)
+Subtracting one term from another borrows a month as 30 days and a year as
+twelve months. Periods served, which are differences of dates and not sentences,
+still carry their days at 30 to the month when two are added (R8.6).
+
 **R8.2 Concurrent.** Take the highest of the sentences in the group; if equal,
 take one. (unnumbered p.3)
 

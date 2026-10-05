@@ -45,12 +45,28 @@ export class Duration {
     return new Duration(days, months, years);
   }
 
+  /** Column by column. Months carry into years; days are never turned into months. */
   add(other: Duration): Duration {
-    return Duration.fromDays(this.totalDays + other.totalDays);
+    const [years, months] = divmod(this.months + other.months, 12);
+    return new Duration(this.days + other.days, months, this.years + other.years + years);
   }
 
+  /** Column by column, borrowing a month as 30 days and a year as 12 months. */
   sub(other: Duration): Duration {
-    return Duration.fromDays(Math.max(0, this.totalDays - other.totalDays));
+    if (this.totalDays <= other.totalDays) return new Duration();
+    let d = this.days - other.days;
+    let m = this.months - other.months;
+    let y = this.years - other.years;
+    while (d < 0) {
+      d += 30;
+      m -= 1;
+    }
+    while (m < 0) {
+      m += 12;
+      y -= 1;
+    }
+    const [carry, months] = divmod(m, 12);
+    return new Duration(d, months, y + carry);
   }
 
   /** "1yr 2mths 3days", or "nil". */

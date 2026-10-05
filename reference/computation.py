@@ -161,10 +161,20 @@ class Duration:
         return Duration(n % 30, (n % 360) // 30, n // 360)
 
     def __add__(self, other: "Duration") -> "Duration":
-        return Duration.from_days(self.total_days + other.total_days)
+        """Column by column. Months carry into years; days are never turned into months."""
+        years, months = divmod(self.months + other.months, 12)
+        return Duration(self.days + other.days, months, self.years + other.years + years)
 
     def __sub__(self, other: "Duration") -> "Duration":
-        return Duration.from_days(max(0, self.total_days - other.total_days))
+        """Column by column, borrowing a month as 30 days and a year as 12 months."""
+        if self.total_days <= other.total_days:
+            return Duration()
+        d, m, y = self.days - other.days, self.months - other.months, self.years - other.years
+        while d < 0:
+            d, m = d + 30, m - 1
+        while m < 0:
+            m, y = m + 12, y - 1
+        return Duration(d, m % 12, y + m // 12)
 
     def __str__(self) -> str:
         bits = []
@@ -585,7 +595,8 @@ def double_escape(d_s: RegDate, sentence: Duration, d_escape1: RegDate,
     """R8.6."""
     served1 = date_diff(d_escape1, d_s, policy)
     served2 = date_diff(d_escape2, d_recapture1, policy)
-    served = served1 + served2
+    # periods served are not sentences: their days carry at 30 to the month
+    served = Duration.from_days(served1.total_days + served2.total_days)
     total = sentence + extra_sentence - cut
     residue = total - served
     res = compute(d_recapture2, residue, offence_class, remission_base=total,
