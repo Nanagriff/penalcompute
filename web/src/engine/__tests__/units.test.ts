@@ -45,12 +45,12 @@ describe("Task 2.2 regdate", () => {
     expect(format(subDuration(lpd, new Duration(10, 8, 1)).date)).toBe("20-6-2002");
     expect(String(dateDiff(lpd, regDate(21, 6, 2002)))).toBe("1yr 8mths 9days");
   });
-  it("R4.3 shows each borrow: 13-1-2022 less 33 days borrows December", () => {
+  it("R4.3 works each borrow but keeps it out of the register", () => {
     const steps = borrowSteps(regDate(13, 1, 2022), new Duration(33, 11, 1));
     expect(steps.map((s) => `${s.figure.trim()} ${s.label} ${format(s.after)}`))
       .toEqual(["31 Borrow Dec 44-12-2021"]);
     const r = additional(regDate(5, 1, 2016), new Duration(0, 60), "stealing", new Duration(70, 10), "robbery");
-    expect(r.render()).toContain("            31   Borrow Dec\n" + " ".repeat(17) + "-".repeat(34) + "\n    44-12-2021");
+    expect(r.render()).not.toContain("Borrow");
   });
   it("R4.3 borrows a year as twelve months when the month column is short", () => {
     const steps = borrowSteps(regDate(20, 2, 2020), new Duration(0, 5, 1));

@@ -452,12 +452,6 @@ def compute(
             cur = _carry_months(RegDate(cur.d - length, cur.m + 1, cur.y))
             add(Line(date=cur))
 
-    def show_borrows(steps) -> None:
-        for figure, label, after in steps:
-            add(Line(deduction=figure, label=label, rule=True, op="+"))
-            add(Line(date=after))
-
-    show_borrows(borrow_steps(cur, Duration(days=1), policy))
     add(Line(deduction="1", label="Grace", rule=True, op="-"))
     cur = sub_days(cur, 1, policy)  # R5.1
     # A7: the notes write the bracket rule (P2) only for a sentence passed on
@@ -493,7 +487,6 @@ def compute(
                              "rounded up (R6.4), the notes show no such example")
     else:
         rem_label = f"1/3 Rem on {base}" if "third" in note else f"Rem on {base}"
-    show_borrows(borrow_steps(cur, rem, policy))
     add(Line(deduction=rem.columns(), label=rem_label, rule=True, op="-"))
 
     cur, fl = sub_duration(cur, rem, policy)
@@ -536,7 +529,6 @@ def compute(
 
     if special_days:
         # R7.6: special and restored remission come off after the add-one line
-        show_borrows(borrow_steps(res.epd, Duration(days=special_days), policy))
         add(Line(deduction=str(special_days), label="Spec Rem", rule=True, op="-"))
         cur = sub_days(RegDate(res.epd.d, res.epd.m, res.epd.y), special_days, policy)
         res.epd = cur
